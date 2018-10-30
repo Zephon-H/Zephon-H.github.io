@@ -7,18 +7,18 @@
   
   <title>Java 继承 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。  eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们">
+  <meta name="description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 继承">
 <meta property="og:url" content="http://yoursite.com/2018/10/30/Java-继承/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。  eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们">
+<meta property="og:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/img/animal.png">
-<meta property="og:updated_time" content="2018-10-30T13:33:42.599Z">
+<meta property="og:updated_time" content="2018-10-30T13:36:01.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 继承">
-<meta name="twitter:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。  eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们">
+<meta name="twitter:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为">
 <meta name="twitter:image" content="http://yoursite.com/img/animal.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -99,26 +99,24 @@
 </ol>
 <hr>
 <h2 id="继承的概念"><a href="#继承的概念" class="headerlink" title="继承的概念"></a>继承的概念</h2><p>&emsp;&emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。</p>
-<blockquote>
-<p>eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为什么会这样去构建呢？<br><img src="/img/animal.png" alt="example1"><br>&emsp;&emsp;正是因为动物种类太多了，所以需要进行分类，在编程中，涉及到了分类，肯定就要抽象，顾名思义，抽象就是抽出相像的部分，这里的狗、猫、人根据其共同点，抽象后就构成了一个新的类别，即哺乳动物，同样的，蛇和鳄鱼又构成爬行动物类，而不管是哺乳动物还是爬行动物，他们又有共同的特征，所以又构成动物类，以此类推。</p>
-</blockquote>
+<p>eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为什么会这样去构建呢？</p>
+<p><img src="/img/animal.png" alt="example1"></p>
+<p>&emsp;&emsp;正是因为动物种类太多了，所以需要进行分类，在编程中，涉及到了分类，肯定就要抽象，顾名思义，抽象就是抽出相像的部分，这里的狗、猫、人根据其共同点，抽象后就构成了一个新的类别，即哺乳动物，同样的，蛇和鳄鱼又构成爬行动物类，而不管是哺乳动物还是爬行动物，他们又有共同的特征，所以又构成动物类，以此类推。</p>
 <p>&emsp;&emsp;在Java编程中继承是用extends来实现的，extends的意思是延伸、扩展，即子类是父类的扩展。</p>
 <p>下面以动物分类为例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能跑"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能吃"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Animal animal = <span class="keyword">new</span> Animal();</span><br><span class="line">        System.out.println(<span class="string">"动物类"</span>);</span><br><span class="line">        animal.run();</span><br><span class="line">        animal.eat();</span><br><span class="line"></span><br><span class="line">        Mammal mammal = <span class="keyword">new</span> Mammal();</span><br><span class="line">        System.out.println(<span class="string">"哺乳类"</span>);</span><br><span class="line">        mammal.viviparous();</span><br><span class="line">        mammal.run();</span><br><span class="line">        mammal.eat();</span><br><span class="line"></span><br><span class="line">        Reptiles reptiles = <span class="keyword">new</span> Reptiles();</span><br><span class="line">        System.out.println(<span class="string">"爬行类"</span>);</span><br><span class="line">        reptiles.Oviparous();</span><br><span class="line">        reptiles.run();</span><br><span class="line">        reptiles.eat();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//哺乳类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mammal</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">viviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是胎生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//爬行类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reptiles</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Oviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是卵生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能爬行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>运行结果：</p>
-<p>动物类</p>
-<p>我能跑</p>
-<p>我能吃</p>
-<p>哺乳类</p>
-<p>我是胎生</p>
-<p>我能跑</p>
-<p>我能吃</p>
-<p>爬行类</p>
-<p>我是卵生</p>
-<p>我能爬行</p>
-<p>我能吃</p>
-</blockquote>
+<p> 运行结果：</p>
+<p> 动物类</p>
+<p> 我能跑</p>
+<p> 我能吃</p>
+<p> 哺乳类</p>
+<p> 我是胎生</p>
+<p> 我能跑</p>
+<p> 我能吃</p>
+<p> 爬行类</p>
+<p> 我是卵生</p>
+<p> 我能爬行</p>
+<p> 我能吃</p>
 <p>&emsp;&emsp;可以看到，在Mammal类和Reptiles类中，并没有写eat方法，但都可以调用，就是因为用了extends继承了Animal类，而在Reptiles中，需要自己扩展，又写了新的run()方法,覆盖了父类的run()方法，这就叫做重写，具体后面会讲。</p>
 <p>小结：</p>
 <ul>
@@ -138,20 +136,15 @@
 <p>子类重写父类的方法时，其实也可以调用父类的该方法，用super关键字。</p>
 <p>eg:在上述代码的基础上加上鸟类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//鸟类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span>  <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.run();</span><br><span class="line">        System.out.println(<span class="string">"我能飞"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：</p>
-<blockquote>
-<p>我能跑</p>
-<p>我能飞</p>
-</blockquote>
+<p>运行结果：<br> 我能跑</p>
+<p> 我能飞</p>
 <h2 id="简单了解Object类与API"><a href="#简单了解Object类与API" class="headerlink" title="简单了解Object类与API"></a>简单了解Object类与API</h2><h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p>构造函数，也叫构造方法，是java中一种特殊的函数。与函数名相同，无返回值。</p>
 <p>作用：一般用来初始化成员属性和成员方法的，即new对象产生后，就调用了对象了属性和方法。</p>
 <p>&emsp;&emsp;一个对象建立，构造函数只运行一次。而一般函数是对象调用才执行，用”.方法名“的方式，给对象添加功能，并且能调用多次。</p>
-<blockquote>
-<p>构造函数的特点:</p>
-<p>1、函数名与类名相同</p>
-<p>2、不用定义返回值类型。（不同于void类型返&gt;回值，void是没有具体返回值类型；构造函数是连类型都没有）</p>
-<p>3、不可以写return语句。（返回值类型都没有，也就不需要return语句了）</p>
-</blockquote>
+<p> 构造函数的特点:</p>
+<p> 1、函数名与类名相同</p>
+<p> 2、不用定义返回值类型。（不同于void类型返&gt;回值，void是没有具体返回值类型；构造函数是连类型都没有）</p>
+<p> 3、不可以写return语句。（返回值类型都没有，也就不需要return语句了）</p>
 <p>&emsp;&emsp;默认构造函数：当一个类中没有定义构造函数时，系统会给该类中加一个默认的空参数的构造函数，方便该类初始化。只是该空构造函数是隐藏不见的。但如果自己定义了构造函数，则默认构造函数就没有了，如果需要需要自己手动添加。</p>
 <h2 id="继承与组合"><a href="#继承与组合" class="headerlink" title="继承与组合"></a>继承与组合</h2><p>&emsp;&emsp;继承是is-a的关系</p>
 <p>&emsp;&emsp;而组合则是have-a的关系</p>
@@ -161,9 +154,7 @@
 <p>&emsp;&emsp;super:用于实现对父类成员的访问，用来引用当前对象的父类</p>
 <p>&emsp;&emsp;this:指向自己的引用</p>
 <p>&emsp;&emsp;final:final 关键字声明类可以把类定义为不能继承的，即最终类；或者用于修饰方法，该方法不能被子类重写.</p>
-<blockquote>
-<p>注:实例变量也可以被定义为 final，被定义为 final 的变量不能被修改，就类似于常量的定义。</p>
-</blockquote>
+<p>&emsp;&emsp; 注:实例变量也可以被定义为 final，被定义为 final 的变量不能被修改，就类似于常量的定义。</p>
 
       
     </div>

@@ -341,21 +341,24 @@ var _hmt = _hmt || [];
   
 
   
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
-<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  {% if site.comment_gitment_repo %}
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
-var gitment = new Gitment({
-  id: "http://www.zephon.xyz/2018/10/31/hello-world/",
-  owner: 'Zephon-H',
-  repo: 'Zephon-H.github.io',
-  oauth: {
-    client_id: 'b12dc4daf901e6929dc7',
-    client_secret: 'b07774d720686ff40ef3dcddf83f13bfb64d2c85',
-  },
-})
-gitment.render('gitment-ctn')
+    var gitment = new Gitment({
+        id: 'Wed Oct 31 2018 17:30:00 GMT+0800',
+        owner: '{{site.github_username}}',
+        repo: '{{site.comment_gitment_repo}}',
+        oauth: {
+            client_id: '{{site.comment_gitment_clientId}}',
+            client_secret: '{{site.comment_gitment_clientSecret}}',
+        },
+    });
+    gitment.render('gitmentContainer')
 </script>
+{% endif %}
+
   
   
    

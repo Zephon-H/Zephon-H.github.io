@@ -17,7 +17,7 @@
 <meta property="og:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://www.zephon.xyz/img/animal.png">
-<meta property="og:updated_time" content="2018-10-31T12:59:42.189Z">
+<meta property="og:updated_time" content="2018-11-01T04:01:40.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-继承">
 <meta name="twitter:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释">
@@ -246,12 +246,57 @@ var _hmt = _hmt || [];
 <h2 id="继承与组合"><a href="#继承与组合" class="headerlink" title="继承与组合"></a>继承与组合</h2><p>&emsp;&emsp;继承是is-a的关系</p>
 <p>&emsp;&emsp;而组合则是have-a的关系</p>
 <p>&emsp;&emsp;组合就是在一个类中，可以用其它的类作为自己的变量，例如，在一个棋盘类中，可以用棋子作为其中的变量，但棋子其实也是我们自己事先定义好的类。</p>
-<h2 id="一些关键字的解释"><a href="#一些关键字的解释" class="headerlink" title="一些关键字的解释"></a>一些关键字的解释</h2><p>&emsp;&emsp;extends:类的继承关键字</p>
-<p>&emsp;&emsp;implements:接口继承关键字</p>
+<h2 id="一些关键字的解释"><a href="#一些关键字的解释" class="headerlink" title="一些关键字的解释"></a>一些关键字的解释</h2><p>&emsp;&emsp;extends:类的继承关键字<br>&emsp;&emsp;implements:接口继承关键字</p>
 <p>&emsp;&emsp;super:用于实现对父类成员的访问，用来引用当前对象的父类</p>
 <p>&emsp;&emsp;this:指向自己的引用</p>
 <p>&emsp;&emsp;final:final 关键字声明类可以把类定义为不能继承的，即最终类；或者用于修饰方法，该方法不能被子类重写.</p>
 <p>&emsp;&emsp; 注:实例变量也可以被定义为 final，被定义为 final 的变量不能被修改，就类似于常量的定义。</p>
+<h3 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h3><table>
+<thead>
+<tr>
+<th>访问权限</th>
+<th style="text-align:right">类</th>
+<th style="text-align:center">包</th>
+<th style="text-align:center">子类</th>
+<th style="text-align:center">其他包</th>
+<th style="text-align:center">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td style="text-align:right">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">对任何人都是可用的</td>
+</tr>
+<tr>
+<td>protect</td>
+<td style="text-align:right">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">继承的类可以访问以及和private一样的权限</td>
+</tr>
+<tr>
+<td>default</td>
+<td style="text-align:right">∨</td>
+<td style="text-align:center">∨</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">包访问权限，即在整个包内均可被访问</td>
+</tr>
+<tr>
+<td>private</td>
+<td style="text-align:right">∨</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">除类型创建者和类型的内部方法之外的任何人都不能访问的元素</td>
+</tr>
+</tbody>
+</table>
 
       
 

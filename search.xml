@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Java-多态]]></title>
+    <url>%2F2018%2F11%2F02%2FJava-%E5%A4%9A%E6%80%81-md%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>Java</category>
+        <category>面向对象基础</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>面向对象基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Java-继承]]></title>
+    <url>%2F2018%2F10%2F31%2FJava-%E7%BB%A7%E6%89%BF%2F</url>
+    <content type="text"><![CDATA[Java面向对象三大特征-继承 继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释 继承的概念&emsp;&emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为什么会这样去构建呢？ &emsp;&emsp;正是因为动物种类太多了，所以需要进行分类，在编程中，涉及到了分类，肯定就要抽象，顾名思义，抽象就是抽出相像的部分，这里的狗、猫、人根据其共同点，抽象后就构成了一个新的类别，即哺乳动物，同样的，蛇和鳄鱼又构成爬行动物类，而不管是哺乳动物还是爬行动物，他们又有共同的特征，所以又构成动物类，以此类推。 &emsp;&emsp;在Java编程中继承是用extends来实现的，extends的意思是延伸、扩展，即子类是父类的扩展。 下面以动物分类为例 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647public class Animal &#123; String name; public void run()&#123; System.out.println("我能跑"); &#125; public void eat()&#123; System.out.println("我能吃"); &#125; public static void main(String[] args)&#123; Animal animal = new Animal(); System.out.println("动物类"); animal.run(); animal.eat(); Mammal mammal = new Mammal(); System.out.println("哺乳类"); mammal.viviparous(); mammal.run(); mammal.eat(); Reptiles reptiles = new Reptiles(); System.out.println("爬行类"); reptiles.Oviparous(); reptiles.run(); reptiles.eat(); &#125;&#125;//哺乳类class Mammal extends Animal &#123; public void viviparous()&#123; System.out.println("我是胎生"); &#125;&#125;//爬行类class Reptiles extends Animal&#123; public void Oviparous()&#123; System.out.println("我是卵生"); &#125; public void run()&#123; System.out.println("我能爬行"); &#125;&#125; 运行结果: 动物类 我能跑 我能吃 哺乳类 我是胎生 我能跑 我能吃 爬行类 我是卵生 我能爬行 我能吃 &emsp;&emsp;可以看到，在Mammal类和Reptiles类中，并没有写eat方法，但都可以调用，就是因为用了extends继承了Animal类，而在Reptiles中，需要自己扩展，又写了新的run()方法,覆盖了父类的run()方法，这就叫做重写，具体后面会讲。 小结： 子类继承父类，可以得到父类的全部属性和方法(除了父类的构造方法)。 Java中的类只有单继承，一个类只能有一个直接父类。没有多继承。多继承会引起混乱，使继承链过于复杂，系统难于维护。就像现实中，如果一个人有多个父亲母亲，世界就会混乱。多继承，就是为了实现代码的复用性，却引入了复杂性，使系统类之间的关系混乱。 Java中的类没有多继承，但有多重继承，即上述的狗类能继承哺乳动物类，哺乳动物类又能继承动物类，这样多层次的继承下去 Java中实际也有多继承，不在类中，但可以通过接口来实现(接口后面再讲) 如果定义一个类时，没有调用extends，则它的父类默认是：Java.lang.Object。 父类和子类有很多不同的叫法：超类、父类、基类、子类 、派生类。。。 如果想要该类不再被其他类继承，则可以使用final关键字 方法的重写(override) (不要与重载(overload)混淆) 在子类中可以根据需要对从基类中继承来的方法重写。 重写方法必须和被重写的方法具有相同的方法名称、参数列表和返回类型。 重写方法不能使用比被重写的访问权限 子类重写父类的方法时，其实也可以调用父类的该方法，用super关键字。 eg:在上述代码的基础上加上鸟类 12345678//鸟类class Bird extends Animal&#123; @Override public void run() &#123; super.run(); System.out.println("我能飞"); &#125;&#125; 运行结果:我能跑我能飞 简单了解Object类与API构造方法构造函数，也叫构造方法，是java中一种特殊的函数。与函数名相同，无返回值。 作用：一般用来初始化成员属性和成员方法的，即new对象产生后，就调用了对象了属性和方法。 &emsp;&emsp;一个对象建立，构造函数只运行一次。而一般函数是对象调用才执行，用”.方法名“的方式，给对象添加功能，并且能调用多次。 构造函数的特点: 1、函数名与类名相同 2、不用定义返回值类型。（不同于void类型返&gt;回值，void是没有具体返回值类型；构造函数是连类型都没有） 3、不可以写return语句。（返回值类型都没有，也就不需要return语句了） &emsp;&emsp;默认构造函数：当一个类中没有定义构造函数时，系统会给该类中加一个默认的空参数的构造函数，方便该类初始化。只是该空构造函数是隐藏不见的。但如果自己定义了构造函数，则默认构造函数就没有了，如果需要需要自己手动添加。 继承与组合&emsp;&emsp;继承是is-a的关系 &emsp;&emsp;而组合则是have-a的关系 &emsp;&emsp;组合就是在一个类中，可以用其它的类作为自己的变量，例如，在一个棋盘类中，可以用棋子作为其中的变量，但棋子其实也是我们自己事先定义好的类。 一些关键字的解释&emsp;&emsp;extends:类的继承关键字&emsp;&emsp;implements:接口继承关键字 &emsp;&emsp;super:用于实现对父类成员的访问，用来引用当前对象的父类 &emsp;&emsp;this:指向自己的引用 &emsp;&emsp;final:final 关键字声明类可以把类定义为不能继承的，即最终类；或者用于修饰方法，该方法不能被子类重写. &emsp;&emsp; 注:实例变量也可以被定义为 final，被定义为 final 的变量不能被修改，就类似于常量的定义。 访问修饰符 访问权限 类 包 子类 其他包 解释 public ∨ ∨ ∨ ∨ 对任何人都是可用的 protect ∨ ∨ ∨ × 继承的类可以访问以及和private一样的权限 default ∨ ∨ × × 包访问权限，即在整个包内均可被访问 private ∨ × × × 除类型创建者和类型的内部方法之外的任何人都不能访问的元素]]></content>
+      <categories>
+        <category>Java</category>
+        <category>面向对象基础</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>面向对象基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F10%2F31%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>开始</category>
+      </categories>
+      <tags>
+        <tag>开始</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+</search>

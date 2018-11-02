@@ -2,8 +2,8 @@
 <search>
   <entry>
     <title><![CDATA[Java-多态]]></title>
-    <url>%2F2018%2F11%2F02%2FJava-%E5%A4%9A%E6%80%81-md%2F</url>
-    <content type="text"></content>
+    <url>%2F2018%2F11%2F02%2FJava-%E5%A4%9A%E6%80%81%2F</url>
+    <content type="text"><![CDATA[Java面向对象三大特征-多态(polymorphism) 多态的概念 多态的概念 多态性是OOP中的一个重要特性，主要是用来实现动态联编的，换句话说，就是程序的最终状态只有在执行过程中才被决定而非在编译期间就决定了。这对于大型系统来说能提高系统的灵活性和扩展性。 多态是同一个行为具有多个不同表现形式或形态的能力。 多态就是同一个接口，使用不同的实例而执行不同操作。 Java实现多态的方法与多态的优点引用变量的两种类型： 编译时类型：(模糊一点，一般是一个父类)由声明时的类型决定运行时的类型：(运行时，具体是哪个子类就是哪个子类)由实际对应的对象类型决定 多态存在的3个必要条件：继承、重写、父类引用指向子类对象比如: Parent p = new Child(); 多态的优点： 消除类型之间的耦合关系 可替换性 可扩充性 接口性 灵活性 简化性 具体例子: 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748public class Animal &#123; String name; public void run()&#123; System.out.println("我能跑"); &#125; public static void main(String[] args)&#123; //传入动物类 testAnimal(new Animal()); //传入爬行类 testAnimal(new Reptiles()); //传入鸟类 testAnimal(new Bird()); /* Animal animal = new Bird(); testAnimal(animal); animal.Oviparous();//会报错，必须强转 ((Bird) animal).Oviparous();//正确形式 */ &#125; public static void testAnimal(Animal a)&#123; a.run(); &#125;&#125;//爬行类class Reptiles extends Animal&#123; @Override public void run()&#123; System.out.println("我能爬行"); &#125;&#125;//鸟类class Bird extends Animal&#123; @Override public void run() &#123; super.run(); System.out.println("我能飞"); &#125; public void Oviparous()&#123; System.out.println("我是卵生"); &#125;&#125; 多态的实现方式 重写 接口 抽象类和抽象方法 后面两个暂时不讲，等学接口和抽象类时再说。]]></content>
       <categories>
         <category>Java</category>
         <category>面向对象基础</category>

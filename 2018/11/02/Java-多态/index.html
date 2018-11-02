@@ -79,15 +79,18 @@
 
 
 
+<meta name="description" content="Java面向对象三大特征-多态(polymorphism)  多态的概念   多态的概念 多态性是OOP中的一个重要特性，主要是用来实现动态联编的，换句话说，就是程序的最终状态只有在执行过程中才被决定而非在编译期间就决定了。这对于大型系统来说能提高系统的灵活性和扩展性。  多态是同一个行为具有多个不同表现形式或形态的能力。  多态就是同一个接口，使用不同的实例而执行不同操作。   Java实现多态">
 <meta name="keywords" content="Java,面向对象基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java-多态">
-<meta property="og:url" content="http://www.zephon.xyz/2018/11/02/Java-多态-md/index.html">
+<meta property="og:url" content="http://www.zephon.xyz/2018/11/02/Java-多态/index.html">
 <meta property="og:site_name" content="Blog_Zephon">
+<meta property="og:description" content="Java面向对象三大特征-多态(polymorphism)  多态的概念   多态的概念 多态性是OOP中的一个重要特性，主要是用来实现动态联编的，换句话说，就是程序的最终状态只有在执行过程中才被决定而非在编译期间就决定了。这对于大型系统来说能提高系统的灵活性和扩展性。  多态是同一个行为具有多个不同表现形式或形态的能力。  多态就是同一个接口，使用不同的实例而执行不同操作。   Java实现多态">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-02T06:35:29.672Z">
+<meta property="og:updated_time" content="2018-11-02T07:18:19.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-多态">
+<meta name="twitter:description" content="Java面向对象三大特征-多态(polymorphism)  多态的概念   多态的概念 多态性是OOP中的一个重要特性，主要是用来实现动态联编的，换句话说，就是程序的最终状态只有在执行过程中才被决定而非在编译期间就决定了。这对于大型系统来说能提高系统的灵活性和扩展性。  多态是同一个行为具有多个不同表现形式或形态的能力。  多态就是同一个接口，使用不同的实例而执行不同操作。   Java实现多态">
 
 
 
@@ -117,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://www.zephon.xyz/2018/11/02/Java-多态-md/">
+  <link rel="canonical" href="http://www.zephon.xyz/2018/11/02/Java-多态/">
 
 
 
@@ -274,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2018/11/02/Java-多态-md/">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2018/11/02/Java-多态/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zephon">
@@ -374,7 +377,43 @@
       
 
       
-        
+        <h1 id="Java面向对象三大特征-多态-polymorphism"><a href="#Java面向对象三大特征-多态-polymorphism" class="headerlink" title="Java面向对象三大特征-多态(polymorphism)"></a>Java面向对象三大特征-多态(polymorphism)</h1><hr>
+<ol>
+<li>多态的概念</li>
+</ol>
+<hr>
+<h2 id="多态的概念"><a href="#多态的概念" class="headerlink" title="多态的概念"></a>多态的概念</h2><ol>
+<li><p>多态性是OOP中的一个重要特性，主要是用来实现动态联编的，换句话说，就是程序的最终状态只有在执行过程中才被决定而非在编译期间就决定了。这对于大型系统来说能提高系统的灵活性和扩展性。</p>
+</li>
+<li><p>多态是同一个行为具有多个不同表现形式或形态的能力。</p>
+</li>
+<li><p>多态就是同一个接口，使用不同的实例而执行不同操作。</p>
+</li>
+</ol>
+<h2 id="Java实现多态的方法与多态的优点"><a href="#Java实现多态的方法与多态的优点" class="headerlink" title="Java实现多态的方法与多态的优点"></a>Java实现多态的方法与多态的优点</h2><p>引用变量的两种类型：</p>
+<p>编译时类型：(模糊一点，一般是一个父类)由声明时的类型决定<br>运行时的类型：(运行时，具体是哪个子类就是哪个子类)由实际对应的对象类型决定</p>
+<p>多态存在的3个必要条件：<br>继承、重写、父类引用指向子类对象<br>比如:</p>
+<blockquote>
+<p>Parent p = new Child();</p>
+</blockquote>
+<p>多态的优点：</p>
+<ol>
+<li>消除类型之间的耦合关系</li>
+<li>可替换性</li>
+<li>可扩充性</li>
+<li>接口性</li>
+<li>灵活性</li>
+<li>简化性</li>
+</ol>
+<p>具体例子:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能跑"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">//传入动物类</span></span><br><span class="line">        testAnimal(<span class="keyword">new</span> Animal());</span><br><span class="line">        <span class="comment">//传入爬行类</span></span><br><span class="line">        testAnimal(<span class="keyword">new</span> Reptiles());</span><br><span class="line">        <span class="comment">//传入鸟类</span></span><br><span class="line">        testAnimal(<span class="keyword">new</span> Bird());</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        Animal animal = new Bird();</span></span><br><span class="line"><span class="comment">        testAnimal(animal);</span></span><br><span class="line"><span class="comment">        animal.Oviparous();//会报错，必须强转</span></span><br><span class="line"><span class="comment">        ((Bird) animal).Oviparous();//正确形式</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testAnimal</span><span class="params">(Animal a)</span></span>&#123;</span><br><span class="line">        a.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//爬行类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reptiles</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能爬行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//鸟类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span>  <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.run();</span><br><span class="line">        System.out.println(<span class="string">"我能飞"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Oviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是卵生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多态的实现方式"><a href="#多态的实现方式" class="headerlink" title="多态的实现方式"></a>多态的实现方式</h2><ul>
+<li>重写</li>
+<li>接口</li>
+<li>抽象类和抽象方法</li>
+</ul>
+<p>后面两个暂时不讲，等学接口和抽象类时再说。</p>
+
       
     </div>
     
@@ -538,8 +577,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -623,6 +671,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java面向对象三大特征-多态-polymorphism"><span class="nav-number">1.</span> <span class="nav-text">Java面向对象三大特征-多态(polymorphism)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多态的概念"><span class="nav-number">1.1.</span> <span class="nav-text">多态的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java实现多态的方法与多态的优点"><span class="nav-number">1.2.</span> <span class="nav-text">Java实现多态的方法与多态的优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态的实现方式"><span class="nav-number">1.3.</span> <span class="nav-text">多态的实现方式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -87,14 +87,15 @@
 <meta property="og:site_name" content="Blog_Zephon">
 <meta property="og:description" content="Hexo-如何上传你的第一篇博客当你的Hexo博客搭建好后，你就可以着手开始上传你的第一篇博客了。 上传前，你需要在自己电脑上先写好，具体步骤如下： 建立一个.md文件 &amp;emsp;&amp;emsp;如图所示,“ ”中的是文件名 编辑你的.md文件找到你的电脑中你的文章所在的位置，例如我的博客放在blog文件夹，然后我的就是blog/source&amp;gt;_posts文件中，找到Post-name.md文">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.zephon.xyz/2018/11/04/Post-name/img/1.png">
-<meta property="og:image" content="http://www.zephon.xyz/2018/11/04/Post-name/img/eg.png">
-<meta property="og:image" content="http://www.zephon.xyz/2018/11/04/Post-name/img/use.png">
-<meta property="og:updated_time" content="2018-11-04T08:05:15.882Z">
+<meta property="og:image" content="http://www.zephon.xyz/img/1.png">
+<meta property="og:image" content="http://www.zephon.xyz/img/eg.png">
+<meta property="og:image" content="http://www.zephon.xyz/img/use.png">
+<meta property="og:image" content="http://www.zephon.xyz/img/upload.png">
+<meta property="og:updated_time" content="2018-11-04T08:12:23.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo-如何上传你的第一篇博客">
 <meta name="twitter:description" content="Hexo-如何上传你的第一篇博客当你的Hexo博客搭建好后，你就可以着手开始上传你的第一篇博客了。 上传前，你需要在自己电脑上先写好，具体步骤如下： 建立一个.md文件 &amp;emsp;&amp;emsp;如图所示,“ ”中的是文件名 编辑你的.md文件找到你的电脑中你的文章所在的位置，例如我的博客放在blog文件夹，然后我的就是blog/source&amp;gt;_posts文件中，找到Post-name.md文">
-<meta name="twitter:image" content="http://www.zephon.xyz/2018/11/04/Post-name/img/1.png">
+<meta name="twitter:image" content="http://www.zephon.xyz/img/1.png">
 
 
 
@@ -364,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  408字
+                  422字
                 </span>
               
 
@@ -403,22 +404,24 @@
       
         <h1 id="Hexo-如何上传你的第一篇博客"><a href="#Hexo-如何上传你的第一篇博客" class="headerlink" title="Hexo-如何上传你的第一篇博客"></a>Hexo-如何上传你的第一篇博客</h1><p>当你的Hexo博客搭建好后，你就可以着手开始上传你的第一篇博客了。</p>
 <p>上传前，你需要在自己电脑上先写好，具体步骤如下：</p>
-<h2 id="建立一个-md文件"><a href="#建立一个-md文件" class="headerlink" title="建立一个.md文件"></a>建立一个.md文件</h2><p><img src="img/1.png" alt="新建"></p>
+<h2 id="建立一个-md文件"><a href="#建立一个-md文件" class="headerlink" title="建立一个.md文件"></a>建立一个.md文件</h2><p><img src="/img/1.png" alt="新建"></p>
 <p>&emsp;&emsp;如图所示,“ ”中的是文件名</p>
 <h2 id="编辑你的-md文件"><a href="#编辑你的-md文件" class="headerlink" title="编辑你的.md文件"></a>编辑你的.md文件</h2><p>找到你的电脑中你的文章所在的位置，例如我的博客放在blog文件夹，然后我的就是blog/source&gt;_posts文件中，找到Post-name.md文件，用markdown编辑器打开，如果没有markdown编辑器可以去下载一个或者直接用记事本也能打开，打开之后会自动帮你生成一些关于文章的信息，不用管，直接在下面继续写就行了，具体的markdown的一些规范与教程不会的可以自行百度。这里主要说一下网上教程可能不适用的方法，比如插入图片、引用。</p>
 <ul>
 <li>上传图片</li>
 </ul>
-<p>&emsp;&emsp;比如你要插入一个图片在此处<br> <img src="img/eg.png" alt="当图片无法加载时显示的内容"><br>&emsp;&emsp;首先你需要将图片放入你的电脑中的一下位置:以我的为例就是blog\source\img中</p>
+<p>&emsp;&emsp;比如你要插入一个图片在此处<br> <img src="/img/eg.png" alt="当图片无法加载时显示的内容"><br>&emsp;&emsp;首先你需要将图片放入你的电脑中的一下位置:以我的为例就是blog\source\img中</p>
 <p>&emsp;&emsp;然后可以用如下代码</p>
-<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">当图片无法加载时显示的内容</span>](<span class="link">img/eg.png</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">当图片无法加载时显示的内容</span>](<span class="link">/img/eg.png</span>)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>引用的话，之接用&gt; 空格+内容就行了，如果失败，可能是主题的原因，比如hexo刚建立时默认的主题landscape用引用就是会失败的如图  </li>
 </ul>
-<p><img src="img/use.png" alt="引用错误"></p>
+<p><img src="/img/use.png" alt="引用错误"></p>
 <p>&emsp;&emsp;这样的话就需要更换主题了</p>
 <h2 id="上传你的文件"><a href="#上传你的文件" class="headerlink" title="上传你的文件"></a>上传你的文件</h2><p>最后就简单了，上传你的修改就行了</p>
 <figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
+<p><img src="/img/upload.png" alt="上传"></p>
+<p>至此，就成功上传一篇你的博客了</p>
 
       
     </div>

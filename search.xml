@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Java-线程（下）]]></title>
+    <url>%2F2018%2F11%2F16%2FJava-%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A02%2F</url>
+    <content type="text"><![CDATA[线程（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synchronized块 同步：也称为并发，由于有多个线程访问同一份资源，所以确保资源安全 –&gt;线程安全 eg:HashTable是线程安全的，而HashMap是线程不安全的eg:StringBuffer是线程安全的，而StringBuild是线程不安全的 一、 同步块 synchronized(引用类型|this|类.class){} 二、 同步方法 public synchronized void test(){} 而同步块中的类.class涉及到单例设计模式 单例设计模式123456789101112131415161718192021222324252627282930/** * 〈单例设计模式：确保一个类只有一个对象〉 * 确保一个类只有一个对象 * 懒汉式 * 1、构造器私有化，避免外部直接创建对象 * 2、声明一个私有的静态变量 * 3、创建一个对外的公共的静态方法访问该变量，如果变量没有对象，创建该对象 * @author Zephon */class Jvm&#123; //声明一个私有的静态变量 private static Jvm instance = null; //构造器私有化，避免外部直接创建对象 private Jvm()&#123; &#125; //创建一个对外的公共的静态方法访问该变量，如果变量没有对象，创建该对象 public static Jvm getInstance(long time)&#123; if (null == instance) &#123; try &#123; Thread.sleep(time);//延时 &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; instance = new Jvm(); &#125; return instance; &#125;&#125; 死锁过多的同步容易造成死锁 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980/** * 死锁案例 * @author Zephon */public class SynDemo03 &#123; public static void main(String[] args)&#123; Object goods = new Object(); Object money = new Object(); Test t1 = new Test(goods,money); Test2 t2 = new Test2(goods,money); Thread proxy = new Thread(t1); Thread proxy2 = new Thread(t2); proxy.start(); proxy2.start(); &#125;&#125;class Test implements Runnable&#123; Object goods; Object money; public Test(Object goods, Object money) &#123; this.goods = goods; this.money = money; &#125; @Override public void run() &#123; while(true)&#123; test(); &#125; &#125; public void test()&#123; synchronized (goods)&#123; try &#123; Thread.sleep(500); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; synchronized (money)&#123; &#125; &#125; System.out.println("一手给钱"); &#125;&#125;class Test2 implements Runnable&#123; Object goods ; Object money ; public Test2(Object goods, Object money) &#123; this.goods = goods; this.money = money; &#125; @Override public void run() &#123; while(true)&#123; test(); &#125; &#125; public void test()&#123; synchronized (money)&#123; try &#123; Thread.sleep(500); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; synchronized (goods)&#123; &#125; &#125; System.out.println("一手给货"); &#125;&#125; 生产者消费者模式(不是设计模式而是解决死锁的一种方式) 生产者消费者问题，也称有限缓冲问题，是一个多线程同步问题的经典案例。该问题描述了两个共享固定大小缓冲区的线程-即所谓的“生产者”和“消费者”-在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗说这些数据。该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时消耗数据。 要解决该问题，就必须让生产者在缓冲区满时休眠（要么干脆就放弃数据），等到下次消费者消耗缓冲区中的数据的时候，生产者才能被唤醒，开始往缓冲区添加数据。同样，也可以让消费者在缓冲区空时进入休眠，等到生产者往缓冲区添加数据之后，再唤醒消费者。通常常用的方法有信号灯法、管程等。如果解决方法不够完善，则容易出现死锁情况。出现死锁时，两个线程都会陷入休眠，等待对方唤醒自己。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899/** * 〈一句话功能简述〉&lt;br&gt; * 〈生产者消费者模式 信号灯法〉 * wait();等待，释放锁 而sleep不释放锁 * notify()/notifyAll:唤醒 * @author Zephon */public class Movie &#123; private String pic ; //信号灯 //flag--&gt;T 生产者生产，消费者等待，生产完后，通知消费 //flag--&gt;F 消费者消费，生产者等待，消费完后，通知生产 private boolean flag = true; public synchronized void play(String pic)&#123; if(!flag)&#123;//生产者等待 try &#123; this.wait(); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; &#125; //开始生产 try &#123; Thread.sleep(500); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; this.pic = pic; //通知消费 this.notify(); //生产者停下 this.flag = false; &#125; public synchronized void watch()&#123; if(flag)&#123;//消费者等待 try &#123; this.wait(); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; &#125; try &#123; Thread.sleep(200); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125; System.out.println(pic); this.notifyAll(); this.flag = true; &#125; public static void main(String[] args)&#123; //共同资源 Movie m = new Movie(); //多线程 Player p = new Player(m); Watcher w = new Watcher(m); new Thread(p).start(); new Thread(w).start(); &#125;&#125;/** * 生产者 */class Player implements Runnable&#123; private Movie m; public Player(Movie m) &#123; this.m = m; &#125; @Override public void run() &#123; for(int i=0;i&lt;20;i++)&#123; if(i%2==0)&#123; m.play("偶数"); &#125;else&#123; m.play("奇数"); &#125; &#125; &#125;&#125;class Watcher implements Runnable&#123; private Movie m; public Watcher(Movie m) &#123; this.m = m; &#125; @Override public void run() &#123; for(int i=0;i&lt;20;i++)&#123; m.watch(); &#125; &#125;&#125; 任务调度12345678910111213141516/** * 任务调度 * 了解即可 * @author Zephon */public class TimeDemo01 &#123; public static void main(String[] args)&#123; Timer timer = new Timer(); timer.schedule(new TimerTask() &#123; @Override public void run() &#123; System.out.println("hello world"); &#125; &#125;,new Date(System.currentTimeMillis()+1000),200); &#125;&#125;]]></content>
+      <categories>
+        <category>Java</category>
+        <category>进阶</category>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>进阶</tag>
+        <tag>学习笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Java-线程（中）]]></title>
     <url>%2F2018%2F11%2F15%2FJava-%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A01%2F</url>
     <content type="text"><![CDATA[线程（中）线程状态 新生状态 就绪状态 运行状态 阻塞状态 死亡状态 新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态，当系统选定一个等待执行的Thread对象后，它就会从等待执行状态进入执行状态，系统挑选的动作称之为“CPU调度”。一旦获得CPU，线程就进入运行状态并自动调用自己的run()方法。运行状态：在运行状态的线程执行自己的run方法中的代码，直到调用其他方法而终止、或等待某资源而阻塞或完成任务而死亡。如果在给定的时间片内没有执行结束，就会被系统给换下来回到等待执行状态。阻塞状态：处于运行状态的线程在某些情况下，如执行了sleep方法，或等待I/O设备等资源，将让出CPU并暂时停止自己的运行，进入阻塞状态。在阻塞状态的线程不能进入就绪队列。只有当引起阻塞的原因消除时，如sleep时间已到，或等待的I/O设备空闲下来，线程便转入就绪状态，重新到时就绪对列中排队等待，被系统选中后从原来停止的位置开始继续运行。死亡状态：死亡状态是线程生命周期中的最后一个阶段。线程死亡的原因有两个。一个是正常运行的线程完成了它的全部工作，另一个是线程被强制性地终止，如通过执行stop或destroy方法来终止一个线程(不推荐使用这两个方法，前者会产生异常，后者是强制终止，不会释放锁) 停止线程1、自然终止：线程体正常执行完毕2、外部干涉：1）线程类中定义线程体使用的标识2）线程体使用该标识3）提供对外的方法改变该标识4）外部根据条件调用该方法 1234567891011121314151617181920212223242526272829public class StopDemo &#123; public static void main(String[] args)&#123; Study s = new Study(); new Thread(s).start(); //外部干涉 for(int i=0;i&lt;100;i++)&#123; if(50==i)s.stop(); System.out.println("main...--&gt;"+i); &#125; &#125;&#125;class Study implements Runnable&#123; //线程类中定义线程体使用的标识 private boolean flag = true; @Override public void run() &#123; //线程体使用该标识 while(flag)&#123; System.out.println("Study thread..."); &#125; &#125; //对外提供方法改变标识 public void stop() &#123; this.flag = false; &#125;&#125; 阻塞 join:合并线程 yield:暂停自己的线程 是一个静态的方法 sleep:休眠，不释放锁 1）与时间相关：倒计时 2）模仿网络延迟 12345678910111213141516171819202122public class JoinDemo extends Thread&#123; public static void main(String[] args) throws InterruptedException &#123; JoinDemo demo = new JoinDemo(); demo.start();//就绪 for(int i=0;i&lt;1000;i++)&#123; /* * demo.join()方法阻塞调用此方法的线程(calling thread)，直到线程t完成， * 此线程再继续；通常用于在main()主线程内，等待其它线程完成再结束main()主线程。 */ if(i==50)demo.join(); System.out.println("main..."+i); &#125; &#125; @Override public void run() &#123; for(int i=0;i&lt;1000;i++)&#123; System.out.println("run..."+i); &#125; &#125;&#125; 线程的信息 isAlive()&emsp;判断线程是否还“活”着getPriority()&emsp;获得线程的优先级数值setPriority()&emsp;设置线程的优先级数值setName()&emsp;设置线程的名字getName()&emsp;获得线程的名字currentThread()&emsp;取得当前正在运行的线程对象 1234567891011121314151617181920212223242526272829/** * 〈优先级〉--代表的是概率，不是绝对的先后顺序 * 1、MAX_PRIORITY 10 * 2、NORM_PRIORITY 5(默认) * 3、MIN_PRIORITY 1 * @author Zephon */public class PriorityDemo &#123; public static void main(String[] args)&#123; MyThread t1 = new MyThread("线程1"); MyThread t2 = new MyThread("线程2"); t1.setPriority(Thread.MAX_PRIORITY); t2.setPriority(Thread.MIN_PRIORITY); t1.start(); t2.start(); &#125;&#125;class MyThread extends Thread&#123; public MyThread(String name)&#123; super(name); &#125; @Override public void run() &#123; for(int i=0;i&lt;1000;i++) System.out.println(currentThread().getName()+"running..."+i); &#125;&#125;]]></content>
       <categories>
         <category>Java</category>
         <category>进阶</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>Java</tag>
         <tag>进阶</tag>
+        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -20,10 +37,12 @@
       <categories>
         <category>Java</category>
         <category>进阶</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>Java</tag>
         <tag>进阶</tag>
+        <tag>学习笔记</tag>
       </tags>
   </entry>
   <entry>

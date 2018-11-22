@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="线程（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synchroni">
+<meta name="description" content="线程学习笔记（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synch">
 <meta name="keywords" content="Java,进阶,学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java-线程（下）">
+<meta property="og:title" content="Java-线程学习笔记（下）">
 <meta property="og:url" content="http://www.zephon.xyz/2018/11/16/Java-线程学习2/index.html">
 <meta property="og:site_name" content="Blog_Zephon">
-<meta property="og:description" content="线程（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synchroni">
+<meta property="og:description" content="线程学习笔记（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synch">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-16T05:38:20.062Z">
+<meta property="og:updated_time" content="2018-11-21T14:21:14.583Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java-线程（下）">
-<meta name="twitter:description" content="线程（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synchroni">
+<meta name="twitter:title" content="Java-线程学习笔记（下）">
+<meta name="twitter:description" content="线程学习笔记（下）同步 由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问 由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synch">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>Java-线程（下） | Blog_Zephon</title>
+  <title>Java-线程学习笔记（下） | Blog_Zephon</title>
   
 
 
@@ -294,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java-线程（下）</h1>
+          <h1 class="post-title" itemprop="name headline">Java-线程学习笔记（下）</h1>
         
 
         <div class="post-meta">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,518字
+                  1,522字
                 </span>
               
 
@@ -419,7 +419,7 @@
       
 
       
-        <h1 id="线程（下）"><a href="#线程（下）" class="headerlink" title="线程（下）"></a>线程（下）</h1><h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><ul>
+        <h1 id="线程学习笔记（下）"><a href="#线程学习笔记（下）" class="headerlink" title="线程学习笔记（下）"></a>线程学习笔记（下）</h1><h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><ul>
 <li>由于同一进程的多个线程共享同一片存储空间，在带来方便的同时，也带来了访问冲突这个严重的问题。Java语言提供了专门机制以解决这种冲突，有效避免了同一个数据对象被多个线程同时访问</li>
 <li>由于我们可以通过private关键字来保证数据对象只能被方法访问，所以我们只需针对方法提出一套机制，这套机制就是synchronized关键字，它包括两种用法：synchronized方法synchronized块</li>
 </ul>
@@ -507,8 +507,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/15/Java-线程学习1/" rel="next" title="Java-线程（中）">
-                <i class="fa fa-chevron-left"></i> Java-线程（中）
+              <a href="/2018/11/15/Java-线程学习1/" rel="next" title="Java-线程学习笔记（中）">
+                <i class="fa fa-chevron-left"></i> Java-线程学习笔记（中）
               </a>
             
           </div>
@@ -516,6 +516,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/21/Java-网络编程学习/" rel="prev" title="网络编程学习笔记">
+                网络编程学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -637,7 +641,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -720,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程（下）"><span class="nav-number">1.</span> <span class="nav-text">线程（下）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#同步"><span class="nav-number">1.1.</span> <span class="nav-text">同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例设计模式"><span class="nav-number">1.2.</span> <span class="nav-text">单例设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">1.3.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产者消费者模式-不是设计模式而是解决死锁的一种方式"><span class="nav-number">1.4.</span> <span class="nav-text">生产者消费者模式(不是设计模式而是解决死锁的一种方式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务调度"><span class="nav-number">1.5.</span> <span class="nav-text">任务调度</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程学习笔记（下）"><span class="nav-number">1.</span> <span class="nav-text">线程学习笔记（下）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#同步"><span class="nav-number">1.1.</span> <span class="nav-text">同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例设计模式"><span class="nav-number">1.2.</span> <span class="nav-text">单例设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死锁"><span class="nav-number">1.3.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产者消费者模式-不是设计模式而是解决死锁的一种方式"><span class="nav-number">1.4.</span> <span class="nav-text">生产者消费者模式(不是设计模式而是解决死锁的一种方式)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务调度"><span class="nav-number">1.5.</span> <span class="nav-text">任务调度</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -741,6 +745,18 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class="">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+</div>
+
 
 <div class="">
   <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>

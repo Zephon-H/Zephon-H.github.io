@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="线程（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态，当系统">
+<meta name="description" content="线程学习笔记（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态">
 <meta name="keywords" content="Java,进阶,学习笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java-线程（中）">
+<meta property="og:title" content="Java-线程学习笔记（中）">
 <meta property="og:url" content="http://www.zephon.xyz/2018/11/15/Java-线程学习1/index.html">
 <meta property="og:site_name" content="Blog_Zephon">
-<meta property="og:description" content="线程（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态，当系统">
+<meta property="og:description" content="线程学习笔记（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.zephon.xyz/img/animal.png">
-<meta property="og:updated_time" content="2018-11-15T14:24:13.629Z">
+<meta property="og:updated_time" content="2018-11-21T14:21:11.575Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java-线程（中）">
-<meta name="twitter:description" content="线程（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态，当系统">
+<meta name="twitter:title" content="Java-线程学习笔记（中）">
+<meta name="twitter:description" content="线程学习笔记（中）线程状态  新生状态 就绪状态 运行状态 阻塞状态 死亡状态  新生状态：用new关键字和Thread类或其子类建立一个线程对象后，该线程对象就处于新生状态。处于新生状态的线程有自己的内存空间，通过调用start方法进入就绪状态(runnable)就绪状态：处于就绪状态的线程已经具备了运行条件，但还没有分配到CPU，处于线程就绪对列，等待系统为其分配CPU。等待状态并不是执行状态">
 <meta name="twitter:image" content="http://www.zephon.xyz/img/animal.png">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>Java-线程（中） | Blog_Zephon</title>
+  <title>Java-线程学习笔记（中） | Blog_Zephon</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java-线程（中）</h1>
+          <h1 class="post-title" itemprop="name headline">Java-线程学习笔记（中）</h1>
         
 
         <div class="post-meta">
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,132字
+                  1,136字
                 </span>
               
 
@@ -421,7 +421,7 @@
       
 
       
-        <h1 id="线程（中）"><a href="#线程（中）" class="headerlink" title="线程（中）"></a>线程（中）</h1><h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p><img src="/img/animal.png" alt="thread"></p>
+        <h1 id="线程学习笔记（中）"><a href="#线程学习笔记（中）" class="headerlink" title="线程学习笔记（中）"></a>线程学习笔记（中）</h1><h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p><img src="/img/animal.png" alt="thread"></p>
 <ol>
 <li>新生状态</li>
 <li>就绪状态</li>
@@ -505,8 +505,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/13/Java-线程学习/" rel="next" title="Java-线程（上）">
-                <i class="fa fa-chevron-left"></i> Java-线程（上）
+              <a href="/2018/11/13/Java-线程学习/" rel="next" title="Java-线程学习笔记（上）">
+                <i class="fa fa-chevron-left"></i> Java-线程学习笔记（上）
               </a>
             
           </div>
@@ -515,8 +515,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/16/Java-线程学习2/" rel="prev" title="Java-线程（下）">
-                Java-线程（下） <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/16/Java-线程学习2/" rel="prev" title="Java-线程学习笔记（下）">
+                Java-线程学习笔记（下） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -639,7 +639,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -722,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程（中）"><span class="nav-number">1.</span> <span class="nav-text">线程（中）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程状态"><span class="nav-number">1.1.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停止线程"><span class="nav-number">1.2.</span> <span class="nav-text">停止线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阻塞"><span class="nav-number">2.</span> <span class="nav-text">阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的信息"><span class="nav-number">3.</span> <span class="nav-text">线程的信息</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程学习笔记（中）"><span class="nav-number">1.</span> <span class="nav-text">线程学习笔记（中）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程状态"><span class="nav-number">1.1.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#停止线程"><span class="nav-number">1.2.</span> <span class="nav-text">停止线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阻塞"><span class="nav-number">2.</span> <span class="nav-text">阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的信息"><span class="nav-number">3.</span> <span class="nav-text">线程的信息</span></a></li></ol></div>
             
 
           </div>
@@ -743,6 +743,18 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class="">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+</div>
+
 
 <div class="">
   <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>

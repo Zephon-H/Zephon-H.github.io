@@ -6,10 +6,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,面向对象基础,">
+  <meta name="keywords" content="Java,面向对象基础," />
 
 
 
@@ -83,16 +83,14 @@
 <meta name="keywords" content="Java,面向对象基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java-继承">
-<meta property="og:url" content="http://www.zephon.xyz/2018/10/31/Java-继承/index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.xyz&#x2F;2018&#x2F;10&#x2F;31&#x2F;Java-%E7%BB%A7%E6%89%BF&#x2F;index.html">
 <meta property="og:site_name" content="Zephon Blog">
 <meta property="og:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.zephon.xyz/img/animal.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;www.zephon.xyz&#x2F;img&#x2F;animal.png">
 <meta property="og:updated_time" content="2018-11-02T06:35:09.710Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java-继承">
-<meta name="twitter:description" content="Java面向对象三大特征-继承  继承的概念 方法重写 简单了解Object类与API 构造方法 继承与组合 一些关键字的解释   继承的概念&amp;emsp;&amp;emsp;类是对对象的抽象，从OOD(面向对象设计)的角度，继承是对某一批类的抽象，从而实现对现实世界更好的建模。从OOP(面向对象编程)的角度，继承则有利于提高代码的复用性。 eg:当要构建动物世界的模型时,我们会依赖继承的关系去构建。我们为">
-<meta name="twitter:image" content="http://www.zephon.xyz/img/animal.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;www.zephon.xyz&#x2F;img&#x2F;animal.png">
 
 
 
@@ -122,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://www.zephon.xyz/2018/10/31/Java-继承/">
+  <link rel="canonical" href="http://www.zephon.xyz/2018/10/31/Java-继承/"/>
 
 
 
@@ -140,7 +138,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -150,15 +148,15 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 	
-	<a href="https://github.com/Zephon-H"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+	<a href="https://github.com/Zephon-H" target="_blank" rel="noopener"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
+      <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Zephon Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -186,9 +184,9 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
           </a>
@@ -196,9 +194,9 @@
       
         
         <li class="menu-item menu-item-download">
-          <a href="/download/" rel="section">
+          <a href="/download/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-download"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-download"></i> <br />
             
             分享
           </a>
@@ -206,9 +204,9 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/tags/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
           </a>
@@ -218,10 +216,10 @@
       
         <li class="menu-item menu-item-search">
           
-            <a href="javascript:;" class="popup-trigger">
+            <a href="javascript:;" target="_blank" rel="noopener" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
             搜索
           </a>
@@ -242,7 +240,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -279,20 +279,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2018/10/31/Java-继承/">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2018/10/31/Java-%E7%BB%A7%E6%89%BF/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zephon">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar1.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Zephon Blog">
     </span>
 
@@ -324,7 +324,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -335,7 +335,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Java/" itemprop="url" rel="index">
                     <span itemprop="name">Java</span>
                   </a>
@@ -346,8 +346,8 @@
                   ， 
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/面向对象基础/" itemprop="url" rel="index">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
                     <span itemprop="name">面向对象基础</span>
                   </a>
                 </span>
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,679字
+                  1.7k字
                 </span>
               
 
@@ -432,7 +432,7 @@
 <p>&emsp;&emsp;在Java编程中继承是用extends来实现的，extends的意思是延伸、扩展，即子类是父类的扩展。</p>
 <p>下面以动物分类为例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能跑"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能吃"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Animal animal = <span class="keyword">new</span> Animal();</span><br><span class="line">        System.out.println(<span class="string">"动物类"</span>);</span><br><span class="line">        animal.run();</span><br><span class="line">        animal.eat();</span><br><span class="line"></span><br><span class="line">        Mammal mammal = <span class="keyword">new</span> Mammal();</span><br><span class="line">        System.out.println(<span class="string">"哺乳类"</span>);</span><br><span class="line">        mammal.viviparous();</span><br><span class="line">        mammal.run();</span><br><span class="line">        mammal.eat();</span><br><span class="line"></span><br><span class="line">        Reptiles reptiles = <span class="keyword">new</span> Reptiles();</span><br><span class="line">        System.out.println(<span class="string">"爬行类"</span>);</span><br><span class="line">        reptiles.Oviparous();</span><br><span class="line">        reptiles.run();</span><br><span class="line">        reptiles.eat();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//哺乳类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mammal</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">viviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是胎生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//爬行类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reptiles</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Oviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是卵生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能爬行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<font color="gray" size="2">
+<font color=gray size=2>
  运行结果:  
  动物类  
  我能跑  
@@ -466,7 +466,7 @@
 <p>子类重写父类的方法时，其实也可以调用父类的该方法，用super关键字。</p>
 <p>eg:在上述代码的基础上加上鸟类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//鸟类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span>  <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.run();</span><br><span class="line">        System.out.println(<span class="string">"我能飞"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<font color="gray" size="2">
+<font color=gray size=2>
 运行结果:  
 我能跑  
 我能飞
@@ -556,14 +556,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -584,7 +584,7 @@
           
             <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
           
-            <a href="/tags/面向对象基础/" rel="tag"><i class="fa fa-tag"></i> 面向对象基础</a>
+            <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80/" rel="tag"><i class="fa fa-tag"></i> 面向对象基础</a>
           
         </div>
       
@@ -607,7 +607,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/02/Java-多态/" rel="prev" title="Java-多态">
+              <a href="/2018/11/02/Java-%E5%A4%9A%E6%80%81/" rel="prev" title="Java-多态">
                 Java-多态 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -679,7 +679,12 @@
   
 
   	  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1106127810827644" data-ad-slot="2635376206"></ins>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-1106127810827644"
+     data-ad-slot="2635376206"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
@@ -723,9 +728,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar1.gif" alt="Zephon">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar1.gif"
+                alt="Zephon" />
             
               <p class="site-author-name" itemprop="name">Zephon</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -798,7 +805,7 @@
           
             <div class="cc-license motion-element" itemprop="license">
               <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
               </a>
             </div>
           
@@ -844,7 +851,7 @@
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-<div class="">
+<div class = "">
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -855,7 +862,7 @@
 </div>
 
 
-<div class="">
+<div class ="">
   <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
 <script>
     var now = new Date(); 

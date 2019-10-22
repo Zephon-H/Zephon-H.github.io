@@ -6,10 +6,10 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
 
 
@@ -20,8 +20,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform">
-<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
 
 
@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -48,9 +48,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="前端,">
+  <meta name="keywords" content="前端," />
 
 
 
@@ -83,14 +83,12 @@
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第十六天">
-<meta property="og:url" content="http://www.zephon.xyz/2019/07/27/vue-6/index.html">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.xyz&#x2F;2019&#x2F;07&#x2F;27&#x2F;vue-6&#x2F;index.html">
 <meta property="og:site_name" content="Zephon Blog">
 <meta property="og:description" content="第十六天在页面中使用render函数渲染组件12345678910111213141516171819202122232425262728293031323334353637&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&quot;zh-CN&quot;&amp;gt;    &amp;lt;head&amp;gt;        &amp;lt;meta charset=&quot;UTF-8&quot;&amp;gt;        &amp;lt;met">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-07-31T06:13:11.324Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第十六天">
-<meta name="twitter:description" content="第十六天在页面中使用render函数渲染组件12345678910111213141516171819202122232425262728293031323334353637&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&quot;zh-CN&quot;&amp;gt;    &amp;lt;head&amp;gt;        &amp;lt;meta charset=&quot;UTF-8&quot;&amp;gt;        &amp;lt;met">
 
 
 
@@ -120,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://www.zephon.xyz/2019/07/27/vue-6/">
+  <link rel="canonical" href="http://www.zephon.xyz/2019/07/27/vue-6/"/>
 
 
 
@@ -138,7 +136,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -148,15 +146,15 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 	
-	<a href="https://github.com/Zephon-H"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+	<a href="https://github.com/Zephon-H" target="_blank" rel="noopener"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
 
     <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
+      <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Zephon Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -184,9 +182,9 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
           </a>
@@ -194,9 +192,9 @@
       
         
         <li class="menu-item menu-item-download">
-          <a href="/download/" rel="section">
+          <a href="/download/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-download"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-download"></i> <br />
             
             分享
           </a>
@@ -204,9 +202,9 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/tags/%20" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
           </a>
@@ -216,10 +214,10 @@
       
         <li class="menu-item menu-item-search">
           
-            <a href="javascript:;" class="popup-trigger">
+            <a href="javascript:;" target="_blank" rel="noopener" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
             搜索
           </a>
@@ -240,7 +238,9 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -277,20 +277,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2019/07/27/vue-6/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zephon">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar1.gif">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="Zephon Blog">
     </span>
 
@@ -322,7 +322,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -333,8 +333,8 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
                     <span itemprop="name">前端</span>
                   </a>
                 </span>
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,483字
+                  1.4k字
                 </span>
               
 
@@ -381,7 +381,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7 分钟
+                  6 分钟
                 </span>
               
             </div>
@@ -402,14 +402,14 @@
       
 
       
-        <h1 id="第十六天"><a href="#第十六天" class="headerlink" title="第十六天"></a>第十六天</h1><h2 id="在页面中使用render函数渲染组件"><a href="#在页面中使用render函数渲染组件" class="headerlink" title="在页面中使用render函数渲染组件"></a>在页面中使用render函数渲染组件</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>在页面中使用render函数渲染组件<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> login = &#123;</span></span><br><span class="line"><span class="xml">                template: '<span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是登录组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>'</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                methods: &#123;&#125;,</span></span><br><span class="line"><span class="javascript">                render: <span class="function"><span class="keyword">function</span> (<span class="params">createElement</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                    <span class="comment">// creteElement 是一个方法，调用它能将指定的组件模板渲染为HTML结构</span></span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> createElement(login);</span></span><br><span class="line"><span class="javascript">                    <span class="comment">// 注意：这里return 的结果会替换页面中el对应的容器</span></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+        <h1 id="第十六天"><a href="#第十六天" class="headerlink" title="第十六天"></a>第十六天</h1><h2 id="在页面中使用render函数渲染组件"><a href="#在页面中使用render函数渲染组件" class="headerlink" title="在页面中使用render函数渲染组件"></a>在页面中使用render函数渲染组件</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>在页面中使用render函数渲染组件<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> login = &#123;</span></span><br><span class="line"><span class="handlebars"><span class="xml">                template: '<span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是登录组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span>'</span></span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="actionscript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                methods: &#123;&#125;,</span></span><br><span class="line"><span class="actionscript">                render: <span class="function"><span class="keyword">function</span> <span class="params">(createElement)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// creteElement 是一个方法，调用它能将指定的组件模板渲染为HTML结构</span></span></span><br><span class="line"><span class="actionscript">                    <span class="keyword">return</span> createElement(login);</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 注意：这里return 的结果会替换页面中el对应的容器</span></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="在webpack中使用vue"><a href="#在webpack中使用vue" class="headerlink" title="在webpack中使用vue"></a>在webpack中使用vue</h2><p>main.js</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如何在webpack构建的文件中，使用Vue进行开发</span></span><br><span class="line"><span class="comment">// 1. 装包 npm i vue -S</span></span><br><span class="line"><span class="comment">// 2. 由于在webpack中，推荐使用.vue这个组件模板文件定义组件，所以需要安装能解析这种文件的loader npm i -D vue-loader vue-template-compiler</span></span><br><span class="line"><span class="comment">// 3. 在main.js中导入vue模块 import Vue from 'vue'</span></span><br><span class="line"><span class="comment">// 4. 定义一个.vue结尾的组件，其中组件包括template、script、style三部分</span></span><br><span class="line"><span class="comment">// 5. 使用import login from './login.vue'导入这个组件</span></span><br><span class="line"><span class="comment">// 6. 创建vm的实例 var vm = new Vue(&#123;el:"#app",render:c=&gt;c(login)&#125;)</span></span><br><span class="line"><span class="comment">// 7. 在页面中创建一个id为app的div元素作为vm实例要控制的区域</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在webpack中使用import导入的Vue构造函数功能不完整，只提供了runtime-only方式，并没有提供像网页中那种形式</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">"vue"</span></span><br><span class="line"><span class="comment">// 如果想像网页中那样可以有以下方法</span></span><br><span class="line"><span class="comment">// import Vue from '../node_modules/vue/dist/vue.js'</span></span><br><span class="line"><span class="comment">// 或 在webpack.config.js module.exports中添加</span></span><br><span class="line"><span class="comment">// resolve: &#123;</span></span><br><span class="line"><span class="comment">//     alias: &#123;</span></span><br><span class="line"><span class="comment">//         // 修改vue被导入时包的路径</span></span><br><span class="line"><span class="comment">//         "vue$": "vue/dist/vue.js"</span></span><br><span class="line"><span class="comment">//     &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// 包的查找规则：</span></span><br><span class="line"><span class="comment">// 1. 找项目根目录中有没有node_modules的文件夹</span></span><br><span class="line"><span class="comment">// 2. 在node_modules中根据包名，找对应的vue文件夹</span></span><br><span class="line"><span class="comment">// 3. 在vue文件夹中找一个叫package.json的包配置文件</span></span><br><span class="line"><span class="comment">// 4. 在package.json文件中，找一个main属性【main属性指定了这个包在被加载时的入口文件】</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 导入login组件</span></span><br><span class="line"><span class="keyword">import</span> login <span class="keyword">from</span> <span class="string">'./login.vue'</span></span><br><span class="line"><span class="comment">// 默认webpack无法打包.vue文件，需要安装vue-loader vue-template-compiler</span></span><br><span class="line"><span class="comment">// npm i -D vue-loader vue-template-compiler</span></span><br><span class="line"><span class="comment">// 在配置文件中新增loader配置项(包括rule和plugin)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">"#app"</span>,</span><br><span class="line">    data: &#123;</span><br><span class="line">        msg: <span class="string">'123'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 在webpack中，如果想通过vue将一个组件放到页面中去展示，vm实例中的render函数可以实现</span></span><br><span class="line">    <span class="comment">// render: function (createElement) &#123;</span></span><br><span class="line">    <span class="comment">//     return createElement(login);</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    render: <span class="function"><span class="params">c</span> =&gt;</span> c(login) <span class="comment">//简写</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>webpack.config.js</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置文件</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> htmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">    VueLoaderPlugin</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">'vue-loader'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.join(__dirname, <span class="string">'./src/main.js'</span>),</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'./dist'</span>),</span><br><span class="line">        filename: <span class="string">'bundle.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> htmlWebpackPlugin(&#123;</span><br><span class="line">            template: path.join(__dirname, <span class="string">'./src/index.html'</span>),</span><br><span class="line">            filename: <span class="string">'index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> VueLoaderPlugin()</span><br><span class="line">    ],</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [&#123;</span><br><span class="line">            test: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">            use: <span class="string">"vue-loader"</span></span><br><span class="line">        &#125;]</span><br><span class="line">        <span class="comment">// ,</span></span><br><span class="line">        <span class="comment">// resolve: &#123;</span></span><br><span class="line">        <span class="comment">//     alias: &#123;</span></span><br><span class="line">        <span class="comment">//         // 修改vue被导入时包的路径</span></span><br><span class="line">        <span class="comment">//         "vue$": "vue/dist/vue.js"</span></span><br><span class="line">        <span class="comment">//     &#125;</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="export和export-default"><a href="#export和export-default" class="headerlink" title="export和export default"></a>export和export default</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是登录组件，使用.vue文件定义出来的---&#123;&#123;msg&#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="comment">// ES6中规定了导入导出模块的方式</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 导入：import 模块名称 from '模块标识符' import '表示路径'</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 导出：export default 和 export 向外暴露成员</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 注意：export default向外暴露的成员，可以通过任意变量接收</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 注意：在一个模块中，export default只允许向外暴露一次</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// export var title = 'abc' --&gt; import &#123;title&#125; from ''</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 通过export形式向外暴露的只能使用&#123; &#125;的形式来接收(即按需导出)</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 使用export导出的成员，必须严格使用导出时的名称(或者 import &#123;title as t&#125; from '' 来起别名)</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// export var a = 'a' export var b = 'b' --&gt;import&#123;a,b&#125; from ''</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// export可以向外暴露多个成员，同时，如果某些成员，在import时不需要则可以不在&#123;&#125;中定义</span></span></span><br><span class="line"><span class="javascript"><span class="comment">// 在一个模块中，可以同时使用export 和 export default向外暴露</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">  data () &#123; <span class="comment">// 注意：组件中的data必须是function</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">      msg: <span class="string">'123'</span></span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="undefined">  methods: &#123;</span></span><br><span class="line"><span class="undefined">    show () &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">"调用了login.vue中的show()方法"</span>);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="export和export-default"><a href="#export和export-default" class="headerlink" title="export和export default"></a>export和export default</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是登录组件，使用.vue文件定义出来的---&#123;&#123;msg&#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript"><span class="comment">// ES6中规定了导入导出模块的方式</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 导入：import 模块名称 from '模块标识符' import '表示路径'</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 导出：export default 和 export 向外暴露成员</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 注意：export default向外暴露的成员，可以通过任意变量接收</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 注意：在一个模块中，export default只允许向外暴露一次</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// export var title = 'abc' --&gt; import &#123;title&#125; from ''</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 通过export形式向外暴露的只能使用&#123; &#125;的形式来接收(即按需导出)</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 使用export导出的成员，必须严格使用导出时的名称(或者 import &#123;title as t&#125; from '' 来起别名)</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// export var a = 'a' export var b = 'b' --&gt;import&#123;a,b&#125; from ''</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// export可以向外暴露多个成员，同时，如果某些成员，在import时不需要则可以不在&#123;&#125;中定义</span></span></span><br><span class="line"><span class="actionscript"><span class="comment">// 在一个模块中，可以同时使用export 和 export default向外暴露</span></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="actionscript">  data () &#123; <span class="comment">// 注意：组件中的data必须是function</span></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="actionscript">      msg: <span class="string">'123'</span></span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;,</span></span><br><span class="line"><span class="undefined">  methods: &#123;</span></span><br><span class="line"><span class="undefined">    show () &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">"调用了login.vue中的show()方法"</span>);</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="webpack中使用vue-router"><a href="#webpack中使用vue-router" class="headerlink" title="webpack中使用vue-router"></a>webpack中使用vue-router</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 导入vue-router包</span></span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">'vue-router'</span>;</span><br><span class="line"><span class="keyword">import</span> account <span class="keyword">from</span> <span class="string">'./main/account.vue'</span>;</span><br><span class="line"><span class="keyword">import</span> goodslist <span class="keyword">from</span> <span class="string">'./main/goodslist.vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> login <span class="keyword">from</span> <span class="string">'./subcom/login.vue'</span>;</span><br><span class="line"><span class="keyword">import</span> register <span class="keyword">from</span> <span class="string">'./subcom/register.vue'</span>;</span><br><span class="line"><span class="comment">// 2. 手动安装 VueRouter</span></span><br><span class="line">Vue.use(VueRouter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建路由对象</span></span><br><span class="line"><span class="keyword">var</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">    routes: [</span><br><span class="line">        <span class="comment">// account goodslist</span></span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'/account'</span>,</span><br><span class="line">            component: account,</span><br><span class="line">            children: [&#123;</span><br><span class="line">                    path: <span class="string">'login'</span>,</span><br><span class="line">                    component: login</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    path: <span class="string">'register'</span>,</span><br><span class="line">                    component: register</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'/goodslist'</span>,</span><br><span class="line">            component: goodslist</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">import</span> app <span class="keyword">from</span> <span class="string">'./app.vue'</span>;</span><br><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">'#app'</span>,</span><br><span class="line">    render: <span class="function"><span class="params">c</span> =&gt;</span> c(app), <span class="comment">// render会将el指定的容器，所有内容都清空覆盖，所以不将router-view和router-link放到该容器中</span></span><br><span class="line">    router <span class="comment">// 4. 将路由对象挂在到vm上</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：App这个组件，是通过VM实例render函数渲染出来的，render函数如果要渲染组件，渲染出来的组件，只能放到el:'#app'所指定的元素中</span></span><br><span class="line"><span class="comment">// Account和goodslist组件，是通过路由匹配监听到的，所以，这两个组件只能展示到属于路由的&lt;router-view&gt;&lt;/router-view&gt;中去</span></span><br></pre></td></tr></table></figure>
-<h2 id="组件中的style"><a href="#组件中的style" class="headerlink" title="组件中的style"></a>组件中的style</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是account的登录子组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">/* 普通的style标签只支持普通的样式，如果要启用scss 或 less需要为style元素设置lang属性 */</span></span><br><span class="line"><span class="undefined">/* 使用scoped使style中的样式只是该组件使用,一般在.vue中都推荐打开scoped */</span></span><br><span class="line"><span class="undefined">div &#123;</span></span><br><span class="line"><span class="undefined">  color: red;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="组件中的style"><a href="#组件中的style" class="headerlink" title="组件中的style"></a>组件中的style</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>这是account的登录子组件<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css"><span class="comment">/* 普通的style标签只支持普通的样式，如果要启用scss 或 less需要为style元素设置lang属性 */</span></span></span><br><span class="line"><span class="css"><span class="comment">/* 使用scoped使style中的样式只是该组件使用,一般在.vue中都推荐打开scoped */</span></span></span><br><span class="line"><span class="undefined">div &#123;</span></span><br><span class="line"><span class="undefined">  color: red;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -429,14 +429,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -455,7 +455,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+            <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
           
         </div>
       
@@ -478,7 +478,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/22/vue-Vue中常见问题解决/" rel="prev" title="Vue商城项目的一些问题">
+              <a href="/2019/09/22/vue-Vue%E4%B8%AD%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" rel="prev" title="Vue商城项目的一些问题">
                 Vue商城项目的一些问题 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -550,7 +550,12 @@
   
 
   	  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1106127810827644" data-ad-slot="2635376206"></ins>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-1106127810827644"
+     data-ad-slot="2635376206"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
@@ -594,9 +599,11 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="/images/avatar1.gif" alt="Zephon">
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar1.gif"
+                alt="Zephon" />
             
               <p class="site-author-name" itemprop="name">Zephon</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -669,7 +676,7 @@
           
             <div class="cc-license motion-element" itemprop="license">
               <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
               </a>
             </div>
           
@@ -715,7 +722,7 @@
         <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
-<div class="">
+<div class = "">
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -726,7 +733,7 @@
 </div>
 
 
-<div class="">
+<div class ="">
   <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
 <script>
     var now = new Date(); 

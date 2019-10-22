@@ -432,7 +432,20 @@
 <p>&emsp;&emsp;在Java编程中继承是用extends来实现的，extends的意思是延伸、扩展，即子类是父类的扩展。</p>
 <p>下面以动物分类为例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能跑"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能吃"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Animal animal = <span class="keyword">new</span> Animal();</span><br><span class="line">        System.out.println(<span class="string">"动物类"</span>);</span><br><span class="line">        animal.run();</span><br><span class="line">        animal.eat();</span><br><span class="line"></span><br><span class="line">        Mammal mammal = <span class="keyword">new</span> Mammal();</span><br><span class="line">        System.out.println(<span class="string">"哺乳类"</span>);</span><br><span class="line">        mammal.viviparous();</span><br><span class="line">        mammal.run();</span><br><span class="line">        mammal.eat();</span><br><span class="line"></span><br><span class="line">        Reptiles reptiles = <span class="keyword">new</span> Reptiles();</span><br><span class="line">        System.out.println(<span class="string">"爬行类"</span>);</span><br><span class="line">        reptiles.Oviparous();</span><br><span class="line">        reptiles.run();</span><br><span class="line">        reptiles.eat();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//哺乳类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mammal</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">viviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是胎生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//爬行类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reptiles</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Oviparous</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是卵生"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我能爬行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<font color="gray" size="2"><br> 运行结果:<br> 动物类<br> 我能跑<br> 我能吃<br> 哺乳类<br> 我是胎生<br> 我能跑<br> 我能吃<br> 爬行类<br> 我是卵生<br> 我能爬行<br> 我能吃<br></font>
+<font color="gray" size="2">
+ 运行结果:  
+ 动物类  
+ 我能跑  
+ 我能吃  
+ 哺乳类  
+ 我是胎生  
+ 我能跑  
+ 我能吃  
+ 爬行类  
+ 我是卵生  
+ 我能爬行  
+ 我能吃  
+</font>
 
 <p>&emsp;&emsp;可以看到，在Mammal类和Reptiles类中，并没有写eat方法，但都可以调用，就是因为用了extends继承了Animal类，而在Reptiles中，需要自己扩展，又写了新的run()方法,覆盖了父类的run()方法，这就叫做重写，具体后面会讲。</p>
 <p>小结：</p>
@@ -453,7 +466,11 @@
 <p>子类重写父类的方法时，其实也可以调用父类的该方法，用super关键字。</p>
 <p>eg:在上述代码的基础上加上鸟类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//鸟类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span>  <span class="title">Animal</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.run();</span><br><span class="line">        System.out.println(<span class="string">"我能飞"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<font color="gray" size="2"><br>运行结果:<br>我能跑<br>我能飞<br> </font>
+<font color="gray" size="2">
+运行结果:  
+我能跑  
+我能飞
+ </font>
 
 <h2 id="简单了解Object类与API"><a href="#简单了解Object类与API" class="headerlink" title="简单了解Object类与API"></a>简单了解Object类与API</h2><h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p>构造函数，也叫构造方法，是java中一种特殊的函数。与函数名相同，无返回值。</p>
 <p>作用：一般用来初始化成员属性和成员方法的，即new对象产生后，就调用了对象了属性和方法。</p>
@@ -471,7 +488,8 @@
 <p>&emsp;&emsp;this:指向自己的引用</p>
 <p>&emsp;&emsp;final:final 关键字声明类可以把类定义为不能继承的，即最终类；或者用于修饰方法，该方法不能被子类重写.</p>
 <p>&emsp;&emsp; 注:实例变量也可以被定义为 final，被定义为 final 的变量不能被修改，就类似于常量的定义。</p>
-<h3 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h3><table>
+<h3 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>访问权限</th>
@@ -517,6 +535,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 
       
     </div>
@@ -719,7 +738,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -730,7 +749,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -741,7 +760,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

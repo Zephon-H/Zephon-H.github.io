@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4,092字
+                  4,088字
                 </span>
               
 
@@ -413,7 +413,7 @@
 <li>异常：exception</li>
 <li>监听器：listener</li>
 <li>注释：<ul>
-<li>类上和方法上使用文档注释/*<em>   </em>/</li>
+<li>类上和方法上使用文档注释/<em>*   </em>/</li>
 <li>在方法里面使用/<em> </em>/或//</li>
 <li>类：使用大驼峰(首字母大写，后面每个单词首字母大写)</li>
 <li>方法，属性：小驼峰(首字母小写，后面每个单词首字母大写)</li>
@@ -437,7 +437,7 @@
 <li>在全局配置文件中引入DTD或schema</li>
 </ol>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE configuration</span></span><br><span class="line"><span class="meta">        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"</span></span><br><span class="line"><span class="meta">        "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- default引用environment的id，当前所使用的环境 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">"default"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 声明可以使用的环境 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">"default"</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 事务管理 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 使用原生JDBC事务 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">"JDBC"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">"POOLED"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driver"</span> <span class="attr">value</span>=<span class="string">"com.mysql.jdbc.Driver"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql:///JavaMysql0"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"root"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">""</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">"com/zephon/mapper/UserMapper.xml"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ol start="4">
+<ol>
 <li><p>新建包com.zephon.mapper，在里面新建xml文件，名字建议为实体类Mapper.xml</p>
 <p>文件作用：编写需要执行的SQL命令，可以将xml文件理解成实现类(dao层)</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper</span></span><br><span class="line"><span class="meta">        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"</span></span><br><span class="line"><span class="meta">        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- namespace:实现类的全路径(包名+类名) --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.zephon.mapper"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- id：方法名</span></span><br><span class="line"><span class="comment">         parameterType：参数类型</span></span><br><span class="line"><span class="comment">         resultType：返回值类型</span></span><br><span class="line"><span class="comment">         如果方法返回值是list，则需要在resultType中写List泛型，因为mybatis是对jdbc封装，是一行一行读取数据</span></span><br><span class="line"><span class="comment">         如果加了parameterType=“”，“”中没内容就会报错</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"selAll"</span>  <span class="attr">resultType</span>=<span class="string">"com.zephon.pojo.User"</span>&gt;</span></span><br><span class="line">        select * from ta_user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -511,7 +511,7 @@
 <li><p>selectMap()返回Map</p>
 <blockquote>
 <p>适用于需要在查询结果中快速通过某列的值取到这行数据的需求</p>
-<p>Map&lt;key,resultType控制&gt;</p>
+<p>Map<key,resulttype控制></key,resulttype控制></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Object, Object&gt; map = sqlSession.selectMap(<span class="string">"com.zephon.mapper.selById"</span>, <span class="string">"uname"</span>);</span><br><span class="line">System.out.println(map);</span><br></pre></td></tr></table></figure>
 </li>
@@ -531,7 +531,7 @@
 <li>在src下新建log4j.properties(路径和名称固定)</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">### 设置###</span><br><span class="line">log4j.rootCategory=DEBUG,CONSOLE,LOGFILE</span><br><span class="line">#log4j.rootLogger = DEBUG,CONSOLE</span><br><span class="line"></span><br><span class="line">### 输出信息到控制抬 ###</span><br><span class="line">log4j.appender.CONSOLE = org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.CONSOLE.Target = System.out</span><br><span class="line">log4j.appender.CONSOLE.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.CONSOLE.layout.ConversionPattern = [%-5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</span><br><span class="line"></span><br><span class="line">### 输出信息到文件  ###</span><br><span class="line">log4j.appender.LOGFILE = org.apache.log4j.FileAppender</span><br><span class="line">log4j.appender.LOGFILE.File = /home/zephon/JetB rains/logs/my.log</span><br><span class="line">log4j.appender.LOGFILE.Append=true;</span><br><span class="line">log4j.appender.LOGFILE.layout = org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.LOGFILE.layout.ConversionPattern = [%-5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</span><br></pre></td></tr></table></figure>
-<ol start="3">
+<ol>
 <li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Logger logger = Logger.getLogger(TestLog4j.class);</span><br><span class="line">logger.debug(<span class="string">"testLog4j"</span>);</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -574,7 +574,7 @@
 </ol>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"selById"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span> <span class="attr">resultType</span>=<span class="string">"com.zephon.pojo.User"</span>&gt;</span></span><br><span class="line">    select * from ta_user where uid=#&#123;0&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User user=sqlSession.selectOne(<span class="string">"com.zephon.dao.selById"</span>,<span class="number">2</span>);</span><br><span class="line">System.out.println(user.getUname());</span><br></pre></td></tr></table></figure>
-<ol start="4">
+<ol>
 <li>如果参数是对象，使用#{属性名}</li>
 <li>如果参数是map，写成#{key}</li>
 </ol>
@@ -582,10 +582,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment">//传递多个参数</span></span><br><span class="line">Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">map.put(<span class="string">"uid"</span>,<span class="number">3</span>);</span><br><span class="line">map.put(<span class="string">"uname"</span>,<span class="string">"小王"</span>);</span><br><span class="line">User user=sqlSession.selectOne(<span class="string">"com.zephon.dao.selById"</span>,map);</span><br><span class="line">System.out.println(user.getUname());</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol start="4">
-<li><p>#{}或${}区别</p>
 <ol>
-<li>#{}获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符</li>
+<li><h1 id="或-区别"><a href="#或-区别" class="headerlink" title="{}或${}区别"></a>{}或${}区别</h1><ol>
+<li><h1 id="获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符"><a href="#获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符" class="headerlink" title="{}获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符"></a>{}获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符</h1></li>
 <li>${}字符串拼接，不使用？，默认找${内容}内容的get/set方法，如果写数字，就是一个数字</li>
 </ol>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"selById"</span> <span class="attr">parameterType</span>=<span class="string">"int"</span> <span class="attr">resultType</span>=<span class="string">"com.zephon.pojo.User"</span>&gt;</span></span><br><span class="line">    select * from ta_user where uid=$&#123;uid&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -753,7 +752,7 @@
 </ol>
 </li>
 </ol>
-<ol start="10">
+<ol>
 <li><p>sql和include</p>
 <ol>
 <li><p>某些SQL片段如果希望复用，可以使用&lt; sql&gt;定义这个片段</p>
@@ -965,7 +964,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -976,7 +975,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -987,7 +986,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1048,7 +1047,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis"><span class="nav-number">1.</span> <span class="nav-text">MyBatis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaEE命名规范"><span class="nav-number">1.1.</span> <span class="nav-text">JavaEE命名规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架介绍"><span class="nav-number">1.2.</span> <span class="nav-text">框架介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架是什么"><span class="nav-number">1.2.1.</span> <span class="nav-text">框架是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis简介"><span class="nav-number">1.3.</span> <span class="nav-text">MyBatis简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis使用"><span class="nav-number">1.4.</span> <span class="nav-text">MyBatis使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建详解"><span class="nav-number">1.5.</span> <span class="nav-text">环境搭建详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库连接池"><span class="nav-number">1.6.</span> <span class="nav-text">数据库连接池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种查询方式"><span class="nav-number">1.7.</span> <span class="nav-text">三种查询方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log4J"><span class="nav-number">1.8.</span> <span class="nav-text">Log4J</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-settings-gt-标签"><span class="nav-number">1.9.</span> <span class="nav-text">&lt; settings &gt;标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#parameterType属性"><span class="nav-number">1.10.</span> <span class="nav-text">parameterType属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用mybatis实现mysql分页"><span class="nav-number">1.11.</span> <span class="nav-text">使用mybatis实现mysql分页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">1.12.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis实现新增"><span class="nav-number">1.13.</span> <span class="nav-text">MyBatis实现新增</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis接口绑定方案及多参数传递"><span class="nav-number">1.14.</span> <span class="nav-text">Mybatis接口绑定方案及多参数传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态SQL"><span class="nav-number">1.15.</span> <span class="nav-text">动态SQL</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis"><span class="nav-number">1.</span> <span class="nav-text">MyBatis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaEE命名规范"><span class="nav-number">1.1.</span> <span class="nav-text">JavaEE命名规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#框架介绍"><span class="nav-number">1.2.</span> <span class="nav-text">框架介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架是什么"><span class="nav-number">1.2.1.</span> <span class="nav-text">框架是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis简介"><span class="nav-number">1.3.</span> <span class="nav-text">MyBatis简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis使用"><span class="nav-number">1.4.</span> <span class="nav-text">MyBatis使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境搭建详解"><span class="nav-number">1.5.</span> <span class="nav-text">环境搭建详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库连接池"><span class="nav-number">1.6.</span> <span class="nav-text">数据库连接池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种查询方式"><span class="nav-number">1.7.</span> <span class="nav-text">三种查询方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log4J"><span class="nav-number">1.8.</span> <span class="nav-text">Log4J</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-settings-gt-标签"><span class="nav-number">1.9.</span> <span class="nav-text">&lt; settings &gt;标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#parameterType属性"><span class="nav-number">1.10.</span> <span class="nav-text">parameterType属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#或-区别"><span class="nav-number">2.</span> <span class="nav-text">{}或${}区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符"><span class="nav-number">3.</span> <span class="nav-text">{}获取参数的内容支持索引获取，param1获取指定位置参数，并在SQL语句中使用？占位符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用mybatis实现mysql分页"><span class="nav-number">3.1.</span> <span class="nav-text">使用mybatis实现mysql分页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-number">3.2.</span> <span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis实现新增"><span class="nav-number">3.3.</span> <span class="nav-text">MyBatis实现新增</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mybatis接口绑定方案及多参数传递"><span class="nav-number">3.4.</span> <span class="nav-text">Mybatis接口绑定方案及多参数传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态SQL"><span class="nav-number">3.5.</span> <span class="nav-text">动态SQL</span></a></li></ol></li></ol></div>
             
 
           </div>

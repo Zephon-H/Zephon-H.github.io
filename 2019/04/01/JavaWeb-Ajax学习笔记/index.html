@@ -408,7 +408,8 @@
 <p>如果不用Ajax，就需要在后台服务器端将多次响应内容重新拼接成一个jsp页面，响应。但这样会造成很多响应内容被重复的响应，造成资源浪费</p>
 <h2 id="使用Ajax"><a href="#使用Ajax" class="headerlink" title="使用Ajax"></a>使用Ajax</h2><h3 id="Ajax访问原理"><a href="#Ajax访问原理" class="headerlink" title="Ajax访问原理"></a>Ajax访问原理</h3><p>Ajax的原理简单来说通过XmlHttpRequest对象来向服务器发异步请求，从服务器获得数据，然后用javascript来操作DOM而更新页面。这其中最关键的一步就是从服务器获得请求数据。要清楚这个过程和原理，我们必须对 XMLHttpRequest有所了解。本质上就是JS操作文档结构，使之变成动态的。</p>
 <h3 id="Ajax的基本使用流程"><a href="#Ajax的基本使用流程" class="headerlink" title="Ajax的基本使用流程"></a>Ajax的基本使用流程</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Test&lt;/title&gt;</span><br><span class="line">    &lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">        <span class="function">function <span class="title">c</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">//1.创建ajax引擎对象</span></span><br><span class="line">                <span class="keyword">var</span> ajax;</span><br><span class="line">                <span class="keyword">if</span>(window.XMLHttpRequest)&#123;</span><br><span class="line">                    ajax = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(window.ActiveXObject)&#123;</span><br><span class="line">                    ajax = <span class="keyword">new</span> ActiveXObject(<span class="string">"Msxm12.XMLHTTP"</span>);<span class="comment">//旧版本IE</span></span><br><span class="line">                &#125;</span><br><span class="line">            <span class="comment">//2.复写onreadystatement函数</span></span><br><span class="line">                ajax.onreadystatechange = function (ev) &#123;</span><br><span class="line">                    <span class="comment">//判断Ajax状态码</span></span><br><span class="line">                    <span class="keyword">if</span>(ajax.readyState==<span class="number">4</span>)&#123;</span><br><span class="line">                        <span class="comment">//判断响应状态码</span></span><br><span class="line">                        <span class="keyword">if</span>(ajax.status==<span class="number">200</span>)&#123;</span><br><span class="line">                            <span class="comment">//获取响应内容</span></span><br><span class="line">                            <span class="keyword">var</span> result = ajax.responseText;</span><br><span class="line">                            <span class="comment">//获取元素对象</span></span><br><span class="line">                            <span class="keyword">var</span> d = document.getElementById(<span class="string">"d"</span>);</span><br><span class="line">                            d.innerHTML=result;</span><br><span class="line">                        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(ajax.status==<span class="number">404</span>)&#123;</span><br><span class="line">                            document.getElementById(<span class="string">"d"</span>).innerHTML=<span class="string">"请求页面不存在"</span>;</span><br><span class="line">                        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(ajax.status==<span class="number">500</span>)&#123;</span><br><span class="line">                            document.getElementById(<span class="string">"d"</span>).innerHTML=<span class="string">"服务器繁忙"</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="comment">//3.发送对象</span></span><br><span class="line">            ajax.open(<span class="string">"get"</span>,<span class="string">"ajax"</span>);</span><br><span class="line">            ajax.send(<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">    &lt;input type=<span class="string">"button"</span> id=<span class="string">"bt"</span> onclick=<span class="string">"c()"</span> value=<span class="string">"按钮"</span>/&gt;</span><br><span class="line">    &lt;div style="width: 100px; height: 100px; background-color: red " id="d"&gt;&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Ajax的状态码"><a href="#Ajax的状态码" class="headerlink" title="Ajax的状态码"></a>Ajax的状态码</h3><table>
+<h3 id="Ajax的状态码"><a href="#Ajax的状态码" class="headerlink" title="Ajax的状态码"></a>Ajax的状态码</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>readState值</th>
@@ -438,6 +439,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="Ajax的异步和同步"><a href="#Ajax的异步和同步" class="headerlink" title="Ajax的异步和同步"></a>Ajax的异步和同步</h3><p>ajax.open(method,url,async)中async为true时，代表异步，默认为异步，false为同步</p>
 <h3 id="Ajax的请求"><a href="#Ajax的请求" class="headerlink" title="Ajax的请求"></a>Ajax的请求</h3><p>get请求：get请求实体拼接在URL后面，用？隔开，键值对</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get方式：请求实体拼接在URL后面</span></span><br><span class="line">ajax.open(<span class="string">"get"</span>,<span class="string">"ajax?name=张三&amp;pwd=123"</span>);</span><br><span class="line">ajax.send(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
@@ -655,7 +657,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -666,7 +668,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -677,7 +679,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="MVC设计模式 简介M：Model：模型–一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图–用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器–接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
+<meta name="description" content="MVC设计模式 简介M：Model：模型—一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图—用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器—接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
 <meta name="keywords" content="JavaWeb">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MVC设计模式">
 <meta property="og:url" content="http://www.zephon.xyz/2019/03/16/JavaWeb-MVC设计模式/index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="MVC设计模式 简介M：Model：模型–一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图–用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器–接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
+<meta property="og:description" content="MVC设计模式 简介M：Model：模型—一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图—用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器—接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.zephon.xyz/img/mvc.png">
 <meta property="og:image" content="http://www.zephon.xyz/img/servlet.png">
@@ -94,7 +94,7 @@
 <meta property="og:updated_time" content="2019-03-20T06:00:48.009Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MVC设计模式">
-<meta name="twitter:description" content="MVC设计模式 简介M：Model：模型–一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图–用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器–接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
+<meta name="twitter:description" content="MVC设计模式 简介M：Model：模型—一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java V：View：视图—用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp C：Controller：控制器—接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(">
 <meta name="twitter:image" content="http://www.zephon.xyz/img/mvc.png">
 
 
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,820字
+                  1,823字
                 </span>
               
 
@@ -408,9 +408,9 @@
 
       
         <h1 id="MVC设计模式"><a href="#MVC设计模式" class="headerlink" title="MVC设计模式"></a>MVC设计模式</h1><hr>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>M：Model：模型–一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java</p>
-<p>V：View：视图–用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp</p>
-<p>C：Controller：控制器–接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(分发器，分发模型-将登录表单的登录请求分发给登录模型)可以用jsp实现，eg:check.jsp，但是不推荐，一般建议使用Servlet实现控制器。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>M：Model：模型—一个功能。用JavaBean实现(登录功能(LoginDao)、注册功能)eg:LoginDao.java</p>
+<p>V：View：视图—用于展示以及与用户交互(负责页面的显示-html/css/jsp/js、登录表单、注册表单)eg:index.jsp</p>
+<p>C：Controller：控制器—接收请求，将请求跳转到模型进行处理;模型处理完毕后，再将处理结果返回给请求处(分发器，分发模型-将登录表单的登录请求分发给登录模型)可以用jsp实现，eg:check.jsp，但是不推荐，一般建议使用Servlet实现控制器。</p>
 <p><img src="/img/mvc.png" alt="mvc"></p>
 <h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><p>Java类必须符合一定的规范：</p>
 <p>a. 必须继承javax.servlet.http.HttpServlet</p>
@@ -439,7 +439,7 @@
 <p>初始化：init()，该方法会在Servlet被加载并实例化以后执行，默认第一次访问Servlet时会被执行，可修改为在tomcat启动时自动执行</p>
 <p>修改方法：</p>
 <p>servlet2.5:</p>
-<p>在web.xml中的<servlet></servlet>中添加<load-on-startup>1</load-on-startup></p>
+<p>在web.xml中的<servlet></servlet>中添加<load-on-startup>1&lt;/load-on-startup&gt;</load-on-startup></p>
 <p>servlet3.0：</p>
 <p>修改@WebServlet(value=”/WelcomeServlet”,loadOnStartup=1)</p>
 <p>服务：service()    -&gt;doGet()    doPost()，每次调用均执行</p>
@@ -672,7 +672,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -683,7 +683,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -694,7 +694,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Zephon Blog">
 <meta property="og:description" content="JSP入门笔记 静态与动态 不要和是否有“动感”混为一谈是否随着时间、地点、用户操作 的改变而改变动态网页 需要使用到 服务端脚本语言(JSP)  BS与CS架构CS:Client Server 客户端与服务端 eg:QQ、微信不足：  如果软件升级，那么所有软件都需要升级 维护麻烦，需要维护每一台客户端软件 每一台客户端都需要安装客户端软件  BS:Broswer Server 浏览器服务器 e">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-20T06:00:24.917Z">
+<meta property="og:updated_time" content="2019-04-16T12:21:51.465Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JSP入门笔记">
 <meta name="twitter:description" content="JSP入门笔记 静态与动态 不要和是否有“动感”混为一谈是否随着时间、地点、用户操作 的改变而改变动态网页 需要使用到 服务端脚本语言(JSP)  BS与CS架构CS:Client Server 客户端与服务端 eg:QQ、微信不足：  如果软件升级，那么所有软件都需要升级 维护麻烦，需要维护每一台客户端软件 每一台客户端都需要安装客户端软件  BS:Broswer Server 浏览器服务器 e">
@@ -432,13 +432,13 @@
 <p>方式二：<br>在conf/Catalina/中新建<em>.xml(</em>与项目同名),内容也为</p>
 <contest docbase="D:\JsProject" path="/JspProject">
 
-<h2 id="虚拟主机-一般不用"><a href="#虚拟主机-一般不用" class="headerlink" title="虚拟主机(一般不用)"></a>虚拟主机(一般不用)</h2><p>通过<a href="http://www.test.com访问主机" target="_blank" rel="noopener">www.test.com访问主机</a></p>
+<h2 id="虚拟主机-一般不用"><a href="#虚拟主机-一般不用" class="headerlink" title="虚拟主机(一般不用)"></a>虚拟主机(一般不用)</h2><p>通过www.test.com访问主机</p>
 <p>在conf/server.xml中增加一个</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Host</span> <span class="attr">appBase</span>=<span class="string">"webapps"</span> <span class="attr">name</span>=<span class="string">"www.test.com"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">docBase</span>=<span class="string">"webapps"</span> <span class="attr">path</span>=<span class="string">"/"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>修改<engin>中的defaultHost=”<a href="http://www.test.com&quot;" target="_blank" rel="noopener">www.test.com&quot;</a></engin></p>
-<p>在hosts文件添加 127.0.0.1    <a href="http://www.test.com" target="_blank" rel="noopener">www.test.com</a></p>
+<p>修改<engin>中的defaultHost=”www.test.com”</engin></p>
+<p>在hosts文件添加 127.0.0.1    www.test.com</p>
 <p>端口改为80</p>
-<p>流程：<a href="http://www.test.com-&gt;host找映射关系-&gt;server.xml找Engine的defaultHost-&gt;通过&quot;/&quot;映射到硬盘" target="_blank" rel="noopener">www.test.com-&gt;host找映射关系-&gt;server.xml找Engine的defaultHost-&gt;通过&quot;/&quot;映射到硬盘</a></p>
+<p>流程：www.test.com-&gt;host找映射关系-&gt;server.xml找Engine的defaultHost-&gt;通过”/“映射到硬盘</p>
 <h2 id="JSP执行流程"><a href="#JSP执行流程" class="headerlink" title="JSP执行流程"></a>JSP执行流程</h2><p>第一次访问：服务端将JSP翻译成java，再将java编译成class文件(比较慢)</p>
 <p>后续访问：直接访问class文件(如果服务端代码修改，将会重新编译)(比较快)</p>
 <p>JSP和Servlet可以相互转换</p>
@@ -472,11 +472,9 @@
 <p>c. 注释</p>
 <p>html注释 ：<!-------->    可以被客户通过浏览器查看源码看到</p>
 <p>java注释：//        / <em> …. </em> /</p>
-<p>jsp注释：&lt;%– ……. –%&gt;</p>
+<p>jsp注释：&lt;%— ……. —%&gt;</p>
 <h2 id="JSP九大内置对象-自带的，不需要new也能用的对象"><a href="#JSP九大内置对象-自带的，不需要new也能用的对象" class="headerlink" title="JSP九大内置对象(自带的，不需要new也能用的对象)"></a>JSP九大内置对象(自带的，不需要new也能用的对象)</h2><blockquote>
 <p>out：输出对象，向客户端输出内容</p>
-</blockquote>
-<blockquote>
 <p>request：请求对象;存储”客户端向服务端发送的请求信息“</p>
 <p>常见方法：</p>
 <p>String getParameter(String name) ：根据请求的字段名key(标签的name属性)，返回字段值value</p>
@@ -500,6 +498,7 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Check&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;%</span><br><span class="line">        request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">        String uname = request.getParameter(<span class="string">"uname"</span>);</span><br><span class="line">        String upwd = request.getParameter(<span class="string">"upwd"</span>);</span><br><span class="line">        <span class="keyword">if</span>(uname.equals(<span class="string">"张三"</span>)&amp;&amp;upwd.equals(<span class="string">"123456"</span>))&#123;</span><br><span class="line">            <span class="comment">// 重定向 会导致数据丢失</span></span><br><span class="line">            <span class="comment">//response.sendRedirect("success.jsp");</span></span><br><span class="line">            <span class="comment">//  请求转发 可以获取到数据，并且地址栏没有改变（仍然保留转发时的地址）</span></span><br><span class="line">            request.getRequestDispatcher(<span class="string">"success.jsp"</span>).forward(request,response);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            out.print(<span class="string">"用户名或密码有误"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    %&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Success&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    登陆成功&lt;br/&gt;</span><br><span class="line">    欢迎你！&lt;%=request.getParameter(<span class="string">"uname"</span>)%&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>请求转发与重定向的区别：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -531,6 +530,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <blockquote>
 <p>session(服务端)</p>
 <p>Cookie(客户端，不是内置对象)：Cookie是由服务端产生的，再发送给客户端保存，相当于本地缓存的作用：客户端-&gt;服务端，能提高访问服务端的效率，但是安全性较差</p>
@@ -591,6 +591,7 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Check&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;%</span><br><span class="line">        <span class="comment">//login.jsp 与之前的相同</span></span><br><span class="line">        request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">        String name = request.getParameter(<span class="string">"uname"</span>);</span><br><span class="line">        String pwd = request.getParameter(<span class="string">"upwd"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(name.equals(<span class="string">"zs"</span>)&amp;&amp;pwd.equals(<span class="string">"123"</span>))&#123;</span><br><span class="line">            session.setAttribute(<span class="string">"uname"</span>,name);</span><br><span class="line">            session.setAttribute(<span class="string">"upwd"</span>,pwd);</span><br><span class="line">            <span class="comment">//设置最大非活动时间</span></span><br><span class="line">            session.setMaxInactiveInterval(<span class="number">10</span>);</span><br><span class="line">            <span class="comment">//request数据只在同一次请求有效</span></span><br><span class="line">            <span class="comment">//地址栏回车（发出第二次请求）</span></span><br><span class="line">            <span class="comment">//如果F5刷新，浏览器提示重新提交表单，相当于重复之前的登录，建立请求</span></span><br><span class="line">            request.getRequestDispatcher(<span class="string">"welcome.jsp"</span>).forward(request,response);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            response.sendRedirect(<span class="string">"login.jsp"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    %&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;welcome&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    welcome</span><br><span class="line">    &lt;%</span><br><span class="line">        String name= (String) session.getAttribute(<span class="string">"uname"</span>);</span><br><span class="line">        <span class="comment">//如果用户没有登录，而是直接通过地址栏访问welcome.jsp，即name为null，</span></span><br><span class="line">        <span class="comment">//则跳转到login.jsp</span></span><br><span class="line">        <span class="keyword">if</span>(name==<span class="keyword">null</span>)&#123;</span><br><span class="line">            response.sendRedirect(<span class="string">"login.jsp"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            out.print(name);</span><br><span class="line">        &#125;</span><br><span class="line">    %&gt;</span><br><span class="line">    &lt;a href="invalidate.jsp"&gt;注销&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;invalidate&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;%</span><br><span class="line">        session.invalidate();<span class="comment">//ssesion失效</span></span><br><span class="line">        response.sendRedirect(<span class="string">"login.jsp"</span>);</span><br><span class="line">    %&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -617,22 +618,17 @@
 </tr>
 </tbody>
 </table>
+</div>
 <blockquote>
 <p>pageContext：JSP页面容器</p>
-</blockquote>
-<blockquote>
 <p>application：全局对象</p>
 <p>常用方法：</p>
 <p>String getContextPath()：获取虚拟路径</p>
 <p>String getRealPath(“虚拟路径”)：获取绝对路径（虚拟路径相对的绝对路径）</p>
-</blockquote>
-<blockquote>
 <p>用的较少：</p>
 <p>config：配置对象（服务器配置信息）</p>
 <p>page：当前JSP页面对象（相当于java中的this）</p>
 <p>exception：异常对象</p>
-</blockquote>
-<blockquote>
 <p>四种范围对象（从小到大）</p>
 <p>pageContext JSP页面容器   （page对象） 当前页面有效</p>
 <p>request   请求对象            同一次请求有效</p>
@@ -845,7 +841,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -856,7 +852,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -867,7 +863,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -427,6 +427,7 @@
 </li>
 </ol>
 <h3 id="各种数据库驱动：相应的数据库厂商提供的，连接-直接操作数据库"><a href="#各种数据库驱动：相应的数据库厂商提供的，连接-直接操作数据库" class="headerlink" title="各种数据库驱动：相应的数据库厂商提供的，连接\直接操作数据库"></a>各种数据库驱动：相应的数据库厂商提供的，连接\直接操作数据库</h3><p>   数据库驱动：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -457,6 +458,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>   Connection产生操作数据库的对象：</p>
 <p>   Connection产生Statement对象：createStatement()</p>
 <p>   Connection产生PreparedStatement对象：prepareStatement()</p>
@@ -491,8 +493,8 @@
 </li>
 <li><p>安全（可以有效防止SQL注入）</p>
 <p>stmt：存在被sql注入的风险</p>
-<p>（例如输入    用户名：任意值 ‘ or 1=1 – 密码：任意值）</p>
-<p>分析：select count(*) from login where uname=’任意值’ or 1=1 –’ and upwd = ‘任意值’;</p>
+<p>（例如输入    用户名：任意值 ‘ or 1=1 — 密码：任意值）</p>
+<p>分析：select count(*) from login where uname=’任意值’ or 1=1 —‘ and upwd = ‘任意值’;</p>
 <p>​    =select count(*) from login where uname=’任意值’ or 1=1</p>
 <p>​    =select count(*) from login;</p>
 <p>pstmt：有效防止sql注入</p>
@@ -731,7 +733,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -742,7 +744,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -753,7 +755,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

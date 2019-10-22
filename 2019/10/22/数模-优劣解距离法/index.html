@@ -415,22 +415,22 @@
 <p>标准化计算公式:</p>
 <script type="math/tex; mode=display">
 标准化矩阵中的元素\frac{z_{ij}=x_{ij}}{\sqrt(\sum_{i=1}^{n}(x_{ij}^2))}</script><h2 id="计算得分"><a href="#计算得分" class="headerlink" title="计算得分"></a>计算得分</h2><p>计算评分公式：$\frac{x与最小值的距离}{x与最大值的距离+x与最小值的距离}$</p>
-<p>定义最大值$Z^+=(Z_1^{+},Z_2^{+},\cdots,Z_{m}^{+})=(max(z_{11},z_{21},\cdots,z_{n1}),max(z_{12},z_{22},\cdots,z_{n2}),\cdots,max(z_{1m},z_{2m},\cdots,z_{nm}))$</p>
-<p>定义最大值$Z^-=(Z_1^{-},Z_2^{-},\cdots,Z_{m}^{-})=(min(z_{11},z_{21},\cdots,z_{n1}),min(z_{12},z_{22},\cdots,z_{n2}),\cdots,min(z_{1m},z_{2m},\cdots,z_{nm}))$</p>
-<p>定义第i(i=1,2,…n)个评价对象与最大值的距离$D_i^+=\sqrt{\sum_{j=1}^m(Z_j^+-z_{ij})^2}$</p>
-<p>定义第i(i=1,2,…n)个评价对象与最小值的距离$D_i^-=\sqrt{\sum_{j=1}^m(Z_j^—z_{ij})^2}$</p>
+<p>定义最大值$Z^+=(Z<em>1^{+},Z_2^{+},\cdots,Z</em>{m}^{+})=(max(z<em>{11},z</em>{21},\cdots,z<em>{n1}),max(z</em>{12},z<em>{22},\cdots,z</em>{n2}),\cdots,max(z<em>{1m},z</em>{2m},\cdots,z_{nm}))$</p>
+<p>定义最大值$Z^-=(Z<em>1^{-},Z_2^{-},\cdots,Z</em>{m}^{-})=(min(z<em>{11},z</em>{21},\cdots,z<em>{n1}),min(z</em>{12},z<em>{22},\cdots,z</em>{n2}),\cdots,min(z<em>{1m},z</em>{2m},\cdots,z_{nm}))$</p>
+<p>定义第i(i=1,2,…n)个评价对象与最大值的距离$D<em>i^+=\sqrt{\sum</em>{j=1}^m(Z<em>j^+-z</em>{ij})^2}$</p>
+<p>定义第i(i=1,2,…n)个评价对象与最小值的距离$D<em>i^-=\sqrt{\sum</em>{j=1}^m(Z<em>j^—z</em>{ij})^2}$</p>
 <p>则可以计算出第i(i=1,2,…,n)个评价类对象未归一化的得分：$S_i=\frac{D_i^-}{D_i^++D_i^-}$</p>
 <p>0$\leqslant S_i\leqslant$1，且$S_i$越大$D_i^+$越小，即越接近最大值。</p>
 <h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><ol>
 <li>将原始矩阵正向化，所谓将原始矩阵正向化，就是将所有的指标类型统一转化为极大型指标<ul>
 <li>极小型转为极大型公式：max-x</li>
-<li>中间型转为极大型公式：$M=max(|x_i-x_{best}|,x_i^{‘}=1-\frac{|x_i-x_{best}|}{M})$</li>
+<li>中间型转为极大型公式：$M=max(|x<em>i-x</em>{best}|,x<em>i^{‘}=1-\frac{|x_i-x</em>{best}|}{M})$</li>
 <li>区间型转为极大型公式：$M=max(a-min(x_i),max(x_i)-b),x_i^{‘}=\begin{cases} 1-\frac{a-x}{M}，x<a\\ 1="" ,a\leqslant="" x="" \leqslant="" b\\1-\frac{x-b}{m}，x="">b\end{cases}  $</a\\></li>
 </ul>
 </li>
 <li>正向化矩阵标准化<ul>
 <li>目的是消除不同指标量纲(单位)的影响</li>
-<li>直接使用标准化公式$z_{ij}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}x_{ij}^2}}$（每一个元素/sqrt(其所在列的元素的平方和)）</li>
+<li>直接使用标准化公式$z<em>{ij}=\frac{x</em>{ij}}{\sqrt{\sum<em>{i=1}^{n}x</em>{ij}^2}}$（每一个元素/sqrt(其所在列的元素的平方和)）</li>
 </ul>
 </li>
 <li>计算得分并归一化<ul>

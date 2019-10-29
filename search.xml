@@ -1,6 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数模-灰色预测模型</title>
+    <url>/2019/10/26/%E6%95%B0%E6%A8%A1-%E7%81%B0%E8%89%B2%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="灰色预测模型"><a href="#灰色预测模型" class="headerlink" title="灰色预测模型"></a>灰色预测模型</h1><h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p><strong>灰色预测模型</strong>是通过少量的、不完全的信息，建立数学模型并做出预测的一种预测方法。其对<strong>时间序列短、统计数据少、信息不完全系统</strong>的分析与建模，具有独特的功效。</p>
+<h2 id="灰色系统"><a href="#灰色系统" class="headerlink" title="灰色系统"></a>灰色系统</h2><h3 id="灰色系统的定义"><a href="#灰色系统的定义" class="headerlink" title="灰色系统的定义"></a>灰色系统的定义</h3><p>灰色系统是黑箱概念的一种推广。我们把既含有已知信息又含有未知信息的系统称为灰色系统。作为两个极端，我们将信息完全未确定的系统称为黑色系统；将信息完全确定的系统为白色系统。区别白色系统与黑色系统的重要标志是系统各因素之间是否具有确定的关系。</p>
+<h3 id="灰色系统的特点"><a href="#灰色系统的特点" class="headerlink" title="灰色系统的特点"></a>灰色系统的特点</h3><ol>
+<li>用灰色数学(不定积分、微积分等包括未知参数/导数的)处理不确定量，使之量化</li>
+<li>充分利用已知信息寻求系统的运动规律</li>
+<li>灰色系统理论能处理贫信息系统</li>
+</ol>
+<h2 id="常见的灰色预测"><a href="#常见的灰色预测" class="headerlink" title="常见的灰色预测"></a>常见的灰色预测</h2><ol>
+<li>数列预测，即用观察到的反映预测对象特征的时间序列来构造灰色预测模型，预测未来某一时刻的特征量，或达到某一特征量的时间。(eg:1,3,5,7,9,预测下一个)</li>
+<li>灾变与异常值预测，即通过灰色模型预测异常值出现的时刻，预测异常值什么时候出现在特定时区内。</li>
+<li>季节灾变与异常值预测，即通过灰色模型预测灾变值发生在一年内某个特定的时区或季节的灾变预测</li>
+<li>拓扑预测，将原始数据作曲线，在曲线上按定值寻找该定值发生的所有时点，并以该定值为框架构成时点数列，然后建立模型预测该定值所发生的时点。</li>
+<li>系统预测，通过对系统行为特征指标建立一组相互关联的灰色预测模型，预测系统中众多变量间的相互协调关系的变化。</li>
+</ol>
+<h2 id="建立基于模型的灰色预测"><a href="#建立基于模型的灰色预测" class="headerlink" title="建立基于模型的灰色预测"></a>建立基于模型的灰色预测</h2><ol>
+<li><p>数据的预处理(使用累加)</p>
+<script type="math/tex; mode=display">
+x^{(1)}(i) =\{\sum_{j=1}^ix^{(0)}(j)|i=1,2,...,N\}</script><p>称此式所表示的数据列为原始数据列的一次累加生成，简称<strong>一次累加生成</strong>，显然有$ x^{(1)}(1)=x^{(0)}(1) $</p>
+</li>
+<li><p>通过图形预测后，使用累减还原</p>
+<script type="math/tex; mode=display">
+\delta x^{(1)}(i)=x^{(1)}(i)-x^{1}(i-1)=x^{(0)}(i),其中i=1,2,...,N,x^{(0)}=0</script></li>
+<li><p>建模原理，给定$x^{(0)}={x^{(0)}(1),x^{(0)}(2),…,x^{(0)}(N)}$，经一次累加得$x^{(1)}=\{x^{(1)}(1),x^{(1)}(2),…,x^{(1)}(N)\}$ ，设$x^{(1)}$ 满足一阶常微分方程$\frac{dx^{(1)}}{dt}+ax^{(1)}=u$ ，其中a为常数，u称为发展灰数，为内生控制类数，是对系统的常定输入，此方程满足初始条件：</p>
+<p>​        当$t=t_0时x^{(1)}=x^{(1)}(t_0)$的解为$x^{(1)}(t)=[x^{(1)}(t_0)-\frac{u}{a}]e^{-a(t-t_0)}+\frac{u}{a}$ ,对等间隔取样的离散值则为$x^{(1)}(k+1)=[x^{(1)}(1)-\frac{u}{a}]e^{-ak}+\frac{u}{a}$ ，通过最小二乘法来估计常数a与u </p>
+</li>
+<li><p>精度检验</p>
+<ol>
+<li>残差检验</li>
+<li>后验差检验</li>
+<li>预测精度等级对照</li>
+</ol>
+</li>
+</ol>
+<p>GM(1,1)的建模步骤：</p>
+<ol>
+<li><p>由原始数据序列$x^{(0)}$计算一次累加序列$x^{(1)}$</p>
+</li>
+<li><p>建立矩阵B,y</p>
+</li>
+<li><p>求逆矩阵$(B^TB)^{-1}$</p>
+</li>
+<li><p>根据$\hat{U}=(B^TB)^{-1}B^Ty求估计值\hat{a}和\hat{u}$</p>
+</li>
+<li><p>用时间响应方程计算拟合值$\hat{x}^{(1)}(i)$，再用后减运算还原，即：</p>
+<script type="math/tex; mode=display">
+x^{(0)}(i)=x(i)-\hat{x}^{(1)}(i-1)(i=2,3,...,N)</script></li>
+<li><p>精度检验与预测</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数模</category>
+      </categories>
+      <tags>
+        <tag>数模</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数模-插值与拟合</title>
+    <url>/2019/10/25/%E6%95%B0%E6%A8%A1-%E6%8F%92%E5%80%BC%E4%B8%8E%E6%8B%9F%E5%90%88/</url>
+    <content><![CDATA[<h1 id="插值与拟合"><a href="#插值与拟合" class="headerlink" title="插值与拟合"></a>插值与拟合</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>遇到大量的数据需要处理，而处理数据的关键就在于这些算法，例如数据拟合、参数估计、插值等数据处理算法。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>在实际中，常常要处理由实验或测量所得到的一些离散数据。插值与拟合方法就是要通过这些数据去确定某一类已知函数的参数或寻求某个近似函数，使所得到的近似函数与已知函数据有较高的拟合精度。如果要求这个近似函数(曲线或曲面)经过所已知的所有数据点，则称此类问题为<strong>插值问题</strong>；如果不要求近似函数通过所有数据点，而是要求它能较好地反映数据变化规律的近似函数的方法称为<strong>数据拟合</strong>。近似函数不一定通过所有数据点。</p>
+<h2 id="插值与拟合的区别和联系"><a href="#插值与拟合的区别和联系" class="headerlink" title="插值与拟合的区别和联系"></a>插值与拟合的区别和联系</h2><h3 id="联系"><a href="#联系" class="headerlink" title="联系"></a>联系</h3><p>都是根据实际中一组已知数据来构造一个能够反映数据变化规律的近似函数的方法</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p><strong>插值问题</strong>不一定得到近似函数的表达形式，仅通过插值方法找到未知点对应的值。<strong>数据拟合</strong>要求得到一个具体的近似函数的表达式。</p>
+<h2 id="插值的使用及求解"><a href="#插值的使用及求解" class="headerlink" title="插值的使用及求解"></a>插值的使用及求解</h2><h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>当数据量不够，需要补充，且认定已有数据可信时，通常利用函数插值方法。</p>
+<p>实际问题当中碰到的函数f(x)是各种各样的，有的表达式很复杂，有的甚至给不出数学的式子，只提供了一些离散数据，例如，某些点上的函数值和导数值。</p>
+<h3 id="插值方法"><a href="#插值方法" class="headerlink" title="插值方法"></a>插值方法</h3><ol>
+<li><p>拉格朗日插值(lagrange插值)</p>
+</li>
+<li><p>分段线性插值</p>
+</li>
+<li>Hermite</li>
+<li>三次样条插值</li>
+</ol>
+<blockquote>
+<p>1、2适合二维面插值；3、4适合三维空间插值；一维用可用最近邻插值/双线性内插/取平均</p>
+</blockquote>
+<h3 id="matlab中的方法："><a href="#matlab中的方法：" class="headerlink" title="matlab中的方法："></a>matlab中的方法：</h3><figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="comment">% interp1(一维插值)</span></span><br><span class="line"><span class="comment">% yi:xi处的插值结果</span></span><br><span class="line"><span class="comment">% x,y:插值节点</span></span><br><span class="line"><span class="comment">% xi:被插值点</span></span><br><span class="line"><span class="comment">% 'method' 插值方法：</span></span><br><span class="line"><span class="comment">% 'nearest' 最邻近插值;</span></span><br><span class="line"><span class="comment">% 'linear' 线性插值;</span></span><br><span class="line"><span class="comment">% 'spline' 三次样条插值</span></span><br><span class="line"><span class="comment">% 'cubic' 立方插值</span></span><br><span class="line"><span class="comment">% 缺省时 分段线性插值</span></span><br><span class="line">yi=interp1(x,y,xi,<span class="string">'method'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">% interp2(二维)</span></span><br><span class="line">z=interp2(x0,y0,z0,x,y,<span class="string">'method'</span>)</span><br><span class="line"><span class="comment">% z:被插值点的函数值</span></span><br><span class="line"><span class="comment">% x0,y0,z0:插值节点</span></span><br><span class="line"><span class="comment">% x,y:被插值点</span></span><br><span class="line"><span class="comment">% 'method':插值方法</span></span><br><span class="line"><span class="comment">% 	'nearest' 最邻近插值</span></span><br><span class="line"><span class="comment">% 	'linear' 双线性插值</span></span><br><span class="line"><span class="comment">% 	'cubic' 双三次插值</span></span><br><span class="line"><span class="comment">% 	缺省时 双线性插值</span></span><br><span class="line"></span><br><span class="line">cz = griddata(x,y,z,cx,cy,<span class="string">'method'</span>)</span><br><span class="line"><span class="comment">% cz被插值点的函数值</span></span><br><span class="line"><span class="comment">% x,y,z 插值节点</span></span><br><span class="line"><span class="comment">% cx,cy 被插值点</span></span><br><span class="line"><span class="comment">% 'method'插值方法</span></span><br><span class="line"><span class="comment">% 'nearest' 最邻近插值</span></span><br><span class="line"><span class="comment">% 'linear' 双线性插值</span></span><br><span class="line"><span class="comment">% 'cubic' 双三次插值</span></span><br><span class="line"><span class="comment">% 'v4' MATLAB提供的插值方法</span></span><br><span class="line"><span class="comment">% 缺省时 双线性插值</span></span><br><span class="line"><span class="comment">% 要求cx取行向量，cy取列向量</span></span><br><span class="line"></span><br><span class="line">interp3(三维)</span><br><span class="line">intern(n维)</span><br></pre></td></tr></table></figure>
+<h2 id="拟合"><a href="#拟合" class="headerlink" title="拟合"></a>拟合</h2><h3 id="引言-1"><a href="#引言-1" class="headerlink" title="引言"></a>引言</h3><p>对于情况较复杂的实际问题（因素不易化简，作用机理不详）可直接使用数据组建模，寻找简单的因果变量之间的数量关系，从而对未知的情形作预报。这样组建的模型为拟合模型。拟合模型的组建主要是处理好观测数据的误差，使用数学表达式从数量上近似因果变量之间的关系。拟合模型的组建是通过对有关变量的观测数据的观察、分析和选择恰当的数学表达方式得到的。</p>
+<h3 id="拟合模型的分类"><a href="#拟合模型的分类" class="headerlink" title="拟合模型的分类"></a>拟合模型的分类</h3><ol>
+<li>直线拟合</li>
+<li>曲线拟合</li>
+<li>观察数据修匀</li>
+</ol>
+<blockquote>
+<p>对于已给的一批实测数据,由于实测方法\实验环境等一些外界因素的影响,不可避免地会产生随机干扰和误差.我们自然希望根据数据分布的总趋势去剔除观察数据中的偶然误差,这就是所谓的数据修匀(或称数据平滑)问题.</p>
+</blockquote>
+<h2 id="曲线拟合问题最常用的解法-线性最小二乘法"><a href="#曲线拟合问题最常用的解法-线性最小二乘法" class="headerlink" title="曲线拟合问题最常用的解法-线性最小二乘法"></a>曲线拟合问题最常用的解法-线性最小二乘法</h2><ol>
+<li><p>先选定一组函数$r_1(x),r_2(x),…,r_m(x),m&lt;n$,令</p>
+<p>$f(x)=a_1r_1(x)+a_2r_2(x)+…+a_mr_m(x)$  (1)</p>
+<p>其中$a_1,a_2,…,a_m$为待定系数</p>
+</li>
+<li><p>确定$a_1,a_2,…,a_m$的准则(最小二乘准则):</p>
+<p>使n个点$(x_i,y_i)$与曲线y=f(x)的距离$\delta_i$的平方和最小</p>
+<p>记</p>
+<script type="math/tex; mode=display">
+J(a_1,a_2,...,a_m) = \sum_{i=1}^n\delta_i^2=\sum_{i=1}^n[f(x_i)-y_i]^2=\sum_{i=1}^n[\sum_{k=1}^ma_kr_k(x_i)-y_i]^2</script></li>
+<li><p>问题归结为,求$a_1,a_2,…,a_m$使$J(a_1,a_2,…,a_m)$最小</p>
+</li>
+</ol>
+<h3 id="使用MATLAB作线性最小二乘拟合"><a href="#使用MATLAB作线性最小二乘拟合" class="headerlink" title="使用MATLAB作线性最小二乘拟合"></a>使用MATLAB作线性最小二乘拟合</h3><ol>
+<li><p>作多项式$f(x)=a_1x^m+…+a_mx+a_m+1$拟合,可利用已有程序:</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">a=polyfit(x,y,m)</span><br><span class="line"><span class="comment">% x,y 输入同长度的数组x,y</span></span><br><span class="line"><span class="comment">% m 拟合多项式次数</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>数模</category>
+      </categories>
+      <tags>
+        <tag>数模</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数模-非线性规划</title>
     <url>/2019/10/24/%E6%95%B0%E6%A8%A1-%E9%9D%9E%E7%BA%BF%E6%80%A7%E8%A7%84%E5%88%92/</url>
     <content><![CDATA[<h1 id="非线性规划"><a href="#非线性规划" class="headerlink" title="非线性规划"></a>非线性规划</h1><h2 id="几种常见的规划名称"><a href="#几种常见的规划名称" class="headerlink" title="几种常见的规划名称"></a>几种常见的规划名称</h2><p>整数规划：规划中的变量(全部或部分)限制为整数，称为整数规划</p>
@@ -18,6 +134,29 @@ a_{21}x_1+a_{22}x_2+... a_{2n}x_n<=b2 \\
 a_{m1}x_1+a_{m2}x_2+... a_{mn}x_n<=b_m\\
 x_1,x_2,...,x_n=0|1（0|1表示0或1）
 \end{cases}</script>]]></content>
+      <categories>
+        <category>数模</category>
+      </categories>
+      <tags>
+        <tag>数模</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数模-十大算法</title>
+    <url>/2019/10/23/%E6%95%B0%E6%A8%A1-%E5%8D%81%E5%A4%A7%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="十大算法"><a href="#十大算法" class="headerlink" title="十大算法"></a>十大算法</h1><ol>
+<li>蒙特卡算法(通过计算机仿真解决问题的算法，同时可以通过模拟来检验自己模型的正确性，是比赛时经常的方法)</li>
+<li>数据拟合、参数估计、插值等数据处理算法(比赛中通常会遇到大量的数据需要处理，通常使用Matlab作为工具)</li>
+<li>线性规划、整数规划、二次规划等规划类问题(建模的大多问题属于最优化问题，通常用Lingo软件实现)</li>
+<li>图算法(如最短路、网络流、二分图等 算法)</li>
+<li>动态规划、回溯搜索、分治算法、分枝定界等计算机算法(这些算法是算法设计比较常用的方法，很多场合可以用到竞赛中)</li>
+<li>优化理论的三大非经典算法：模拟退火、神经网络、遗传算法(这些问题是用来解决一些较困难的优化问题的算法，对于有些问题非常有帮助，但是算法实现比较困难，需谨慎使用)</li>
+<li>数值分析算法(数值分析中常用算法比如方程组求解、矩阵运算、函数积分等)</li>
+<li>一些连续离散化方法(很多实际问题要用计算机求解，必须将离散化后才能计算)</li>
+<li>网格算法和穷举法(网格算法和穷举法都是搜索最优点的算法，在很多竞赛题中有应用，当重点讨论模型本身而轻视算法的时候，可以使用这种方案)</li>
+<li>图像处理算法</li>
+</ol>
+]]></content>
       <categories>
         <category>数模</category>
       </categories>

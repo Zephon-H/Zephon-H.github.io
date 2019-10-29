@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="第十二天过滤器概念：Vue.js允许自定义过滤器，可以被用作一些常见的文本格式化，过滤器可以用在两个地方：mustache插值和v-bind表达式。过滤器应该被添加在JavaScript表达式的尾部，由“管道”符表示 全局过滤器123456789101112131415161718192021222324252627282930313233343536373839404142434445&amp;lt;!">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第十二天">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.xyz&#x2F;2019&#x2F;07&#x2F;23&#x2F;undefined&#x2F;index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="第十二天过滤器概念：Vue.js允许自定义过滤器，可以被用作一些常见的文本格式化，过滤器可以用在两个地方：mustache插值和v-bind表达式。过滤器应该被添加在JavaScript表达式的尾部，由“管道”符表示 全局过滤器123456789101112131415161718192021222324252627282930313233343536373839404142434445&amp;lt;!">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-26T02:40:33.222Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zephon.xyz/2019/07/23/undefined/"/>
+
+
+
+
+
+  <title>第十二天 | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	
+	<a href="https://github.com/Zephon-H" target="_blank" rel="noopener"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zephon Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-download">
+          <a href="/download/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-download"></i> <br />
+            
+            分享
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" target="_blank" rel="noopener" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.xyz/2019/07/23/undefined/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">第十二天</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-23T18:22:32+08:00">
+                2019-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5.5k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  24 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第十二天"><a href="#第十二天" class="headerlink" title="第十二天"></a>第十二天</h1><h2 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h2><p>概念：Vue.js允许自定义过滤器，可以被用作一些常见的文本格式化，过滤器可以用在两个地方：mustache插值和v-bind表达式。过滤器应该被添加在JavaScript表达式的尾部，由“管道”符表示</p>
+<h3 id="全局过滤器"><a href="#全局过滤器" class="headerlink" title="全局过滤器"></a>全局过滤器</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>过滤器<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">            &#123;&#123;msg | msgFormat("疯狂") | test&#125;&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 定义一个Vue全局过滤器</span></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 全局过滤器，就是所有的VM共享的</span></span></span><br><span class="line"><span class="actionscript">            Vue.filter(<span class="string">'msgFormat'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(msg, arg)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="comment">// return msg.replace(/单纯/g, '邪恶');</span></span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> msg.replace(<span class="regexp">/单纯/g</span>, arg);</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="actionscript">            Vue.filter(<span class="string">"test"</span>, <span class="function"><span class="keyword">function</span> <span class="params">(msg)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">return</span> msg + <span class="string">"=========="</span>;</span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="actionscript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;</span></span><br><span class="line"><span class="actionscript">                    msg: <span class="string">'曾经，我也是一个单纯的少年，单纯的我，傻傻的问，谁是世界上最单纯的人'</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 过滤器的定义语法</span></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 过滤器中的function,第一个参数，规定为过滤器管道符前面传递过来的数据</span></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            vue.filter(<span class="string">"过滤器的名称"</span>, <span class="function"><span class="keyword">function</span> <span class="params">(data)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">return</span> data + <span class="string">'123'</span>;</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="actionscript">            <span class="comment">// |即管道符</span></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 过滤器调用时的格式 &#123;&#123;name | 过滤器的名称&#125;&#125;</span></span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="私有过滤器"><a href="#私有过滤器" class="headerlink" title="私有过滤器"></a>私有过滤器</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">                el: <span class="string">"#app"</span>,</span><br><span class="line">                data: &#123;</span><br><span class="line">                    id: <span class="string">''</span>,</span><br><span class="line">                    name: <span class="string">''</span>,</span><br><span class="line">                    keywords: <span class="string">''</span>,</span><br><span class="line">                    list: [&#123;</span><br><span class="line">                            id: <span class="number">1</span>,</span><br><span class="line">                            name: <span class="string">"奔驰"</span>,</span><br><span class="line">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            id: <span class="number">2</span>,</span><br><span class="line">                            name: <span class="string">"宝马"</span>,</span><br><span class="line">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;,</span><br><span class="line">                methods: &#123;</span><br><span class="line">                    add() &#123;</span><br><span class="line">                        <span class="comment">// 分析</span></span><br><span class="line">                        <span class="comment">// 1. 获取到id和name， 直接从data上获取</span></span><br><span class="line">                        <span class="comment">// 2. 组织出一个对象</span></span><br><span class="line">                        <span class="comment">// 3. 把这个对象，调用数组相关方法，添加到当前data中的list中</span></span><br><span class="line">                        <span class="comment">// 注意：在vue中已经实现了数据的双向绑定，每当我们修改了data中的数据，vue会默认监听到数据的改动，自动把最新的数据应用到页面上</span></span><br><span class="line">                        <span class="comment">// 程序员更多的是在进行VM中Model数据的操作， 同时， 在操作Model数据的时候， 指定的业务逻辑操作</span></span><br><span class="line">                        <span class="keyword">var</span> car = &#123;</span><br><span class="line">                            id: <span class="keyword">this</span>.id,</span><br><span class="line">                            name: <span class="keyword">this</span>.name,</span><br><span class="line">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">                        &#125;;</span><br><span class="line">                        <span class="keyword">this</span>.list.push(car);</span><br><span class="line">                        <span class="keyword">this</span>.id = <span class="keyword">this</span>.name = <span class="string">""</span>;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    del(id) &#123; <span class="comment">//根据id删除数据</span></span><br><span class="line">                        <span class="comment">// 分析</span></span><br><span class="line">                        <span class="comment">// 1. 如何根据id找到要删除项的索引</span></span><br><span class="line">                        <span class="comment">// 2. 如果找到索引了，直接调用数组splice方法</span></span><br><span class="line">                        <span class="comment">// this.list.some((item, i) =&gt; &#123;</span></span><br><span class="line">                        <span class="comment">//     if (item.id == id) &#123;</span></span><br><span class="line">                        <span class="comment">//         this.list.splice(i, 1);</span></span><br><span class="line">                        <span class="comment">//         //在数组的some方法中，如果return true,就会立即终止这个数组的后续循环</span></span><br><span class="line">                        <span class="comment">//         return true;</span></span><br><span class="line">                        <span class="comment">//     &#125;</span></span><br><span class="line">                        <span class="comment">// &#125;)</span></span><br><span class="line">                        <span class="keyword">var</span> index = <span class="keyword">this</span>.list.findIndex(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span> (item.id == id) &#123;</span><br><span class="line">                                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;)</span><br><span class="line">                        <span class="keyword">this</span>.list.splice(index, <span class="number">1</span>);</span><br><span class="line">                    &#125;,</span><br><span class="line">                    search(keywords) &#123; <span class="comment">//根据关键字进行数据搜索</span></span><br><span class="line">                        <span class="comment">// var newList = [];</span></span><br><span class="line">                        <span class="comment">// this.list.forEach(item =&gt; &#123;</span></span><br><span class="line">                        <span class="comment">//     if (item.name.indexOf(keywords) != -1) &#123;</span></span><br><span class="line">                        <span class="comment">//         newList.push(item);</span></span><br><span class="line">                        <span class="comment">//     &#125;</span></span><br><span class="line">                        <span class="comment">// &#125;);</span></span><br><span class="line">                        <span class="comment">// return newList;</span></span><br><span class="line"></span><br><span class="line">                        <span class="comment">// forEach some filter findIndex 都属于数组新方法，都会被数组中的每一项进行遍历，执行相关操作</span></span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">this</span>.list.filter(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">                            <span class="comment">// if(item.name.indexOf(keywords)!=-1)</span></span><br><span class="line">                            <span class="comment">// es6中为字符串提供一个新方法-String.prototype.includes(要包含的字符串)，若包含，则返回true，否则返回 false</span></span><br><span class="line">                            <span class="keyword">if</span> (item.name.includes(keywords)) &#123;</span><br><span class="line">                                <span class="keyword">return</span> item;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 定义私有过滤器 过滤器有两个条件-过滤器名称和处理函数</span></span><br><span class="line">                filters: &#123;</span><br><span class="line">                    <span class="comment">//过滤器调用的时候，采用的是就近原则，如果私有过滤器和全局过滤器名称一致，优先调用私有过滤器</span></span><br><span class="line">                    dateFormat: <span class="function"><span class="keyword">function</span> (<span class="params">dateStr, pattern = <span class="string">""</span></span>) </span>&#123;</span><br><span class="line">                        <span class="comment">//根据给定的时间字符串，得到特定的时间</span></span><br><span class="line">                        <span class="keyword">var</span> dt = <span class="keyword">new</span> <span class="built_in">Date</span>(dateStr);</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">var</span> y = dt.getFullYear();</span><br><span class="line">                        <span class="comment">// 使用es6新方法 padStart()实现补零格式化</span></span><br><span class="line">                        <span class="keyword">var</span> m = (dt.getMonth() + <span class="number">1</span>).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span><br><span class="line">                        <span class="keyword">var</span> d = (dt.getDate()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> (pattern.toLowerCase() === <span class="string">'yyyy-mm-dd'</span>) &#123;</span><br><span class="line">                            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span>`</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                            <span class="keyword">var</span> hh = (dt.getHours()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span><br><span class="line">                            <span class="keyword">var</span> mm = (dt.getMinutes()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span><br><span class="line">                            <span class="keyword">var</span> ss = (dt.getSeconds()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span><br><span class="line">                            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span> <span class="subst">$&#123;hh&#125;</span>:<span class="subst">$&#123;mm&#125;</span>:<span class="subst">$&#123;ss&#125;</span>!!!`</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="自定义键盘修饰符"><a href="#自定义键盘修饰符" class="headerlink" title="自定义键盘修饰符"></a>自定义键盘修饰符</h2><p>全部的按键别名：</p>
+<ul>
+<li>.enter</li>
+<li>.tab</li>
+<li>.delete(捕获“删除”或“退格”键)</li>
+<li>.esc</li>
+<li>.space</li>
+<li>.up</li>
+<li>.down</li>
+<li>.left</li>
+<li>.right</li>
+</ul>
+<p>不在以上列表中的按键，可以用键盘码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 此处113也是对的，113是F2的键盘码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>Name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"name"</span> @<span class="attr">keyup.113</span>=<span class="string">"add"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"添加"</span> @<span class="attr">click</span>=<span class="string">"add"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>也可以自定义按键修饰符</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义全局按键按键修饰符</span></span><br><span class="line"> Vue.config.keyCodes.f2 = <span class="number">113</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h2><h3 id="自定义全局指令"><a href="#自定义全局指令" class="headerlink" title="自定义全局指令"></a>自定义全局指令</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 自定义全局指令,,实现自动获取焦点</span></span><br><span class="line"><span class="comment">// 参数1：指令的名称，注意：在定义的时候，指令名称前不需要加v-前缀，调用时必须添加</span></span><br><span class="line"> <span class="comment">// 参数2：是一个对象，对象上有一些指令相关的函数，这些函数可以在特定的阶段执行相关的操作</span></span><br><span class="line"> Vue.directive(<span class="string">'focus'</span>, &#123;</span><br><span class="line">     bind: <span class="function"><span class="keyword">function</span> (<span class="params">el</span>) </span>&#123;</span><br><span class="line">         <span class="comment">//每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次</span></span><br><span class="line">         <span class="comment">// 注意：在每个函数中，第一个参数永远是el，表示被绑定了指令的那个元素，这个el参数，是一个原生JS对象</span></span><br><span class="line">         <span class="comment">// 在元素刚绑定了指令时，还没有插入到DOM中，这时，调用focus()没用，因为一个元素只有插入DOM后，才能获取焦点</span></span><br><span class="line">         <span class="comment">// el.focus();</span></span><br><span class="line">     &#125;,</span><br><span class="line">     inserted: <span class="function"><span class="keyword">function</span> (<span class="params">el</span>) </span>&#123;</span><br><span class="line">         <span class="comment">// 表示元素插入到DOM中的时候会执行这个inserted函数，触发一次</span></span><br><span class="line">         <span class="comment">// 和JS行为有关的操作，最好在inserted中去执行，防止JS行为不生效</span></span><br><span class="line">         el.focus();</span><br><span class="line">     &#125;,</span><br><span class="line">     updated: <span class="function"><span class="keyword">function</span> (<span class="params">el</span>) </span>&#123;</span><br><span class="line">         <span class="comment">// 当VNode更新的时候，会执行这个updated，可能会触发多次</span></span><br><span class="line">     &#125;</span><br><span class="line"> &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="使用钩子函数的第二个参数拿到传递的参数"><a href="#使用钩子函数的第二个参数拿到传递的参数" class="headerlink" title="使用钩子函数的第二个参数拿到传递的参数"></a>使用钩子函数的第二个参数拿到传递的参数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义一个设置字体颜色的指令</span></span><br><span class="line">            Vue.directive(<span class="string">'color'</span>, &#123;</span><br><span class="line">                <span class="comment">// 样式，只要通过指令绑定给了元素，不管这个元素有没有插入到页面中去，这个元素肯定有了一个内联的样式，将来元素肯定会显示到页面中，这时浏览器的渲染引擎必然会解析样式，应用给这个元素</span></span><br><span class="line">                bind: <span class="function"><span class="keyword">function</span> (<span class="params">el, binding</span>) </span>&#123;</span><br><span class="line">                    <span class="comment">// 和样式相关的操作，一般都可以在bind执行</span></span><br><span class="line">                    <span class="comment">// el.style.color = "red";</span></span><br><span class="line">                    <span class="comment">// binding： 一个对象，包含以下属性</span></span><br><span class="line">                    <span class="comment">// name： 指令名，不包括v-</span></span><br><span class="line">                    <span class="comment">// value：指令绑定值，可计算</span></span><br><span class="line">                    <span class="comment">// oldValue： 指令绑定前一个值</span></span><br><span class="line">                    <span class="comment">// expression： 字符串形式的指令表达</span></span><br><span class="line">                    <span class="comment">// arg： 传给指令的参数，可选</span></span><br><span class="line">                    <span class="comment">// modifies：一个包含修饰符的对象</span></span><br><span class="line">                    el.style.color = binding.value;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="自定义局部指令"><a href="#自定义局部指令" class="headerlink" title="自定义局部指令"></a>自定义局部指令</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">                el: <span class="string">"#app"</span>,</span><br><span class="line">                directives: &#123;</span><br><span class="line">                    <span class="string">'fontweight'</span>: &#123;</span><br><span class="line">                        bind: <span class="function"><span class="keyword">function</span> (<span class="params">el, binding</span>) </span>&#123;</span><br><span class="line">                            el.style.fontWeight = binding.value;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="函数简写"><a href="#函数简写" class="headerlink" title="函数简写"></a>函数简写</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    el: <span class="string">"#app"</span>,</span><br><span class="line">    directives: &#123;</span><br><span class="line">        <span class="string">'fontweight'</span>: <span class="function"><span class="keyword">function</span>(<span class="params">el,binding</span>)</span>&#123; <span class="comment">// 注意：这个function等同于把代码写到了bind和update中去</span></span><br><span class="line">            el.style.fontSize = <span class="built_in">parseInt</span>(binding.value)+<span class="string">"px"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="案例-品牌列表"><a href="#案例-品牌列表" class="headerlink" title="案例-品牌列表"></a>案例-品牌列表</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>品牌列表案例<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">            <span class="selector-id">#app</span> <span class="selector-tag">th</span>,</span></span><br><span class="line"><span class="undefined">            td &#123;</span></span><br><span class="line"><span class="css">                <span class="selector-tag">border</span>: 1<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-id">#000</span>;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="css">            <span class="selector-id">#app</span> <span class="selector-tag">thead</span> <span class="selector-tag">th</span> &#123;</span></span><br><span class="line"><span class="undefined">                width: 200px;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="css">            <span class="selector-id">#app</span> <span class="selector-tag">tbody</span> <span class="selector-tag">td</span> &#123;</span></span><br><span class="line"><span class="undefined">                width: 200px;</span></span><br><span class="line"><span class="undefined">                text-align: center;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>ID: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"id"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!-- 自定义按键修饰符 --&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>Name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"name"</span> @<span class="attr">keyup.f2</span>=<span class="string">"add"</span>&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"添加"</span> @<span class="attr">click</span>=<span class="string">"add"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">""</span>&gt;</span>搜索名称关键字:</span><br><span class="line">                    <span class="comment">&lt;!-- 注意：Vue中所有的指令在调用时都以v-开头 --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">v-model</span>=<span class="string">"keywords"</span> <span class="attr">v-focus</span> <span class="attr">v-color</span>=<span class="string">"'blue'"</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- 注意v-color中是""中套''，如果没有''，则会在data中去找--&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>ID<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>Name<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>Ctime<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">th</span>&gt;</span>Operation<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- 之前v-for中的数据，都是直接从data上的list中直接渲染过来的 --&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- &lt;tr v-for=" item in list" :key="item.id"&gt; --&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- 现在，我们自定义了一个search方法，同时把所有的关键字通过传参的形式，传递给search方法 --&gt;</span></span><br><span class="line">                    <span class="comment">&lt;!-- 在search方法内部，通过执行for循环，把所有符合搜索关键字的数据，保存到一个新数组中，返回 --&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">tr</span> <span class="attr">v-for</span>=<span class="string">"item in search(keywords)"</span> <span class="attr">:key</span>=<span class="string">"item.id"</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;item.id&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;item.name&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;item.ctime | dateFormat&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">""</span> @<span class="attr">click.prevent</span>=<span class="string">"del(item.id)"</span>&gt;</span>删除<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            Vue.filter(<span class="string">'dateFormat'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(dateStr, pattern = <span class="string">""</span>)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="comment">//根据给定的时间字符串，得到特定的时间</span></span></span><br><span class="line"><span class="javascript">                <span class="keyword">var</span> dt = <span class="keyword">new</span> <span class="built_in">Date</span>(dateStr);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> y = dt.getFullYear();</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> m = dt.getMonth() + <span class="number">1</span>;</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> d = dt.getDate();</span></span><br><span class="line"><span class="actionscript">                <span class="comment">// return y + '-' + m + '-' + d '</span></span></span><br><span class="line"><span class="actionscript">                <span class="keyword">if</span> (pattern.toLowerCase() === <span class="string">'yyyy-mm-dd'</span>) &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span>`</span>;</span></span><br><span class="line"><span class="actionscript">                &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="keyword">var</span> hh = dt.getHours();</span></span><br><span class="line"><span class="actionscript">                    <span class="keyword">var</span> mm = dt.getMinutes();</span></span><br><span class="line"><span class="actionscript">                    <span class="keyword">var</span> ss = dt.getSeconds();</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span> <span class="subst">$&#123;hh&#125;</span>:<span class="subst">$&#123;mm&#125;</span>:<span class="subst">$&#123;ss&#125;</span>`</span>;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 自定义全局按键按键修饰符</span></span></span><br><span class="line"><span class="undefined">            Vue.config.keyCodes.f2 = 113;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 自定义全局指令,实现自动获取焦点</span></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 参数1：指令的名称，注意：在定义的时候，指令名称前不需要加v-前缀，调用时必须添加</span></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 参数2：是一个对象，对象上有一些指令相关的函数，这些函数可以在特定的阶段执行相关的操作</span></span></span><br><span class="line"><span class="actionscript">            Vue.directive(<span class="string">'focus'</span>, &#123;</span></span><br><span class="line"><span class="actionscript">                bind: <span class="function"><span class="keyword">function</span> <span class="params">(el)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">//每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 注意：在每个函数中，第一个参数永远是el，表示被绑定了指令的那个元素，这个el参数，是一个原生JS对象</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 在元素刚绑定了指令时，还没有插入到DOM中，这时，调用focus()没用，因为一个元素只有插入DOM后，才能获取焦点</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// el.focus();</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="actionscript">                inserted: <span class="function"><span class="keyword">function</span> <span class="params">(el)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 表示元素插入到DOM中的时候会执行这个inserted函数，触发一次</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 和JS行为有关的操作，最好在inserted中去执行，防止JS行为不生效</span></span></span><br><span class="line"><span class="undefined">                    el.focus();</span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="actionscript">                updated: <span class="function"><span class="keyword">function</span> <span class="params">(el)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 当VNode更新的时候，会执行这个updated，可能会触发多次</span></span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 自定义一个设置字体颜色的指令</span></span></span><br><span class="line"><span class="actionscript">            Vue.directive(<span class="string">'color'</span>, &#123;</span></span><br><span class="line"><span class="actionscript">                <span class="comment">// 样式，只要通过指令绑定给了元素，不管这个元素有没有插入到页面中去，这个元素肯定有了一个内联的样式，将来元素肯定会显示到页面中，这时浏览器的渲染引擎必然会解析样式，应用给这个元素</span></span></span><br><span class="line"><span class="actionscript">                bind: <span class="function"><span class="keyword">function</span> <span class="params">(el, binding)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 和样式相关的操作，一般都可以在bind执行</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// el.style.color = "red";</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// binding： 一个对象，包含以下属性</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// name： 指令名，不包括v-</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// value：指令绑定值，可计算</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// oldValue： 指令绑定前一个值</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// expression： 字符串形式的指令表达</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// arg： 传给指令的参数，可选</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// modifies：一个包含修饰符的对象</span></span></span><br><span class="line"><span class="undefined">                    el.style.color = binding.value;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="actionscript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;</span></span><br><span class="line"><span class="actionscript">                    id: <span class="string">''</span>,</span></span><br><span class="line"><span class="actionscript">                    name: <span class="string">''</span>,</span></span><br><span class="line"><span class="actionscript">                    keywords: <span class="string">''</span>,</span></span><br><span class="line"><span class="undefined">                    list: [&#123;</span></span><br><span class="line"><span class="undefined">                            id: 1,</span></span><br><span class="line"><span class="actionscript">                            name: <span class="string">"奔驰"</span>,</span></span><br><span class="line"><span class="javascript">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span></span><br><span class="line"><span class="undefined">                        &#125;,</span></span><br><span class="line"><span class="undefined">                        &#123;</span></span><br><span class="line"><span class="undefined">                            id: 2,</span></span><br><span class="line"><span class="actionscript">                            name: <span class="string">"宝马"</span>,</span></span><br><span class="line"><span class="javascript">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    ]</span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                methods: &#123;</span></span><br><span class="line"><span class="undefined">                    add() &#123;</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 分析</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 1. 获取到id和name， 直接从data上获取</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 2. 组织出一个对象</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 3. 把这个对象，调用数组相关方法，添加到当前data中的list中</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 注意：在vue中已经实现了数据的双向绑定，每当我们修改了data中的数据，vue会默认监听到数据的改动，自动把最新的数据应用到页面上</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 程序员更多的是在进行VM中Model数据的操作， 同时， 在操作Model数据的时候， 指定的业务逻辑操作</span></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">var</span> car = &#123;</span></span><br><span class="line"><span class="actionscript">                            id: <span class="keyword">this</span>.id,</span></span><br><span class="line"><span class="actionscript">                            name: <span class="keyword">this</span>.name,</span></span><br><span class="line"><span class="javascript">                            ctime: <span class="keyword">new</span> <span class="built_in">Date</span>()</span></span><br><span class="line"><span class="undefined">                        &#125;;</span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">this</span>.list.push(car);</span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">this</span>.id = <span class="keyword">this</span>.name = <span class="string">""</span>;</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="actionscript">                    del(id) &#123; <span class="comment">//根据id删除数据</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 分析</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 1. 如何根据id找到要删除项的索引</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 2. 如果找到索引了，直接调用数组splice方法</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// this.list.some((item, i) =&gt; &#123;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//     if (item.id == id) &#123;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//         this.list.splice(i, 1);</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//         //在数组的some方法中，如果return true,就会立即终止这个数组的后续循环</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//         return true;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//     &#125;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// &#125;)</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">var</span> index = <span class="keyword">this</span>.list.findIndex(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="actionscript">                            <span class="keyword">if</span> (item.id == id) &#123;</span></span><br><span class="line"><span class="actionscript">                                <span class="keyword">return</span> <span class="literal">true</span>;</span></span><br><span class="line"><span class="undefined">                            &#125;</span></span><br><span class="line"><span class="undefined">                        &#125;)</span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">this</span>.list.splice(index, <span class="number">1</span>);</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="actionscript">                    search(keywords) &#123; <span class="comment">//根据关键字进行数据搜索</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// var newList = [];</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// this.list.forEach(item =&gt; &#123;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//     if (item.name.indexOf(keywords) != -1) &#123;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//         newList.push(item);</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//     &#125;</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// &#125;);</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// return newList;</span></span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// forEach some filter findIndex 都属于数组新方法，都会被数组中的每一项进行遍历，执行相关操作</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">return</span> <span class="keyword">this</span>.list.filter(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="actionscript">                            <span class="comment">// if(item.name.indexOf(keywords)!=-1)</span></span></span><br><span class="line"><span class="actionscript">                            <span class="comment">// es6中为字符串提供一个新方法-String.prototype.includes(要包含的字符串)，若包含，则返回true，否则返回 false</span></span></span><br><span class="line"><span class="actionscript">                            <span class="keyword">if</span> (item.name.includes(keywords)) &#123;</span></span><br><span class="line"><span class="actionscript">                                <span class="keyword">return</span> item;</span></span><br><span class="line"><span class="undefined">                            &#125;</span></span><br><span class="line"><span class="undefined">                        &#125;)</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">                <span class="comment">// 定义私有过滤器 过滤器有两个条件-过滤器名称和处理函数</span></span></span><br><span class="line"><span class="undefined">                filters: &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">//过滤器调用的时候，采用的是就近原则，如果私有过滤器和全局过滤器名称一致，优先调用私有过滤器</span></span></span><br><span class="line"><span class="actionscript">                    dateFormat: <span class="function"><span class="keyword">function</span> <span class="params">(dateStr, pattern = <span class="string">""</span>)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//根据给定的时间字符串，得到特定的时间</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">var</span> dt = <span class="keyword">new</span> <span class="built_in">Date</span>(dateStr);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">var</span> y = dt.getFullYear();</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 使用es6新方法 padStart()实现补零格式化</span></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">var</span> m = (dt.getMonth() + <span class="number">1</span>).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">var</span> d = (dt.getDate()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">if</span> (pattern.toLowerCase() === <span class="string">'yyyy-mm-dd'</span>) &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span>`</span>;</span></span><br><span class="line"><span class="actionscript">                        &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="actionscript">                            <span class="keyword">var</span> hh = (dt.getHours()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span></span><br><span class="line"><span class="actionscript">                            <span class="keyword">var</span> mm = (dt.getMinutes()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span></span><br><span class="line"><span class="actionscript">                            <span class="keyword">var</span> ss = (dt.getSeconds()).toString().padStart(<span class="number">2</span>, <span class="string">'0'</span>);</span></span><br><span class="line"><span class="javascript">                            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;y&#125;</span>-<span class="subst">$&#123;m&#125;</span>-<span class="subst">$&#123;d&#125;</span> <span class="subst">$&#123;hh&#125;</span>:<span class="subst">$&#123;mm&#125;</span>:<span class="subst">$&#123;ss&#125;</span>!!!`</span>;</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                directives: &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="string">'fontweight'</span>: &#123;</span></span><br><span class="line"><span class="actionscript">                        bind: <span class="function"><span class="keyword">function</span> <span class="params">(el, binding)</span> </span>&#123;</span></span><br><span class="line"><span class="undefined">                            el.style.fontWeight = binding.value;</span></span><br><span class="line"><span class="undefined">                        &#125;</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;);</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Vue实例的生命周期"><a href="#Vue实例的生命周期" class="headerlink" title="Vue实例的生命周期"></a>Vue实例的生命周期</h2><ul>
+<li>什么是生命周期：从Vue实例创建、运行、到销毁期间，总是伴随着各种各样的事件，这些事件，统称为生命周期。</li>
+<li>生命周期钩子，就是生命周期事件的别名</li>
+<li>主要的生命周期函数分类：<ul>
+<li>创建期间的生命周期函数：<ul>
+<li>beforeCreate：实例刚在内存中被创建出来，此时，还没有初始化好data和methods属性</li>
+<li>created：实例已经在内存中创建OK,此时data和methods已经创建OK,此时还没有开始编译模板</li>
+<li>breforeMount：此时已经完成了模板的编译，但是还没有挂载到页面中</li>
+<li>mounted：此时，已经将编译好的模板挂在到了页面指定的窗口中显示</li>
+</ul>
+</li>
+<li>运行期间的生命周期函数：<ul>
+<li>beforeUpdate：状态更新之前执行此函数，此时data中的状态值是最新的，但是界面上显示的数据还是旧的，因为此时还没有开始重新渲染DOM节点</li>
+<li>updated：实例更新完毕后调用此函数，此时data中的状态值和界面上显示的数据都已经完成了更新，界面已经被重新渲染好了！</li>
+</ul>
+</li>
+<li>销毁期间的生命周期函数<ul>
+<li>beforeDestroy：实例销毁之前调用。在这一步，实例仍然完全可用</li>
+<li>destroyed:vue实例销毁后调用。调用后，vue实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>生命周期函数<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"修改msg"</span> @<span class="attr">click</span>=<span class="string">"msg='no'"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span> <span class="attr">id</span>=<span class="string">"h3"</span>&gt;</span>&#123;&#123;msg&#125;&#125;<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="actionscript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;</span></span><br><span class="line"><span class="actionscript">                    msg: <span class="string">"ok"</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                methods: &#123;</span></span><br><span class="line"><span class="undefined">                    show() &#123;</span></span><br><span class="line"><span class="javascript">                        <span class="built_in">console</span>.log(<span class="string">"执行了show方法"</span>)</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                beforeCreate() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">//这是遇到的第一个生命周期函数，表示实例完全被创建出来之前，会执行它</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// console.log(this.msg);</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// this.show()</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">//注意：在beforeCreate生命周期函数执行的时候，data和methods中的数据都还没有被初始化，所以this.msg/this.show()都是undefined</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                created() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 这是遇到的第二个生命周期函数</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// console.log(this.msg);</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// this.show();</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 在created中，data和methods都已经被初始化好了</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 如果要调用methods中的方法，或者操作data中的数据，最早只能在created中操作</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                breforeMount() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 这是遇到的第三个生命周期函数，表示模板已经在内存中编辑完成，但学未把模板渲染到页面中</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// console.log(document.getElementById("h3").innerText);</span></span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 在beforeMount 执行的时候，页面中的元素还没有被真正替换过来，只是之前写的一些模板字符串</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                mounted() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 这是遇到的第四个生命周期函数，表示内存中的模板已经真实挂载到页面中，用户已经可以看到渲染好的页面了</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="built_in">document</span>.getElementById(<span class="string">"h3"</span>).innerText);</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 注意： mounted是实例创建期间的最后一个生命周期函数， 当执行完mounted就表示， 实例已经被完全创建好了， 此时， 如果没有其它操作的话， 这个实例， 就静静待在内存中</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                beforeUpdate() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">//这时，界面还没有被更新，数据已经被更新了</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'界面上元素的内容:'</span> + <span class="built_in">document</span>.getElementById(<span class="string">"h3"</span>).innerText);</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'data中的msg数据是:'</span> + <span class="keyword">this</span>.msg);</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 结论：当执行beforeUpdate时，页面中显示的数据还是旧的，此时data数据是最新的，页面还没有和最新的数据保持同步</span></span></span><br><span class="line"><span class="undefined">                &#125;,</span></span><br><span class="line"><span class="undefined">                updated() &#123;</span></span><br><span class="line"><span class="actionscript">                    <span class="comment">// 这时，页面和data数据已经保持同步了，都是最新的</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'界面上元素的内容:'</span> + <span class="built_in">document</span>.getElementById(<span class="string">"h3"</span>).innerText);</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="string">'data中的msg数据是:'</span> + <span class="keyword">this</span>.msg);</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="Vue-resource实现get、post、jsonp请求"><a href="#Vue-resource实现get、post、jsonp请求" class="headerlink" title="Vue-resource实现get、post、jsonp请求"></a>Vue-resource实现get、post、jsonp请求</h2><p>除了vue-resource外，还可以使用”axios”的第三包实现数据的请求</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>vue-resource基本使用<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 注意：vue-resource依赖于vue，所以先后顺序不能反 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- this.$http.jsonp --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"./js/vue-resource.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"get请求"</span> @<span class="attr">click</span>=<span class="string">"getInfo"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"post请求"</span> @<span class="attr">click</span>=<span class="string">"postInfo"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"jsonp请求"</span> @<span class="attr">click</span>=<span class="string">"jsonpInfo"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> vm = <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="actionscript">                el: <span class="string">"#app"</span>,</span></span><br><span class="line"><span class="undefined">                data: &#123;&#125;,</span></span><br><span class="line"><span class="undefined">                methods: &#123;</span></span><br><span class="line"><span class="undefined">                    getInfo() &#123;</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 发起get请求</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 当发起get请求后， 通过.then来设置成功的回调函数</span></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">this</span>.$http.get(<span class="string">'http://vue.studyit.io/api/getlunbo'</span>).then(<span class="function"><span class="keyword">function</span> <span class="params">(result)</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">                            <span class="comment">// 通过result.body拿到服务器返回成功的数据</span></span></span><br><span class="line"><span class="actionscript">                            <span class="comment">// console.log(result.body);</span></span></span><br><span class="line"><span class="undefined">                        &#125;)</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="undefined">                    postInfo() &#123;</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 发起post请求</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 手动发起的post请求，默认没有表单格式，所有有的服务器处理不了</span></span></span><br><span class="line"><span class="actionscript">                        <span class="comment">// 通过post方法的第三个参数emulateJSON:true， 设置提交的内容类型为普通表单数据格式</span></span></span><br><span class="line"><span class="actionscript">                        <span class="keyword">this</span>.$http.post(<span class="string">'http://vue.studyit.io/api/post'</span>, &#123;&#125;, &#123;</span></span><br><span class="line"><span class="actionscript">                            emulateJSON: <span class="literal">true</span></span></span><br><span class="line"><span class="javascript">                        &#125;).then(<span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="built_in">console</span>.log(result.body);</span></span><br><span class="line"><span class="undefined">                        &#125;);</span></span><br><span class="line"><span class="undefined">                    &#125;,</span></span><br><span class="line"><span class="undefined">                    jsonpInfo() &#123;</span></span><br><span class="line"><span class="actionscript">                        <span class="comment">//发起jsonp请求</span></span></span><br><span class="line"><span class="javascript">                        <span class="keyword">this</span>.$http.jsonp(<span class="string">'http://vue.studyit.io/api/jsonp'</span>).then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">                            <span class="built_in">console</span>.log(result.body);</span></span><br><span class="line"><span class="undefined">                        &#125;)</span></span><br><span class="line"><span class="undefined">                    &#125;</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;)</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="JSONP的实现原理"><a href="#JSONP的实现原理" class="headerlink" title="JSONP的实现原理"></a>JSONP的实现原理</h3><ul>
+<li>由于浏览器的安全性限制，不允许AJAX访问协议不同、域名不同、端口号不同的数据接口，浏览器认为这种访问不安全</li>
+<li>可以通过动态创建script标签的形式，把script标签的src属性，指向数据接口的地址，因为script标签不存在跨域限制，这种数据获取方式，称作JSONP(注意：根据JSONP的实现原理，知晓JSONP只支持get请求)</li>
+<li>具体实现过程：<ul>
+<li>先在客户端定义一个回调方法，预定义对数据的操作</li>
+<li>再把这个回调方法的名称，通过URL传参的形式，提交到服务器的数据接口</li>
+<li>服务器数据接口组织好要发送给客户端的数据，再拿着客户端传递过来的回调方法名称，拼接出一个调用这个方法的字符串，发送给客户端去解析执行</li>
+<li>客户端拿到服务器返回的字符串后，当作script脚本去解析执行，这样就能拿到JSONP数据了</li>
+</ul>
+</li>
+</ul>
+<h2 id="通过Node-js，手动实现一个JSONP"><a href="#通过Node-js，手动实现一个JSONP" class="headerlink" title="通过Node.js，手动实现一个JSONP"></a>通过Node.js，手动实现一个JSONP</h2><p>后端：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</span><br><span class="line"><span class="comment">// 这个核心模块可以帮我们解析URL地址，从而拿到pathname 和 query</span></span><br><span class="line"><span class="keyword">const</span> urlModule = <span class="built_in">require</span>(<span class="string">'url'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer()</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'request'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// const url = req.url</span></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">        pathname: url,</span><br><span class="line">        query</span><br><span class="line">    &#125; = urlModule.parse(req.url, <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (url === <span class="string">'/getscript'</span>) &#123;</span><br><span class="line">        <span class="comment">// 拼接一个合法的JS脚本，这里拼接的是一个方法的调用</span></span><br><span class="line">        <span class="comment">// var scriptStr = 'show()'</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> data = &#123;</span><br><span class="line">            name: <span class="string">'zs'</span>,</span><br><span class="line">            age: <span class="number">18</span>,</span><br><span class="line">            gender: <span class="string">'男'</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> scriptStr = <span class="string">`<span class="subst">$&#123;query.callback&#125;</span>(<span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(data)&#125;</span>)`</span></span><br><span class="line">        <span class="comment">// res.end 发送给客户端，客户端将这个字符串当作JS代码去解析执行</span></span><br><span class="line">        res.end(scriptStr)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        res.end(<span class="string">'404'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3000</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'server listen at http://127.0.0.1:3000'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>前端：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>客户端JSONP页面<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- Host Current Workspace and Open in Browser --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">            <span class="function"><span class="keyword">function</span> <span class="title">showInfo123</span><span class="params">(data)</span> </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">console</span>.log(data);</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://127.0.0.1:3000/getscript?callback=showInfo123"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 相当于</span></span><br><span class="line"><span class="comment">        &lt;script&gt;</span></span><br><span class="line"><span class="comment">            show()</span></span><br><span class="line"><span class="comment">        &lt;/script&gt; --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/22/undefined/" rel="next" title="第十一天">
+                <i class="fa fa-chevron-left"></i> 第十一天
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/24/undefined/" rel="prev" title="第十天">
+                第十天 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+  	  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-1106127810827644"
+     data-ad-slot="2635376206"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar1.gif"
+                alt="Zephon" />
+            
+              <p class="site-author-name" itemprop="name">Zephon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Zephon-H" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="qq1528498238@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/u010367977" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-link"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第十二天"><span class="nav-number">1.</span> <span class="nav-text">第十二天</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器"><span class="nav-number">1.1.</span> <span class="nav-text">过滤器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全局过滤器"><span class="nav-number">1.1.1.</span> <span class="nav-text">全局过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#私有过滤器"><span class="nav-number">1.1.2.</span> <span class="nav-text">私有过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义键盘修饰符"><span class="nav-number">1.2.</span> <span class="nav-text">自定义键盘修饰符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义指令"><span class="nav-number">1.3.</span> <span class="nav-text">自定义指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义全局指令"><span class="nav-number">1.3.1.</span> <span class="nav-text">自定义全局指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用钩子函数的第二个参数拿到传递的参数"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用钩子函数的第二个参数拿到传递的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义局部指令"><span class="nav-number">1.3.3.</span> <span class="nav-text">自定义局部指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数简写"><span class="nav-number">1.3.4.</span> <span class="nav-text">函数简写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例-品牌列表"><span class="nav-number">1.4.</span> <span class="nav-text">案例-品牌列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue实例的生命周期"><span class="nav-number">1.5.</span> <span class="nav-text">Vue实例的生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-resource实现get、post、jsonp请求"><span class="nav-number">1.6.</span> <span class="nav-text">Vue-resource实现get、post、jsonp请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSONP的实现原理"><span class="nav-number">1.6.1.</span> <span class="nav-text">JSONP的实现原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过Node-js，手动实现一个JSONP"><span class="nav-number">1.7.</span> <span class="nav-text">通过Node.js，手动实现一个JSONP</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class = "">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+</div>
+
+
+<div class ="">
+  <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("10/31/2018 12:31:35");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+</div>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+
+  
+
+  
+  
+  <div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv">人次</span>
+</span>
+</div>
+  
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
+
+<script type="text/javascript" src="/js/src/love.js"></script>

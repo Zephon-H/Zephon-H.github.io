@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="回归分析回归分析的原理概述在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。 原理在大数据分析中，回归分析是一种预测性的建模技术，它研究的">
+<meta name="description" content="回归分析回归分析的原理概述在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。 原理在大数据分析中，回归分析是一种预测性的建模技术，它研究的是">
 <meta name="keywords" content="数模">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数模-回归分析">
 <meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2019&#x2F;11&#x2F;02&#x2F;%E6%95%B0%E6%A8%A1-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90&#x2F;index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="回归分析回归分析的原理概述在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。 原理在大数据分析中，回归分析是一种预测性的建模技术，它研究的">
+<meta property="og:description" content="回归分析回归分析的原理概述在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。 原理在大数据分析中，回归分析是一种预测性的建模技术，它研究的是">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-02T16:21:24.923Z">
+<meta property="og:updated_time" content="2019-11-02T16:27:49.520Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.5k字
+                  2.4k字
                 </span>
               
 
@@ -402,8 +402,7 @@
       
 
       
-        <ol>
-<li><h1 id="回归分析"><a href="#回归分析" class="headerlink" title="回归分析"></a>回归分析</h1><h2 id="回归分析的原理"><a href="#回归分析的原理" class="headerlink" title="回归分析的原理"></a>回归分析的原理</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。</p>
+        <h1 id="回归分析"><a href="#回归分析" class="headerlink" title="回归分析"></a>回归分析</h1><h2 id="回归分析的原理"><a href="#回归分析的原理" class="headerlink" title="回归分析的原理"></a>回归分析的原理</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在统计学中，回归分析(regression analysis)指的是确定两种或两种以上变量间相互依赖的定量关系的一种统计分析方法。回归分析按照涉及的变量的多少，分为一元回归和多元回归分析；按照因变量的多少，可分为简单回归分析和多重回归分析；按照自变量和因变量之间的关系类型，可分为线型回归分析和非线性回归分析。</p>
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在大数据分析中，回归分析是一种预测性的建模技术，它研究的是因变量(目标)和自变量(预测器)之间的关系。这种技术通常用于预测分析，时间序列模型以及发现变量之间的因果关系。</p>
 <h3 id="回归分析研究的主要问题"><a href="#回归分析研究的主要问题" class="headerlink" title="回归分析研究的主要问题"></a>回归分析研究的主要问题</h3><ol>
 <li>确定Y与X间的定量关系表达式，这种表达式称为回归方程</li>
@@ -464,66 +463,61 @@
 <script type="math/tex; mode=display">
 a=\frac{\sum_{i=1}^m(x^{(i)}-\bar{x})(y^{(i)}-\bar{y})}{\sum_{i=1}^m(x^{(i)}-\bar{x})^2}</script><script type="math/tex; mode=display">
 b=\bar{y}-a\bar{x}</script><script type="math/tex; mode=display">
-a=\frac{\sum_{i=1}^m(x^{(i)}-\bar{x})(y^{(i)}-\bar{y})}{\sum_{i=1}^m(x^{(i)}-\bar{x})^2} -->\sum_{i=1}^mw^{(i)}\cdot v^{(i)} -->w\cdot v</script></li>
-</ol>
+a=\frac{\sum_{i=1}^m(x^{(i)}-\bar{x})(y^{(i)}-\bar{y})}{\sum_{i=1}^m(x^{(i)}-\bar{x})^2} -->\sum_{i=1}^mw^{(i)}\cdot v^{(i)} -->w\cdot v</script><script type="math/tex; mode=display">
+w=(w^{(1)},w^{(2)},...,w^{(n)})，v=(v^{(1)},v^{(2)},...,v^{(n)})</script><h3 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h3><p>目标：使$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小</p>
 <script type="math/tex; mode=display">
-   w=(w^{(1)},w^{(2)},...,w^{(n)})，v=(v^{(1)},v^{(2)},...,v^{(n)})</script><h3 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h3><p>   目标：使$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小</p>
+\hat{y}^{(i)}=\theta_0+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}</script><p>目标：找到$\theta_0,\theta_1,\theta_2,…,\theta_n$，使得$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小</p>
 <script type="math/tex; mode=display">
-   \hat{y}^{(i)}=\theta_0+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}</script><p>   目标：找到$\theta_0,\theta_1,\theta_2,…,\theta_n$，使得$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小</p>
-<script type="math/tex; mode=display">
-   \hat{y}^{(i)}=\theta_0+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}</script><script type="math/tex; mode=display">
-   \theta=(\theta_0,\theta_1,\theta_2,...,\theta_n)^T</script><script type="math/tex; mode=display">
-   \hat{y}^{(i)}=\theta_0X_0^{(i)}+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}\underline=1</script><script type="math/tex; mode=display">
-   X^{(i)}=(X_0^{(i)},X_1^{(i)},X_2^{(i)},...,X_n^{(i)})</script><script type="math/tex; mode=display">
-   \hat{y}^{(i)}=X^{(i)}\cdot \theta</script><script type="math/tex; mode=display">
-   X_b=\left(
-   \begin{matrix} 
-   1&X_1^{(1)}&X_2^{(1)}&...&X_n^{(1)}\\
-   1&X_1^{(2)}&X_2^{(2)}&...&X_n^{(2)}\\
-   ...\\
-   1&X_1^{(m)}&X_2^{(m)}&...&X_n^{(m)}\\
-   \end{matrix}
-   \right)</script><script type="math/tex; mode=display">
-   \theta=\left(
-   \begin{matrix}
-   \theta_0\\
-   \theta_1\\
-   \theta_2\\
-   ...\\
-   \theta_n
-   \end{matrix}
-   \right)</script><script type="math/tex; mode=display">
-   \hat{y}=X_b\cdot \theta</script><p>   目标：使$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小—&gt;使$(y-X_b\cdot \theta)^T(y-X_b\cdot \theta)$尽可能小—&gt;$\theta=(X_b^TX_b)^{-1}X_b^Ty$</p>
-<p>   多元线性回归的正规方程解$\theta=(X_b^TX_b)^{-1}X_b^Ty$</p>
-<p>   问题：时间复杂度高：O(n^3)(wdwxO(n^2.4))</p>
-<p>   优点：不需要对数据做归一化处理</p>
+\hat{y}^{(i)}=\theta_0+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}</script><script type="math/tex; mode=display">
+\theta=(\theta_0,\theta_1,\theta_2,...,\theta_n)^T</script><script type="math/tex; mode=display">
+\hat{y}^{(i)}=\theta_0X_0^{(i)}+\theta_1X_1^{(i)}+\theta_2X_2^{(i)}+...+\theta_nX_n^{(i)}\underline=1</script><script type="math/tex; mode=display">
+X^{(i)}=(X_0^{(i)},X_1^{(i)},X_2^{(i)},...,X_n^{(i)})</script><script type="math/tex; mode=display">
+\hat{y}^{(i)}=X^{(i)}\cdot \theta</script><script type="math/tex; mode=display">
+X_b=\left(
+\begin{matrix} 
+1&X_1^{(1)}&X_2^{(1)}&...&X_n^{(1)}\\
+1&X_1^{(2)}&X_2^{(2)}&...&X_n^{(2)}\\
+...\\
+1&X_1^{(m)}&X_2^{(m)}&...&X_n^{(m)}\\
+\end{matrix}
+\right)</script><script type="math/tex; mode=display">
+\theta=\left(
+\begin{matrix}
+\theta_0\\
+\theta_1\\
+\theta_2\\
+...\\
+\theta_n
+\end{matrix}
+\right)</script><script type="math/tex; mode=display">
+\hat{y}=X_b\cdot \theta</script><p>目标：使$\sum_{i=1}^m(y^{(i)}-\hat{y}^{(i)})^2$尽可能小—&gt;使$(y-X_b\cdot \theta)^T(y-X_b\cdot \theta)$尽可能小—&gt;$\theta=(X_b^TX_b)^{-1}X_b^Ty$</p>
+<p>多元线性回归的正规方程解$\theta=(X_b^TX_b)^{-1}X_b^Ty$</p>
+<p>问题：时间复杂度高：O(n^3)(wdwxO(n^2.4))</p>
+<p>优点：不需要对数据做归一化处理</p>
 <h3 id="回归分析的MATLAB调用-1"><a href="#回归分析的MATLAB调用-1" class="headerlink" title="回归分析的MATLAB调用"></a>回归分析的MATLAB调用</h3><ol>
 <li>b=regress(Y,X)确定回归系数的点估计值，其中，Y为n*1的矩阵；X为（ones(n,1),x1,…,xm)的矩阵</li>
 <li>[b,bint,r,rint,stats]=regress(Y,X,alpha)求回归系数的点估计和区间估计，并检验回归模型(b：回归系数；bint：回归系数的区间估计；r：残差；rint：残差置信区间；stats：用于检验回归模型的统计量，有四个数值：相关系数R2、F值、与F对应的概率p，误差方差。相关系数R2越接近1，说明回归方程越显著；F&gt;F1-$\alpha$(k,n-k-1)时拒绝H0,F越大，说明回归方程越显著；与F对应的概率p时拒绝H0，回归模型成立。p值在0.01-0.05之间，越小越好</li>
-<li><p>残差以及其置信区间：rcoplot(r,rint);</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% </span></span><br><span class="line">clc;clear;</span><br><span class="line">x=<span class="number">1</span>:<span class="number">10</span>;</span><br><span class="line">x=x';</span><br><span class="line">y=<span class="number">2</span>*x+<span class="number">1</span>;</span><br><span class="line">x=[x <span class="built_in">ones</span>(<span class="number">10</span>,<span class="number">1</span>)];</span><br><span class="line">[b,bint,r,rint,stats]=regress(y,x);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>);</span><br><span class="line"><span class="built_in">plot</span>(x,y);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line"><span class="built_in">plot</span>(x,x*b(<span class="number">1</span>)+b(<span class="number">2</span>));</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,[<span class="number">3</span> <span class="number">4</span>])</span><br><span class="line">rcoplot(r,rint);</span><br></pre></td></tr></table></figure>
-</li>
+<li>残差以及其置信区间：rcoplot(r,rint);</li>
 </ol>
-<h2 id="回归分析的评价"><a href="#回归分析的评价" class="headerlink" title="回归分析的评价"></a>回归分析的评价</h2><p>   衡量线性回归法的指标</p>
-<p>   ​    均方误差ＭSE均方根差RMSE、平均绝对误差MAE，这三类算法具体公式不赘述，但乐都存在局限性：作用域使用范围，对不同事物的预测缺乏统一标准，这样就引出了新的一个预测指标R Squared</p>
+<h2 id="回归分析的评价"><a href="#回归分析的评价" class="headerlink" title="回归分析的评价"></a>回归分析的评价</h2><p>衡量线性回归法的指标</p>
+<p>​    均方误差ＭSE均方根差RMSE、平均绝对误差MAE，这三类算法具体公式不赘述，但乐都存在局限性：作用域使用范围，对不同事物的预测缺乏统一标准，这样就引出了新的一个预测指标R Squared</p>
 <script type="math/tex; mode=display">
-   R^2=1-\frac{\sum_i(\hat{y}^{(i)}-y^{(i)})^2}{\sum_i(\bar{y}-y^{(i)})^2}</script><ul>
+R^2=1-\frac{\sum_i(\hat{y}^{(i)}-y^{(i)})^2}{\sum_i(\bar{y}-y^{(i)})^2}</script><ul>
 <li>R^2&lt;=1</li>
 <li>R^2越大越好。当我们的预测模型不犯任何错误时，R^2为最大值 1</li>
 <li>当我们的模型等于基准模型时，R^2=0</li>
-<li><p>如果R^2&lt;0，说明我们学习到的模型还不如基准模型，此时，数据很可能不存在任何线性关系</p>
-<p>实际应用中，学采用regress函数来实现</p>
-<h2 id="回归分析的优点"><a href="#回归分析的优点" class="headerlink" title="回归分析的优点"></a>回归分析的优点</h2></li>
+<li>如果R^2&lt;0，说明我们学习到的模型还不如基准模型，此时，数据很可能不存在任何线性关系</li>
 </ul>
-<ol>
+<p>实际应用中，学采用regress函数来实现</p>
+<h2 id="回归分析的优点"><a href="#回归分析的优点" class="headerlink" title="回归分析的优点"></a>回归分析的优点</h2><ol>
 <li>回归分析在分析多因素模型时，更加简单和方便</li>
 <li>运用回归模型，只需要采用的模型与数据相同，通过标准的统计方法可以计算出唯一的结果，但在图和表的形式中，数据之间的关系往往因人而异，不同人画出的拟合曲线可能不一样</li>
 <li>回归分析可以准确的计算每个因素的相关程度和回归拟合程度的高低，提高预测方程式的效果</li>
-<li><p>在使用回归分析时，要注意模式的适用范围。</p>
+<li>在使用回归分析时，要注意模式的适用范围。</li>
+</ol>
 <h2 id="回归分析的缺点"><a href="#回归分析的缺点" class="headerlink" title="回归分析的缺点"></a>回归分析的缺点</h2><p>有时候在回归分析中，选用何种因子和该因子采用何种表达式仅是一种推测，这影响了因子的多样性和某些因子的不可预测性，使得回归分析在某些情况下受到限制。</p>
-<h2 id="回归分析的改进方法"><a href="#回归分析的改进方法" class="headerlink" title="回归分析的改进方法"></a>回归分析的改进方法</h2></li>
-<li><p>综合分析,仔细确定模型</p>
-</li>
+<h2 id="回归分析的改进方法"><a href="#回归分析的改进方法" class="headerlink" title="回归分析的改进方法"></a>回归分析的改进方法</h2><ol>
+<li>综合分析,仔细确定模型</li>
 <li>对于较难确定的相关关系,可以采用神经网络等算法进行分析</li>
 <li>通过残差分析和拟合度分析,不断调整模型,直到符合实际情况</li>
 </ol>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java," />
+  <meta name="keywords" content="数模," />
 
 
 
@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="字节码操作 Java动态性的两种常见实现方式 字节码操作  反射   运行时操作字节码可以让我们实现如下功能 动态生成新的类 动态改变某个类的结构(添加&#x2F;删除&#x2F;修改 新的属性&#x2F;方法)  优势 比反射开销小，性能高 Javaasist性能高于反射，低于ASM  常见的字节码操作类库 BCEL Byte Code Engineering Library,这是Apache software Founda">
-<meta name="keywords" content="Java">
+<meta name="description" content="K-means原理聚类分析是在数据中发现数据对象之间的关系，将数据进行分组，组内相似性越大，组间的差别越大，则聚类效果越好。 K-means算法的思想很简单，对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。K-means算法是无监督的聚类算法，它实现起来比较简单，聚类效果也不错，因此应用很广泛。 如果用数据表达式表示，假设簇划分">
+<meta name="keywords" content="数模">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java-字节码操作">
-<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2019&#x2F;04&#x2F;27&#x2F;Java-%E5%AD%97%E8%8A%82%E7%A0%81%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:title" content="数模-K-means">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2019&#x2F;11&#x2F;03&#x2F;%E6%95%B0%E6%A8%A1-K-means&#x2F;index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="字节码操作 Java动态性的两种常见实现方式 字节码操作  反射   运行时操作字节码可以让我们实现如下功能 动态生成新的类 动态改变某个类的结构(添加&#x2F;删除&#x2F;修改 新的属性&#x2F;方法)  优势 比反射开销小，性能高 Javaasist性能高于反射，低于ASM  常见的字节码操作类库 BCEL Byte Code Engineering Library,这是Apache software Founda">
+<meta property="og:description" content="K-means原理聚类分析是在数据中发现数据对象之间的关系，将数据进行分组，组内相似性越大，组间的差别越大，则聚类效果越好。 K-means算法的思想很简单，对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。K-means算法是无监督的聚类算法，它实现起来比较简单，聚类效果也不错，因此应用很广泛。 如果用数据表达式表示，假设簇划分">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-28T05:14:38.100Z">
+<meta property="og:updated_time" content="2019-11-03T15:20:10.676Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://www.zephon.ml/2019/04/27/Java-字节码操作/"/>
+  <link rel="canonical" href="http://www.zephon.ml/2019/11/03/数模-K-means/"/>
 
 
 
 
 
-  <title>Java-字节码操作 | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>数模-K-means | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2019/04/27/Java-%E5%AD%97%E8%8A%82%E7%A0%81%E6%93%8D%E4%BD%9C/">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2019/11/03/%E6%95%B0%E6%A8%A1-K-means/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zephon">
@@ -299,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java-字节码操作</h1>
+          <h1 class="post-title" itemprop="name headline">数模-K-means</h1>
         
 
         <div class="post-meta">
@@ -311,8 +311,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-27T14:13:26+08:00">
-                2019-04-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-03T21:15:46+08:00">
+                2019-11-03
               </time>
             
 
@@ -334,8 +334,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/%E6%95%B0%E6%A8%A1/" itemprop="url" rel="index">
+                    <span itemprop="name">数模</span>
                   </a>
                 </span>
 
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  311字
+                  1.9k字
                 </span>
               
 
@@ -381,7 +381,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  7 分钟
                 </span>
               
             </div>
@@ -402,36 +402,74 @@
       
 
       
-        <h1 id="字节码操作"><a href="#字节码操作" class="headerlink" title="字节码操作"></a>字节码操作</h1><hr>
-<h2 id="Java动态性的两种常见实现方式"><a href="#Java动态性的两种常见实现方式" class="headerlink" title="Java动态性的两种常见实现方式"></a>Java动态性的两种常见实现方式</h2><ol>
-<li><p>字节码操作</p>
-</li>
-<li><p>反射</p>
-</li>
+        <h1 id="K-means"><a href="#K-means" class="headerlink" title="K-means"></a>K-means</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>聚类分析是在数据中发现数据对象之间的关系，将数据进行分组，组内相似性越大，组间的差别越大，则聚类效果越好。</p>
+<p>K-means算法的思想很简单，对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。K-means算法是无监督的聚类算法，它实现起来比较简单，聚类效果也不错，因此应用很广泛。</p>
+<p>如果用数据表达式表示，假设簇划分为(C1,C2,…,Ck),则我们的目标是最小化平方误差E：$E=\sum_{i=1}^k\sum_{x\in C_i}||x-\mu_i||_2^2$ ，其中$\mu_i$是簇Ci的均值向量，有时也称为质心，表达式为：$\mu_i=\frac{1}{|C_i|}\sum_{x\in C_i}x$ ，如果我们想直接求上式的最小值并不容易，这是一个NP难(没有直接能求的一个式子)的问题，因此只能采用启发式的迭代方法。</p>
+<p>K-means采用的启发式：</p>
+<p>选择K个点作为初始质心</p>
+<p>repeat</p>
+<p>将每个点指派到最近的质心，形成K个簇</p>
+<p>重新计算每个簇的质心</p>
+<p>until 簇不发生变化式达到最大迭代次数</p>
+<h2 id="使用方法和适用范围"><a href="#使用方法和适用范围" class="headerlink" title="使用方法和适用范围"></a>使用方法和适用范围</h2><h3 id="K-means算法的要点"><a href="#K-means算法的要点" class="headerlink" title="K-means算法的要点"></a>K-means算法的要点</h3><ol>
+<li>对于K-means算法，首先要注意的是k值的选择，一般来说，我们会根据对数据的先验经验选择一个合适的k值，如果没有什么先验知识，则可以通过交叉验证选择一个合适的k值</li>
+<li>在确定了k的个数后，我们需要选择k个初始化的质心。由于我们是启发式方法，k个初始化的质心的位置选择对最后的聚类结果和运行时间都有很大的影响，因此需要选择合适的k个质心，最好这些质心不能太近。</li>
 </ol>
-<h2 id="运行时操作字节码可以让我们实现如下功能"><a href="#运行时操作字节码可以让我们实现如下功能" class="headerlink" title="运行时操作字节码可以让我们实现如下功能"></a>运行时操作字节码可以让我们实现如下功能</h2><ol>
-<li>动态生成新的类</li>
-<li>动态改变某个类的结构(添加/删除/修改 新的属性/方法)</li>
+<h3 id="K-means算法的步骤"><a href="#K-means算法的步骤" class="headerlink" title="K-means算法的步骤"></a>K-means算法的步骤</h3><p>输入是样本集$D={x_1,x_2,…x_m}$,聚类的簇树k，最大迭代次数N</p>
+<p>输出是簇划分$C={C_1,C_2,…C_k}$</p>
+<ol>
+<li>从数据集D中随机选择k个样本作为初始的k个质心向量：${\mu_1,\mu_2,…\mu_k}$</li>
+<li>对于n=1,2,…,N<ol>
+<li>将簇划分C初始化为$C_i=\empty （t=1,2…k）$</li>
+<li>对于i=1,2,…m,计算样本$x_i$和各个质心向量$\mu_j(j=1,2,…,k)$的距离：$d_{ij}=||x_i-\mu_j||_2^2$，将$x_i$标记最小为$d_{ij}$所对应的类别$\lambda_i$。此时更新$C_{\lambda_i}=C_{\lambda_i}\cup {\{ x_i\}}$ </li>
+<li>对于 j=1,2,…,k，对$C_j$中所有的样本点重新计算新的质心$\mu_j=\frac{1}{|C_j|}\sum_{x\in C_j}x$</li>
+<li>如果所有的k个质心向量都没有发生变化，则转到步骤3（外）</li>
 </ol>
-<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ol>
-<li>比反射开销小，性能高</li>
-<li>Javaasist性能高于反射，低于ASM</li>
+</li>
+<li>输出簇划分$C={C_1,C_2,…C_k}$</li>
 </ol>
-<h2 id="常见的字节码操作类库"><a href="#常见的字节码操作类库" class="headerlink" title="常见的字节码操作类库"></a>常见的字节码操作类库</h2><ul>
-<li><p>BCEL</p>
-<p>Byte Code Engineering Library,这是Apache software Foundation的Jakarta项目的一部分，BCEL是Java classworking广泛使用的一种框架，它可以让你深入JVM汇编语言进行类操作的细节。BCEL与Javassist有不同的处理字节码的方法BCEL在实际的JVM指令层次上进行操作(BCEL拥有丰富的JVM指令级支持)而Javassist所强调的是源代码级别的工作。</p>
-</li>
-<li><p>ASM</p>
-<p>是一个轻量级java字节码操作框架，直接涉及到JVM底层的操作和指令</p>
-</li>
-<li><p>CGLIB(Code Generation Library)</p>
-<p>是一个强大的，高性能，高质量的Code生成类库，基于ASM实现。</p>
-</li>
-<li><p>Javassit</p>
-<p>是一个开源的分析、编辑和创建Java字节码的类库。性能较ASM差，和cglib差不多，但使用简单。很多开源框架都在使用它。</p>
-</li>
-</ul>
-<p>未完</p>
+<h3 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h3><p>主要是解决分类问题，对于给定的样本集，按照样本之间的距离大小，将样本集划分为K个簇，也就是分成K类。让簇内的点尽量紧密的连在一起，而让簇间的距离尽量的大。</p>
+<p>可以解决的问题有：</p>
+<ol>
+<li>星系区分</li>
+<li>区域分划</li>
+<li>样本分类</li>
+</ol>
+<p>…</p>
+<h2 id="MATLAB调用"><a href="#MATLAB调用" class="headerlink" title="MATLAB调用"></a>MATLAB调用</h2><p>K-means聚类算法采用的是将N×P的矩阵X划分成K个类，使得类内对象之间的距离最大，而类之间的距离最小。</p>
+<p>使用方法 ：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Idx=kmeans(X,K)</span><br><span class="line"></span><br><span class="line">[Idx,C]=kmeans(X,K)</span><br><span class="line"></span><br><span class="line">[Idx,C,sumD]=kmeans(X,K)</span><br><span class="line"></span><br><span class="line"><span class="comment">% X:N*P的数据矩阵</span></span><br><span class="line"><span class="comment">% K:表示将X划分为几类，为整数</span></span><br><span class="line"><span class="comment">% Idx:N*1的向量，存储的是每个点的聚类标号</span></span><br><span class="line"><span class="comment">% C:K*P的矩阵，存储的是K个聚类质心位置</span></span><br><span class="line"><span class="comment">% sumD:1*K的和向量，存储的是类间所有点与该类质心之间距离之和</span></span><br><span class="line"><span class="comment">% D:N*N的矩阵，存储的是每个点与所有质心的距离</span></span><br><span class="line">[Idx,C,sumD,D]=kmeans(X,K)</span><br><span class="line"></span><br><span class="line"><span class="comment">% Param1、Param2等，主要可以设置如下：</span></span><br><span class="line"><span class="comment">% 'Distance' (距离测度)</span></span><br><span class="line"><span class="comment">% 'sqEuclidean' 欧式距离(默认时采用此距离方式)</span></span><br><span class="line"><span class="comment">% 'cityblock' 绝对误差和，又称：L1</span></span><br><span class="line"><span class="comment">% 'cosine' 针对向量</span></span><br><span class="line"><span class="comment">% 'correlation' 针对有时序关系的值</span></span><br><span class="line"><span class="comment">% 'Hamming' 只针对二进制数据</span></span><br><span class="line"><span class="comment">% ’start' (初始质心为位置选择方法)</span></span><br><span class="line"><span class="comment">% 'sample' 从X中随机选取K个质心点</span></span><br><span class="line"><span class="comment">% 'uniform' 根据X的分布范围均匀的随机生成K个质心</span></span><br><span class="line"><span class="comment">% 'cluster' 初始聚类阶段随机选择10%的X的子样本(此方法初始使用'sample'方法)</span></span><br><span class="line"><span class="comment">% 'Replicates' (聚类重复次数) 整数</span></span><br><span class="line"><span class="comment">% 'emptyaction' (空簇处理方法):'drop'</span></span><br><span class="line">[...]=kmeans(...,<span class="string">'Param1'</span>,Val1,<span class="string">'Param2'</span>,Val2,...)</span><br></pre></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% </span></span><br><span class="line"><span class="comment">% test</span></span><br><span class="line">clear;clc;</span><br><span class="line">x=[<span class="number">1</span> <span class="number">1</span>;<span class="number">1</span> <span class="number">2</span>;<span class="number">2</span> <span class="number">1</span>;<span class="number">2</span> <span class="number">2</span>];</span><br><span class="line">x=[x;x+<span class="number">10</span>;x+<span class="number">20</span>;x+<span class="number">30</span>;x+<span class="number">40</span>];</span><br><span class="line">[Idx,C,sumD,D]=kmeans(x,<span class="number">5</span>);</span><br><span class="line"><span class="built_in">plot</span>(x(<span class="built_in">find</span>(Idx==<span class="number">1</span>),<span class="number">1</span>),x(<span class="built_in">find</span>(Idx==<span class="number">1</span>),<span class="number">2</span>),<span class="string">'*'</span>);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x(<span class="built_in">find</span>(Idx==<span class="number">2</span>),<span class="number">1</span>),x(<span class="built_in">find</span>(Idx==<span class="number">2</span>),<span class="number">2</span>),<span class="string">'*'</span>);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x(<span class="built_in">find</span>(Idx==<span class="number">3</span>),<span class="number">1</span>),x(<span class="built_in">find</span>(Idx==<span class="number">3</span>),<span class="number">2</span>),<span class="string">'*'</span>);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x(<span class="built_in">find</span>(Idx==<span class="number">4</span>),<span class="number">1</span>),x(<span class="built_in">find</span>(Idx==<span class="number">4</span>),<span class="number">2</span>),<span class="string">'*'</span>);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">plot</span>(x(<span class="built_in">find</span>(Idx==<span class="number">5</span>),<span class="number">1</span>),x(<span class="built_in">find</span>(Idx==<span class="number">5</span>),<span class="number">2</span>),<span class="string">'*'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="评价和结果分析"><a href="#评价和结果分析" class="headerlink" title="评价和结果分析"></a>评价和结果分析</h2><ol>
+<li>通过调用MATLAB中的kmeans函数可以实现聚类过程，返回得到质心和各个数据点的类别</li>
+<li>接下来要做的就是通过画图将结果呈现出来。我们可以将不同类别采用不同的颜色或形状将数据点区分开来。</li>
+<li>可以较为直观的观察出分类的效果，区分明显则说明分类效果较好，否则调整参数重新聚类分析。</li>
+</ol>
+<p>聚类的衡量指标</p>
+<p>均一性(一个簇只包含一个类别的样本)</p>
+<p>完整性(同类别样本被归类到相同簇中)</p>
+<p>V-measure(均一性和完整性的加权平均)</p>
+<p>ARI</p>
+<p>AMI</p>
+<p>轮廓系数</p>
+<h2 id="优点和改进方法"><a href="#优点和改进方法" class="headerlink" title="优点和改进方法"></a>优点和改进方法</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li>是解决聚类问题的一种经典算法，简单、快速</li>
+<li>对处理大数据集，该算法保持可伸缩性和高效性</li>
+<li>当簇接近高斯分布时，它的效果较好</li>
+</ol>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
+<li>在簇的平均值可被定义的情况下才能使用,可能不适合某些应用</li>
+<li>在K-means算法中,K是事先给定的,这个K值的选定是非常难以估计的.很多时候,事先并不知道给定的数据集应该分成多少类别最合适</li>
+<li>在K-means算法中,首先需要根据初始聚类中心来确定一个初始划分,然后对初始划分进行优化.这个初始聚类中心的选择对聚类结果有较大的影响,一旦初始值选择的不好,可能无法得到有效的聚类结果.</li>
+<li>该算法需要不断地进行样本分类调整,不断地计算调整后的新的聚类中心,因此当数据量非常大时,算法的时间开销非常大;</li>
+<li>若簇中含有异常点,将导致均值偏离严重(即:对噪声和孤立点数据敏感)</li>
+<li>不适用于发现非凸形状的簇或大小差别很大的簇</li>
+</ol>
+<h3 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h3><ol>
+<li>很多时候,事先并不知道给定的数据集应该分成多少类别才最合适.通过类的自动合并和分裂,得到较为合理的类型数目K,例如ISODATA算法</li>
+<li>针对上述3,可选用二分K-均值聚类;或多设置一些不同的初值,对比最后的运算结果,一值到结果趋于稳定结束</li>
+<li>针对上述5,改成求点的中位数,这种聚类方式即K-Mediods聚类(K中值)</li>
+</ol>
 
       
     </div>
@@ -478,7 +516,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+            <a href="/tags/%E6%95%B0%E6%A8%A1/" rel="tag"><i class="fa fa-tag"></i> 数模</a>
           
         </div>
       
@@ -491,8 +529,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/26/Java-%E5%8A%A8%E6%80%81%E7%BC%96%E8%AF%91/" rel="next" title="Java-动态编译">
-                <i class="fa fa-chevron-left"></i> Java-动态编译
+              <a href="/2019/11/02/%E6%95%B0%E6%A8%A1-%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" rel="next" title="数模-回归分析">
+                <i class="fa fa-chevron-left"></i> 数模-回归分析
               </a>
             
           </div>
@@ -500,10 +538,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/27/Java-JVM%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/" rel="prev" title="Java-JVM核心机制">
-                Java-JVM核心机制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -722,7 +756,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#字节码操作"><span class="nav-number">1.</span> <span class="nav-text">字节码操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java动态性的两种常见实现方式"><span class="nav-number">1.1.</span> <span class="nav-text">Java动态性的两种常见实现方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时操作字节码可以让我们实现如下功能"><span class="nav-number">1.2.</span> <span class="nav-text">运行时操作字节码可以让我们实现如下功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优势"><span class="nav-number">1.3.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的字节码操作类库"><span class="nav-number">1.4.</span> <span class="nav-text">常见的字节码操作类库</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#K-means"><span class="nav-number">1.</span> <span class="nav-text">K-means</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法和适用范围"><span class="nav-number">1.2.</span> <span class="nav-text">使用方法和适用范围</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#K-means算法的要点"><span class="nav-number">1.2.1.</span> <span class="nav-text">K-means算法的要点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#K-means算法的步骤"><span class="nav-number">1.2.2.</span> <span class="nav-text">K-means算法的步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适用范围"><span class="nav-number">1.2.3.</span> <span class="nav-text">适用范围</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MATLAB调用"><span class="nav-number">1.3.</span> <span class="nav-text">MATLAB调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#评价和结果分析"><span class="nav-number">1.4.</span> <span class="nav-text">评价和结果分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点和改进方法"><span class="nav-number">1.5.</span> <span class="nav-text">优点和改进方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.5.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.5.2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进"><span class="nav-number">1.5.3.</span> <span class="nav-text">改进</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

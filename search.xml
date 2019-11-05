@@ -1,6 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数模-神经网络</title>
+    <url>/2019/11/05/%E6%95%B0%E6%A8%A1-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<h1 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h1><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h3 id="模型概述"><a href="#模型概述" class="headerlink" title="模型概述"></a>模型概述</h3><p>神经元模型：从神经元的特性和功能可以知道，神经元是一个多输入单输出的信息处理单元，而且，它对信息的处理是非线性的。根据神经元的特性和功能，可以把神经元抽象为一个简单的数学模型。</p>
+<p><img src="/img/ANN.png" alt="ANN"></p>
+<p>X1，X2，…，Xn是神经元的输入，即是来自前几个神经元的轴突的信息A，$\sum$是i神经元的阈值；Wi1,Wi2,…,Win分别是i神经元对X1,X2,…,Xn的权系数，也即突触的传递效率；Yi是i神经元的输出；f[.]是激发函数，它决定i神经元受到输入X1,X2,…,Xn的共同刺激达到阀值时以何种方式输出。</p>
+<p>神经元模型表达式：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+U_i=\sum_{j=1}^nw_yx_j-\theta_i\\
+Y_i=f(U_i)
+\end{cases}</script><p>对于阶跃型激发函数，它的输出是电位脉冲，故而这种激发函数的神经元称离散输出模型。</p>
+<p>对于线性激发函数，它的输出是随输入的激发问题成正比的；故这种神经元称线性连续型模型。</p>
+<p>对于用s型激发函数，它的输出是非线性的；故这种神经元称非线性连续型模型。</p>
+<script type="math/tex; mode=display">
+阶跃函数：f(x)=\begin{cases}
+0& x<0\\
+1& x>=0
+\end{cases}\\
+线性函数：f(x)=x\\
+单极性S型函数：f(x)=\frac{1}{1+e^{-x}}\\
+双曲正切S型函数：f(x)=\frac{1-e^{-x}}{1+e^{-x}}</script><h2 id="人工神经网络"><a href="#人工神经网络" class="headerlink" title="人工神经网络"></a>人工神经网络</h2><p>在机器学习和认知科学领域，人工神经网络(artificial neural network,缩写ANN),简称神经网络(neural network，缩写NN)或类神经网络，是一种模仿生物神经网络(动物的中枢神经系统，特别是大脑)的结构和功能的数学模型或计算模型，用于对函数进行估计或近似。神经网络由大量的人工神经元联结进行计算。大多数情况下人工神经网络能在外界信息的基础上改变内部结构，是一种自适应系统。现代神经网络是一种非线性统计性数据建模工具。典型的神经网络具有以下三个部分：</p>
+<ol>
+<li>结构(Architecture) 结构指定了网络中的变量和它们的拓扑关系。例如，神经网络中的变量可以是神经元连接的权重(weights)和神经元的激励值(activities of the neurons)。</li>
+<li>激励函数(Activity Rule) 大部分神经网络模型具有一个短时间尺度的动力学规则，来定义神经元如何根据其他神经元活动来改变自己的激励值。一般激励函数依赖于网络中的权重(即该网络的参数)。</li>
+<li>学习规则(Learning Rule) 学习规则指定了网络中的权重如何随着时间推进而调整。这一般被看作是一种长时间尺度的动力学规则。一般情况下，学习规则依赖于神经元的激励值 。它也可能依赖于监督者提供的目标值和当前权重的值。</li>
+</ol>
+<p>神经网络主要包括三个部分：结构、激励函数、学习规则。下图是一个三层的神经网络，输入层有d个节点，隐层有q个节点，输出层有l个节点。除了输入层，每层节点都包含一个<strong>非线性</strong>变换。</p>
+<p><img src="/img/nnlayer.png" alt="nnlayer"></p>
+<h3 id="为什么要进行非线性变换？"><a href="#为什么要进行非线性变换？" class="headerlink" title="为什么要进行非线性变换？"></a>为什么要进行非线性变换？</h3><ol>
+<li>如果只进行线性变换，那么即使是多层的神经网络，依然只有一层的效果(类似于层次分析法)</li>
+<li>进行非线性变换，可以使得神经网络可以拟合任意一个函数</li>
+</ol>
+<h3 id="BP-Back-Propagation-神经网络"><a href="#BP-Back-Propagation-神经网络" class="headerlink" title="BP(Back Propagation)神经网络"></a>BP(Back Propagation)神经网络</h3><p>BP神经网络的学习过程由信号的正向传播与误差的反向传播两个过程组成。正向传播时，输入样本从输入层传入，经隐层逐层处理后，传向输出层。若输出层的实际输出与期望输出不符，则转身误差的反向传播阶段。误差的反向传播是将输出误差以某种形式通过隐层向输入层逐层反传，并将误差分摊给各层的所有单元，从而获得各层单元的误差信号，此误差信号即作为修正各单元权值的依据。</p>
+<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><p>在训练神经网络前一般需要对数据进行预处理，一种重要的预处理手段是归一化处理</p>
+<ol>
+<li><p>什么是归一化</p>
+<p>数据归一化，就是将数据映射到[0,1]或[-1,1]区间或更小的区间</p>
+</li>
+<li><p>为什么要归一化处理</p>
+<ol>
+<li>输入数据的单位不一样，有些数据的范围可能特别大，导致结果是神经网络收敛慢、训练时间长</li>
+<li>数据范围大的输入在模式分类中的作用可能会偏大，而数据范围小的输入作用就可能会偏小</li>
+<li>由于神经网络输出层的激活函数的值域是有限制的，因此需要将网络训练的目标函数映射到激活函数的值域。例如，神经网络的输出层若采用S形激活函数，由于S形函数的值域限制在(0,1)，也就是说神经网络的输出只能限制在(0,1)，所以训练数据的输出就要归一化到[0,1]区间</li>
+<li>S形激活函数在(0,1)区间以外区域很平缓，区分度太小。例如S形函数f(X)在参数a=1时，f(100)与f(5)只差0.0067</li>
+</ol>
+</li>
+<li><p>归一化算法</p>
+<p>一种简单而快速的归一化算法是线性转换算法。线性转换算法常见有两种形式:</p>
+<ol>
+<li><p>y=(x-min)/(max-min)</p>
+<p>其中min为x的最小值 ，max为    x的最大值 ，输入向量为x，归一化后的输出向量为y。上式将数据归一化到[0,1]区间，当激活函数采用S形函数时(值域为(0,1))时适用</p>
+</li>
+<li><p>y=2*(x-min)/(max-min)-1</p>
+<p>这条公式将数据归一化到[-1,1]区间。当激活函数采用双极S形函数(值域为(-1,1))时适用</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="BP神经网络的训练过程"><a href="#BP神经网络的训练过程" class="headerlink" title="BP神经网络的训练过程"></a>BP神经网络的训练过程</h3><ol>
+<li>初始化网络的突触权值和阈值矩阵</li>
+<li>训练样本的呈现</li>
+<li>前向传播计算</li>
+<li>误差反向传播计算并更新权值</li>
+<li>迭代，用新的样本进行步骤3和4，直至满足停止准则</li>
+</ol>
+<h3 id="BP神经网络的测试过程"><a href="#BP神经网络的测试过程" class="headerlink" title="BP神经网络的测试过程"></a>BP神经网络的测试过程</h3><ol>
+<li>数据分为训练数据和测试数据，根据训练数据训练模型，再根据测试数据验证模型训练的正确性</li>
+<li>将测试数据输入模型，得到理论测试输出和实际输出，对比后即可确定模型预测的正确率</li>
+</ol>
+<h2 id="Matlab调用"><a href="#Matlab调用" class="headerlink" title="Ｍatlab调用"></a>Ｍatlab调用</h2><ol>
+<li><p>数据预处理</p>
+<p>Matlab中归一化处理数据可以采用premnmx,postmnmx,tramnmx这3个函数</p>
+<ul>
+<li><p>premnmx</p>
+<p>语法：[pn,minp,maxp,tn,mint,maxt]=premnmx(p,t)</p>
+<p>参数：</p>
+<p>pn:p矩阵按行归一化后的矩阵</p>
+<p>minp,maxp:p矩阵每一行的最小值 ，最大值</p>
+<p>tn:t矩阵按行归一化后的矩阵</p>
+<p>mint,maxt:t矩阵每一行的最小值，最大值</p>
+<p>作用：将矩阵p,t归一化到[-1,1]，主要用于归一化处理数据集</p>
+</li>
+<li><p>tramnmx</p>
+<p>语法：[pn]=tramnmx(p,minp,maxp)</p>
+<p>参数：</p>
+<p>minp,maxp:premnmx函数计算的矩阵的最小、最大值</p>
+<p>pn:归一化后的矩阵</p>
+<p>作用：主要用于归一化处理待分类的输入数据</p>
+</li>
+<li><p>postmnmx</p>
+<p>语法：[p,t]=postmnmx(pn,minp,maxp,tn,mint,maxt)</p>
+<p>参数：</p>
+<p>minp,maxp:premnmx函数计算的p矩阵每行的最小值，最大值 </p>
+<p>mint,maxt:premnmx函数计算的t矩阵每行的最小值，最大值</p>
+<p>作用：将矩阵pn,tn映射回归一化处理前的范围。postmnmx函数主要用于将神经网络的输出结果映射回归一化前的数据范围。</p>
+</li>
+</ul>
+</li>
+<li><p>神经网络的训练和测试</p>
+<p>使用matlab建立前馈神经网络主要会使用到下面3个函数：</p>
+<ul>
+<li><p>newff：前馈网络创建函数</p>
+<p>语法：newff函数参数列表有很多的可选参数，具体可以参数Matlab的帮助文档，这里介绍new函数的一种简单的形式：net=newff(A,B,{C},’trainFun’)</p>
+<p>参数：</p>
+<p>A:一个n*2的矩阵，第i行元素为输入信号xi的最小值和最大值 </p>
+<p>B:一个k维行向量，其元素为网络中各层节点数</p>
+<p>C:一个k维字符串行向量，每一分量为对应层神经元的激活函数</p>
+<p>trainFun:为学习规则采用的训练算法</p>
+<ul>
+<li><p>常用的激活函数</p>
+<p>线性函数(Linear transfer function)—-&gt;’purelin’</p>
+<p>对数S形转移函数(Logarithmic sigmoid transfer function)—-&gt;’logsig’</p>
+<p>双曲正切S形函数(Hyperbolic tangent sigmoid transfer function)—-&gt;’tansig’</p>
+</li>
+<li><p>常见的训练函数</p>
+<p>traingd：梯度下降BP训练函数(Gradient descent backpropagation)</p>
+<p>traingdx：梯度下降自适应学习率训练函数</p>
+</li>
+<li><p>网络配置参数</p>
+<p>net.trainparam.goal：神经网络训练的目标误差</p>
+<p>net.trainparam.show：显示中间结果的周期</p>
+<p>net.trainparam.epochs：最大迭代次数</p>
+<p>net.trainParam.lr：学习率</p>
+</li>
+</ul>
+</li>
+<li><p>train：训练一个神经网络</p>
+<p>语法：[net,tr,Y1,E]=train(net,X,Y)</p>
+<p>参数：</p>
+<p>X：网络实际输入</p>
+<p>Y：网络应有输出</p>
+<p>tr：训练跟踪信息</p>
+<p>Y1：网络实际输出</p>
+<p>E：误差矩阵</p>
+</li>
+<li><p>sim：使用网络进行仿真</p>
+<p>语法：Y=sim(net,X)</p>
+<p>参数：</p>
+<p>net：网络</p>
+<p>X：输入给网络的K*N矩阵，其中K为网络输入个数，N为数据样本数</p>
+<p>Y：输出矩阵Q*N，其中Q为网络输出个数</p>
+</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% BP网络函数逼近实例</span></span><br><span class="line">clear;clc;</span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% 1.首先定义正弦函数，采样率为20Hz，频率为1Hz</span></span><br><span class="line">k=<span class="number">1</span>; <span class="comment">%设定正弦信号频率</span></span><br><span class="line">p=[<span class="number">0</span>:<span class="number">0.05</span>:<span class="number">25</span>];</span><br><span class="line">t=<span class="built_in">cos</span>(k*<span class="built_in">pi</span>*p)+<span class="number">3</span>*<span class="built_in">sin</span>(<span class="built_in">pi</span>*p);</span><br><span class="line"><span class="comment">% plot(p,t,'-'),xlabel('时间');ylabel('输入信号');</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% 2生成BP网络。用newff函数生成前向型BP网络，设定隐层中神经元数目为10</span></span><br><span class="line"><span class="comment">% 分别选择隐层的传递函数为tansig，输出层的传递函数为purelin</span></span><br><span class="line"><span class="comment">% 学习算法为trainlm</span></span><br><span class="line"><span class="comment">% net = newff(minmax(p),[10,10,1],&#123;'tansig','tansig','purelin'&#125;,'trainlm');</span></span><br><span class="line">output=t;</span><br><span class="line">net = newff(p,output,[<span class="number">10</span>,<span class="number">10</span>],&#123;<span class="string">'tansig'</span>,<span class="string">'tansig'</span>,<span class="string">'purelin'</span>&#125;,<span class="string">'trainlm'</span>);</span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% 3.对生成的网络进行仿真并做图显示</span></span><br><span class="line"><span class="comment">% y1=sim(net,p);plot(p,t,'-',p,y1,'--')</span></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% 4.训练。对网络进行训练，设定训练误差目标为1e-5，最大迭代数为300</span></span><br><span class="line"><span class="comment">% 学习速率为0.05</span></span><br><span class="line">net.trainParam.lr=<span class="number">0.05</span>;</span><br><span class="line">net.trainParam.epochs=<span class="number">1000</span>;</span><br><span class="line">net.trainParam.goal=<span class="number">1e-5</span>;</span><br><span class="line">[net,tr]=train(net,p,t);</span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">% 5.再次对生成的网络进行仿真并作图显示</span></span><br><span class="line">y2=sim(net,p);</span><br><span class="line"><span class="built_in">plot</span>(p,t,<span class="string">'-'</span>,p,y2,<span class="string">'*'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="调试与结果分析"><a href="#调试与结果分析" class="headerlink" title="调试与结果分析"></a>调试与结果分析</h2><h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>   采用Matlabt内置函数后，BP神经网络的调试就已经变成了修改参数，使结果能够满意</p>
+<p>   可调试的内容有</p>
+<ol>
+<li><p>激活函数</p>
+</li>
+<li><p>神经网络层数</p>
+</li>
+<li><p>神经网络节点数</p>
+</li>
+<li><p>有无偏置</p>
+</li>
+<li><p>步长</p>
+</li>
+<li><p>梯度下降法</p>
+<p>…</p>
+</li>
+</ol>
+<h3 id="结果分析"><a href="#结果分析" class="headerlink" title="　结果分析"></a>　结果分析</h3><p>神经网络的结果分析可以在Matlab的神经网络训练界面中实现，查看：</p>
+<ol>
+<li>步数</li>
+<li>时间</li>
+<li>梯度</li>
+<li>图像对比</li>
+<li>回归分析</li>
+<li>训练状态</li>
+</ol>
+<h2 id="优缺点和改进方法"><a href="#优缺点和改进方法" class="headerlink" title="优缺点和改进方法"></a>优缺点和改进方法</h2><h2 id="BP神经网络的优点"><a href="#BP神经网络的优点" class="headerlink" title="BP神经网络的优点"></a>BP神经网络的优点</h2><ol>
+<li>非线性映射能力：BP神经网络实质上实现了一个从输入到输出的映射功能，数学理论证明三层的神经网络就能够以任意精度逼近任何非线性连续函数，这使得其特别适合于求解内部机制复杂的问题，即BP神经网络具有较强的非线性映射能力</li>
+<li>自学习和自适应能力：BP神经网络在训练时，能够通过学习自动提取输入、输出数据间的“合理规则”，并自适应的将学习内容记忆于网络的权值中。即BP神经网络具有高度自学习和自适应的能力。</li>
+<li>泛化能力：所谓泛化能力是指在设计模式分类器时，即要考虑网络在保证对所需分类对象进行正确分类，还要关心网络在经过训练后，能否对未见过的模式或有噪声的模式，进行正确的分类。也即BP神经网络具有将学习成果应用于新知识的能力。</li>
+<li>容错能力：BP神经网络在其局部的或部分的神经元受到破坏后对全局的训练结果不会造成很大的影响，也就是说即使系统在受到局部损伤时还是可以正常工作的。即BP神经网络具有一定的容错能力</li>
+</ol>
+<h3 id="BP神经网络的缺点"><a href="#BP神经网络的缺点" class="headerlink" title="BP神经网络的缺点"></a>BP神经网络的缺点</h3><ol>
+<li>局部极小化问题：从数学角度看，传统的BP神经网络为局部搜索的优化方法，它要解决的是一个复杂非线性化问题，网络的权值是通过沿局部改善的方向逐渐进行调整的，这样会使算法陷入局部极值，权值收敛到局部极小点，从而导致网络训练失败。加上BP神经网络对初始网络权重非常敏感，以不同的权重初始化网络，其往往会收敛于不同的局部极小，这也是很多学者每次训练得到不同结果的根本原因。</li>
+<li>BP神经网络算法的收敛速度慢：由于BP神经网络算法本质上为梯度下降法，它所要优化的目标函数是非常复杂的，因此，必然会出现“锯齿形现象”，这使得BP算法低效；又由于优化的目标函数很复杂，它必然会在神经元输入接近0或1的情况下，出现一些平坦区，在这些区域内，权值误差改变很小，使训练过程几乎停顿；BP神经网络模型中，为了使网络执行BP算法，不能使用传统的一维搜索法求每次迭代的步长，而必须把步长更新规则预先赋予网络，这种方法也会引起算法低效。以上种种，导致了BP神经网络算法收敛速度慢的现象</li>
+<li>BP神经网络结构选择不一：BP神经网络结构的选择至今尚无一种统一而完整的理论指导，一般只能由经验选定。网络结构选择过大，训练中效率不高，可能出现过拟合现象，造成网络性能低，容错性下降，若选择过小，则又会造成网络可能不收敛。而网络的结构直接影响网络的逼近能力及推广性质。因此，应用中如何选择合适的网络结构是一个重要的问题</li>
+<li>应用实例与网络规模的矛盾问题：BP神经网络难以解决应用问题的实例规模和网络规模间的矛盾问题，其涉及到网络容量的可能性与可行性的关系问题，即学习复杂性问题</li>
+<li>BP神经网络预测能力和训练能力的矛盾问题：预测能力也称泛化能力或推广能力，而训练能力也称逼近能力或学习能力。一般情况下，训练能力差时，预测能力也差，并且一定程度上，随着训练能力地提高，预测能力会得到提高。但这种趋势不是固定的，其有一个极限，当达到此极限时，随着训练能力的提高，预测能力反而会下降，也即出现所谓“过拟合”现象。出现该现象的原因是网络学习了过多的样本细节导致，学习出的模型已不能反映样本内含的规律，所以如何把握好学习的度，解决网络预测能力和训练能力间矛盾问题也是BP神经网络的重要研究内容。</li>
+<li>BP神经网络样本依赖性问题：网络模型的逼近和推广能力与学习样本的典型性密切相关，而从问题中选取典型样本实例组成训练集是一个很困难的问题</li>
+</ol>
+<h3 id="BP神经网络算法的改进"><a href="#BP神经网络算法的改进" class="headerlink" title="ＢP神经网络算法的改进"></a>ＢP神经网络算法的改进</h3><p>传统的BP算法改进主要有两类：</p>
+<p>启发式算法：如附加动量法、自适应算法</p>
+<p>数值优化法：如共轭梯度法、牛顿迭代法、Levenberg-Marquardt算法</p>
+]]></content>
+      <categories>
+        <category>数模</category>
+      </categories>
+      <tags>
+        <tag>数模</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数模-决策树和随机森林</title>
     <url>/2019/11/04/%E6%95%B0%E6%A8%A1-%E5%86%B3%E7%AD%96%E6%A0%91%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/</url>
     <content><![CDATA[<h1 id="数模-决策树和随机森林"><a href="#数模-决策树和随机森林" class="headerlink" title="数模-决策树和随机森林"></a>数模-决策树和随机森林</h1><h2 id="决策树原理"><a href="#决策树原理" class="headerlink" title="决策树原理"></a>决策树原理</h2><h3 id="决策树算法原理"><a href="#决策树算法原理" class="headerlink" title="决策树算法原理"></a>决策树算法原理</h3><p>决策树算法是一种逼近离散函数值的方法。它是一种典型的分类方法，首先以数据进行处理，利用归纳算法生成可读的规则和决策树，然后使用决策树对新数据进行分析。本质上决策树是通过一系列规则对数据进行分类的过程。</p>

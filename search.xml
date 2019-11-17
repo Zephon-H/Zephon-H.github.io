@@ -169,7 +169,8 @@
    p & q & r & s & t
   \end{matrix} 
 \right]</script><h2 id="开平方"><a href="#开平方" class="headerlink" title="开平方"></a>开平方</h2><p>\sqrt{a}—-&gt;$\sqrt{a}$</p>
-<h2 id="分段函数"><a href="#分段函数" class="headerlink" title="分段函数"></a>分段函数</h2><p>X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}—&gt;$X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}$</p>
+<h2 id="分段函数"><a href="#分段函数" class="headerlink" title="分段函数"></a>分段函数</h2><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">$$</span><br><span class="line">X(m,n)=\begin&#123;cases&#125;x(n)\\x(n-1)\\x(n-1)\end&#123;cases&#125;</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>$X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}$</p>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2><p>。。。</p>
 ]]></content>
       <categories>

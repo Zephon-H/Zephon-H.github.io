@@ -3,7 +3,7 @@
   <entry>
     <title>常见数学公式Markdown表示总结</title>
     <url>/2019/11/15/%E5%B8%B8%E8%A7%81%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8FMarkdown%E8%A1%A8%E7%A4%BA%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="常见数学公式Markdown表示总结"><a href="#常见数学公式Markdown表示总结" class="headerlink" title="常见数学公式Markdown表示总结"></a>常见数学公式Markdown表示总结</h1><h1 id="下标与上标"><a href="#下标与上标" class="headerlink" title="下标与上标"></a>下标与上标</h1><ol>
+    <content><![CDATA[<h1 id="常见数学公式Markdown表示总结"><a href="#常见数学公式Markdown表示总结" class="headerlink" title="常见数学公式Markdown表示总结"></a>常见数学公式Markdown表示总结</h1><h2 id="下标与上标"><a href="#下标与上标" class="headerlink" title="下标与上标"></a>下标与上标</h2><ol>
 <li>下标，x_1—&gt;$x_1$</li>
 <li>上标，x^1—&gt;$x^1$,x^{12}—&gt;$x^{12}$</li>
 </ol>
@@ -169,7 +169,7 @@
    p & q & r & s & t
   \end{matrix} 
 \right]</script><h2 id="开平方"><a href="#开平方" class="headerlink" title="开平方"></a>开平方</h2><p>\sqrt{a}—-&gt;$\sqrt{a}$</p>
-<h1 id="分段函数"><a href="#分段函数" class="headerlink" title="分段函数"></a>分段函数</h1><p>X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}—&gt;$X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}$</p>
+<h2 id="分段函数"><a href="#分段函数" class="headerlink" title="分段函数"></a>分段函数</h2><p>X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}—&gt;$X(m,n)=\begin{cases}x(n)\\x(n-1)\\x(n-1)\end{cases}$</p>
 <h2 id="待续"><a href="#待续" class="headerlink" title="待续"></a>待续</h2><p>。。。</p>
 ]]></content>
       <categories>

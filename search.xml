@@ -1,6 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Junit测试</title>
+    <url>/2020/02/03/Junit%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h1 id="Junit测试"><a href="#Junit测试" class="headerlink" title="Junit测试"></a>Junit测试</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li>黑盒测试</li>
+<li>白盒测试</li>
+</ol>
+<h2 id="Junit使用-白盒测试"><a href="#Junit使用-白盒测试" class="headerlink" title="Junit使用-白盒测试"></a>Junit使用-白盒测试</h2><p>步骤：</p>
+<ol>
+<li>定义测试类</li>
+<li>定义测试方法</li>
+<li>在测试方法上添加注解@Test，第一次时使用alt+enter导入Junit</li>
+<li>使用断言处理结果Assert.assertEquals(exp,res);</li>
+</ol>
+<h2 id="Junit中的Before和After"><a href="#Junit中的Before和After" class="headerlink" title="Junit中的Before和After"></a>Junit中的Before和After</h2><p>Junit中的两个注解@Before和@After</p>
+<p>@Before在@Test前执行，常用于资源申请、初始化等</p>
+<p>@After在@Test后执行，常用于资源释放等</p>
+<p>无论测试结果如何，@Before和@After都会执行</p>
+]]></content>
+      <categories>
+        <category>J2EE</category>
+      </categories>
+      <tags>
+        <tag>J2EE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>注解复习</title>
+    <url>/2020/02/03/%E6%B3%A8%E8%A7%A3-%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="注解复习"><a href="#注解复习" class="headerlink" title="注解复习"></a>注解复习</h1><h2 id="注解与注释"><a href="#注解与注释" class="headerlink" title="注解与注释"></a>注解与注释</h2><p>注解：说明程序的，给计算机看的</p>
+<p>注释：用文字描述程序的，给程序员看的</p>
+<h2 id="概念描述"><a href="#概念描述" class="headerlink" title="概念描述"></a>概念描述</h2><ol>
+<li>JDK1.5之后的新特性</li>
+<li>说明程序的</li>
+<li>使用注解：@注解名称</li>
+</ol>
+<h2 id="作用分类"><a href="#作用分类" class="headerlink" title="作用分类"></a>作用分类</h2><ol>
+<li>编写文档：通过代码里标识的注解生成doc文档</li>
+<li>代码分析：通过代码里标识的注解对代码进行分析-使用反射</li>
+<li>编译检查：通过代码里标识的注解让编译器能够实现基本的编译检查-类似于Override</li>
+</ol>
+<h2 id="JDK内置注解"><a href="#JDK内置注解" class="headerlink" title="JDK内置注解"></a>JDK内置注解</h2><ul>
+<li>@Override：检测被该注解标注的方法是否是继承自父类(接口)的</li>
+<li>@Deprecated：表示标注的内容已过时</li>
+<li>@SuppressWarnings：压制警告<ul>
+<li>一般传递参数all：@SuppressWarnings(“all”)</li>
+</ul>
+</li>
+</ul>
+<h2 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h2><ul>
+<li>格式：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">	<span class="comment">// 元注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnno&#123;</span><br><span class="line">    <span class="comment">// 属性列表</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">age</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> 30</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">public interface MyAnno extends java.lang.annotation.Annotation&#123; &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>本质：一个接口，默认继承Annotation接口</p>
+</li>
+<li><p>属性：接口中的抽象方法</p>
+<ul>
+<li>要求：返回值类型-基本数据类型、String、枚举、注解、以上类型对应的数组</li>
+<li>定义了属性，在使用时需要给属性赋值，如果定义属性时使用default 关键字给属性默认化初始值，则使用注解时，可以不进行属性的赋值 ；如果只有一个属性需要赋值，且属性的名称是value，则value可以省略，直接定义值即可；数组赋值时，值使用{}包裹，如果数组中只有一个值，则{}省略</li>
+</ul>
+</li>
+<li><p>元注解：用于描述注解的注解</p>
+<ol>
+<li>@Target：描述注解能够作用的位置<ul>
+<li>ElementType取值：<ul>
+<li>TYPE：可作用于类上</li>
+<li>METHOD：可作用于方法上</li>
+<li>FIELD：可作用于成员变量上</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>@Retention：描述注解被保留的阶段<ul>
+<li>RetentionPolicy.RUNTIME：当前注解会保留到class字节码文件中，并被JVM读取到</li>
+</ul>
+</li>
+<li>@Documented：描述注解是否被抽取到api文档中</li>
+<li>@Inherited：描述注解是否被子类继承</li>
+</ol>
+</li>
+</ul>
+<h2 id="在程序中使用-解析-注解-获取注解中定义的属性值"><a href="#在程序中使用-解析-注解-获取注解中定义的属性值" class="headerlink" title="在程序中使用(解析)注解-获取注解中定义的属性值"></a>在程序中使用(解析)注解-获取注解中定义的属性值</h2><ol>
+<li>获取注解定义的位置的对象(Class,Method,Field)</li>
+<li>获取指定的注解-getAnnotation(Class)</li>
+<li>调用注解中的抽象方法获取配置的属性值</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@MyAnno</span>(className = <span class="string">"com.zephon.domain.Person"</span>,method = <span class="string">"eat"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">// 解析注解</span></span><br><span class="line">        <span class="comment">// 获取该类的字节码对象</span></span><br><span class="line">        Class&lt;Test&gt; testClass = Test.class;</span><br><span class="line">        <span class="comment">// 获取上边的注解对象</span></span><br><span class="line">        MyAnno annotation = testClass.getAnnotation(MyAnno.class);</span><br><span class="line">        <span class="comment">// 调用注解对象中的抽象方法，获取返回值</span></span><br><span class="line">        String className = annotation.className();</span><br><span class="line">        String method = annotation.method();</span><br><span class="line">        System.out.println(className);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加载该类进内存</span></span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(className);</span><br><span class="line">        Object obj = cls.newInstance();</span><br><span class="line">        Method method1 = cls.getMethod(method);</span><br><span class="line">        method1.invoke(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="简单案例"><a href="#简单案例" class="headerlink" title="简单案例"></a>简单案例</h2><p>使用注解实现一个简单的测试框架(当主方法执行后，会自动执行被检测的所有方法(加了Check注解的方法)，判断方法是否有异常，记录到文件中)</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Check &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestCheck</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 创建计算器对象</span></span><br><span class="line">        Calculator c = <span class="keyword">new</span> Calculator();</span><br><span class="line">        <span class="comment">// 获取字节码文件对象</span></span><br><span class="line">        Class cls = c.getClass();</span><br><span class="line">        <span class="comment">// 获取所有方法</span></span><br><span class="line">        Method[] methods = cls.getMethods();</span><br><span class="line">        <span class="keyword">int</span> num=<span class="number">0</span>;<span class="comment">// 出现异常的次数</span></span><br><span class="line">        BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(<span class="keyword">new</span> FileWriter(<span class="string">"bug.txt"</span>));</span><br><span class="line">        <span class="keyword">for</span> (Method m :</span><br><span class="line">                methods) &#123;</span><br><span class="line">            <span class="comment">// 判断方法上是否有Check注解</span></span><br><span class="line">            <span class="keyword">if</span>(m.isAnnotationPresent(Check.class)) &#123;</span><br><span class="line">                <span class="comment">// 有Check注解，执行</span></span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    m.invoke(c);</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="comment">// 捕获异常</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 记录到文件中</span></span><br><span class="line">                    num++;</span><br><span class="line">                    bw.write(m.getName()+<span class="string">"出异常了"</span>);</span><br><span class="line">                    bw.newLine();</span><br><span class="line">                    bw.write(<span class="string">"异常的名称："</span>+e.getCause().getClass().getSimpleName());</span><br><span class="line">                    bw.newLine();</span><br><span class="line">                    bw.write(<span class="string">"异常的原因："</span>+e.getCause().getMessage());</span><br><span class="line">                    bw.newLine();</span><br><span class="line">                    bw.write(<span class="string">"---------------"</span>);</span><br><span class="line">                    bw.newLine();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        bw.write(<span class="string">"本次测试一共出现"</span>+num+<span class="string">"次异常"</span>);</span><br><span class="line">        bw.flush();</span><br><span class="line">        bw.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>J2EE</category>
+      </categories>
+      <tags>
+        <tag>J2EE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>反射复习</title>
+    <url>/2020/02/02/%E5%8F%8D%E5%B0%84-%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="反射复习"><a href="#反射复习" class="headerlink" title="反射复习"></a>反射复习</h1><p>框架设计的灵魂</p>
+<h2 id="获取Class对象的方式"><a href="#获取Class对象的方式" class="headerlink" title="获取Class对象的方式"></a>获取Class对象的方式</h2><ol>
+<li><p>Class.forName(“全类名”)</p>
+<p>多用于配置文件，将类名定义在配置文件 中，读取文件，加载类</p>
+</li>
+<li><p>类名.class</p>
+<p>多用于参数的传递</p>
+</li>
+<li><p>对象.getClass()</p>
+<p>多用于对象的获取字节码的方式</p>
+</li>
+</ol>
+<blockquote>
+<p>同一字节码文件(*.class)在一次程序运行过程中，只会被加载一次，不论通过哪种方式获取的Class对象都是同一个</p>
+</blockquote>
+<h2 id="Class对象功能"><a href="#Class对象功能" class="headerlink" title="Class对象功能"></a>Class对象功能</h2><ol>
+<li>获取成员变量们(Fields)</li>
+<li>获取构造方法们(Constructors)</li>
+<li>获取成员方法们(Methods)</li>
+<li>获取类名</li>
+</ol>
+<h2 id="一个案例"><a href="#一个案例" class="headerlink" title="一个案例"></a>一个案例</h2><p>需求：写一个“框架”，不能改变该类的任何代码的前提下，可以创建任意类的对象并执行其中的任意方法</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="meta">className</span>=<span class="string">com.zephon.domain.Person</span></span><br><span class="line"><span class="attr">method</span>=<span class="string">eat</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zephon.reflect;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Zephon</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> V1.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Package</span> com.zephon.reflect</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2020/2/1 下午6:49</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Copyright</span> ©</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReflectDemo2</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 实现：</span></span><br><span class="line"><span class="comment">     * 1. 配置文件</span></span><br><span class="line"><span class="comment">     * 2. 反射</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, IllegalAccessException, InstantiationException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException </span>&#123;</span><br><span class="line">        <span class="comment">// 加载配置文件</span></span><br><span class="line">        <span class="comment">// 创建Properties对象</span></span><br><span class="line">        Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">        <span class="comment">// 加载配置文件</span></span><br><span class="line">        <span class="comment">// 获取class目录下的配置文件</span></span><br><span class="line">        ClassLoader classLoader = ReflectDemo2.class.getClassLoader();</span><br><span class="line">        InputStream is = classLoader.getResourceAsStream(<span class="string">"pro.properties"</span>);</span><br><span class="line">        properties.load(is);</span><br><span class="line">        <span class="comment">// 获取配置文件中定义的数据</span></span><br><span class="line">        String className = properties.getProperty(<span class="string">"className"</span>);</span><br><span class="line">        String method = properties.getProperty(<span class="string">"method"</span>);</span><br><span class="line">        <span class="comment">// 加载该类进内存</span></span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(className);</span><br><span class="line">        Object obj = cls.newInstance();</span><br><span class="line">        Method method1 = cls.getMethod(method);</span><br><span class="line">        method1.invoke(obj);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>J2EE</category>
+      </categories>
+      <tags>
+        <tag>J2EE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据获取</title>
     <url>/2019/12/13/%E5%85%B6%E5%AE%83-%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96/</url>
     <content><![CDATA[<h1 id="数据获取"><a href="#数据获取" class="headerlink" title="数据获取"></a>数据获取</h1><ol>

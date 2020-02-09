@@ -1,6 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>redis</title>
+    <url>/2020/02/08/redis/</url>
+    <content><![CDATA[<h1 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>redis是一款高性能的NOSQL系列的非关系型数据库</p>
+<ol>
+<li><p>数据之间没有关联关系</p>
+</li>
+<li><p>数据存储在内存中</p>
+</li>
+<li>一般会将数据存储在关系型数据库中，在nosql数据库中备份存储关系型数据库的数据</li>
+</ol>
+<p>redis的应用场景</p>
+<ul>
+<li>缓存（数据查询、短连接、新闻内容、商品内容等）</li>
+<li>聊天室的在线好友列表</li>
+<li>任务队列（秒杀、抢购、12306等）</li>
+<li>应用排行榜</li>
+<li>网站访问统计</li>
+<li>数据过期处理（可以精确到毫秒）</li>
+<li>分布式集群架构中的session分离</li>
+</ul>
+<h2 id="命令操作"><a href="#命令操作" class="headerlink" title="命令操作"></a>命令操作</h2><ol>
+<li>redis的数据结构<ul>
+<li>redis存储的是：key-value格式的数据，其中key都是字符串，value有5种不同的数据结构<ul>
+<li>value的数据结构：<ol>
+<li>字符串类型：string</li>
+<li>哈希类型：hash：类似map格式</li>
+<li>列表类型：list：linkedlist格式</li>
+<li>集合类型：set：</li>
+<li>有序集合类型：sortedset</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>字符串类型 string<ol>
+<li>存储：set key value</li>
+<li>获取：get key</li>
+<li>删除：del key</li>
+</ol>
+</li>
+<li>哈希类型：hash<ol>
+<li>存储：hset  key field value</li>
+<li>获取：<ul>
+<li>hget key field：获取指定的field对应的值</li>
+<li>hgetall key：获取所有的field和value</li>
+</ul>
+</li>
+<li>删除：hdel key field</li>
+</ol>
+</li>
+<li>列表类型：list<ol>
+<li>存储：<ul>
+<li>lpush key value：将元素加入列表左边</li>
+<li>rpush key value：将元素加入列表右边</li>
+</ul>
+</li>
+<li>获取：<ul>
+<li>lrange key start end：范围获取</li>
+</ul>
+</li>
+<li>删除：<ul>
+<li>lpop key：删除列表最左边的元素，并将元素返回</li>
+<li>rpop key：删除列表最右边的元素，并将元素返回</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>集合类型：set：不允许重复元素<ol>
+<li>存储：sadd key value</li>
+<li>获取：smembers key：获取set集合中所有元素</li>
+<li>删除：srem key value：删除set集合中的某个元素</li>
+</ol>
+</li>
+<li>有序集合类型：sortedset：不允许重复元素，且元素有顺序<ol>
+<li>存储：zadd key score value</li>
+<li>获取：zrange key start end</li>
+<li>删除：zrem key value</li>
+</ol>
+</li>
+<li>通用命令<ul>
+<li>keys * ：查询所有的键</li>
+<li>type key：获取键对应的value的类型</li>
+<li>del key：删除指定的key value</li>
+</ul>
+</li>
+</ol>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><ol>
+<li>redis是一个内存数据库，当redis服务器重启，获取电脑重启，数据会丢失，我们可以将redis内存中的数据持久化保存到硬盘的文件中</li>
+<li>redis持久化机制：<ol>
+<li>RDB：默认方式，不需要进行配置，默认就使用这种机制<ul>
+<li>在一定的间隔时间中，检测key的变化情况，然后持久化数据</li>
+</ul>
+</li>
+<li>AOF：日志记录的方式，可以记录每一条命令的操作。可以每一次命令操作后，持久化数据。</li>
+</ol>
+</li>
+</ol>
+<h2 id="Jedis"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</h2>]]></content>
+      <categories>
+        <category>J2EE</category>
+      </categories>
+      <tags>
+        <tag>J2EE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>EL表达式和JSTL标签-复习</title>
+    <url>/2020/02/07/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CJSTL%E6%A0%87%E7%AD%BE-%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="EL表达式和JSTL标签"><a href="#EL表达式和JSTL标签" class="headerlink" title="EL表达式和JSTL标签"></a>EL表达式和JSTL标签</h1><h2 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h2><ul>
+<li><p>概念：Expression Language 表达式语言</p>
+</li>
+<li><p>作用：替换和简化jsp页面中java代码的编写</p>
+</li>
+<li><p>语法：${表达式}</p>
+</li>
+<li><p>注意：</p>
+<ul>
+<li>jsp默认支持el表达式的，如果要忽略EL表达式，可<ol>
+<li>设置jsp中page指令中：isELIgnored=”true” 忽略当前jsp页面中所有el表达式</li>
+<li> ${表达式}：忽略当前这个el表达式</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>使用：</p>
+<ul>
+<li><p>运算</p>
+<ol>
+<li>算数运算符：+ - * /(div) %(mod)</li>
+<li>比较运算符：&gt; &lt; &gt;= &lt;= != ==</li>
+<li>逻辑运算符：&amp;&amp;(and) ||(or) !(not)</li>
+<li>空运算符：empty<ul>
+<li>功能：判断字符串/集合/数组对象是否为null并且长度是否为0 <code>${empty list}</code> </li>
+<li><code>${not empty str}</code></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>获取值</p>
+<ol>
+<li>EL表达式只能从域对象中获取值</li>
+<li>语法：<ol>
+<li>${域名称.键名}：从指定域中获取指定键的值<ul>
+<li>域名称：<ol>
+<li>pageScope—&gt;pageContext</li>
+<li>requestScope—&gt;request</li>
+<li>sessionScope—&gt;session</li>
+<li>applicationScope—&gt;application(ServletContext)</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>${键名}：表示依次从最小的域中查找是否有该键对应的值，直到找到为止</li>
+</ol>
+</li>
+<li>获取对象、List集合、Map集合的值<ol>
+<li>对象：<code>${域名称.键名.属性名}</code><ul>
+<li>本质上会去调用对象的getter方法</li>
+</ul>
+</li>
+<li>List集合：<code>${域名称.键名[索引]}</code></li>
+<li>Map集合：<code>${域名称.键名.key名称}   ${域名称.键名[&quot;key名称&quot;]}</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>隐匿对象</p>
+<ul>
+<li><p>EL表达式有11个隐式对象</p>
+</li>
+<li><p>pageContext：获取jsp其它八个内置对象</p>
+<p>${pageContext.request.contextPath}：动态获取虚拟目录</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="JSTL表达式"><a href="#JSTL表达式" class="headerlink" title="JSTL表达式"></a>JSTL表达式</h2><ul>
+<li><p>概念：JavaServer Page Tag Library JSP标准标签库</p>
+<ul>
+<li>是由Apache组织提供的开源的免费的JSP标签</li>
+</ul>
+</li>
+<li><p>作用：用于简化和替换JSP页面上的java代码</p>
+</li>
+<li><p>使用步骤：</p>
+<ol>
+<li>导入jstl相关jar包</li>
+<li>引入标签库</li>
+<li>使用标签</li>
+</ol>
+</li>
+<li><p>常用的JSTL标签</p>
+<ol>
+<li><p>if：相当于java中的if</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;%-- 属性：</span><br><span class="line">    			test 必须属性，接收<span class="keyword">boolean</span>表达式</span><br><span class="line">    				- 如果表达式为<span class="keyword">true</span>，则显示<span class="keyword">if</span>标签体内容，否则不显示</span><br><span class="line">    				- 一般情况下，test属性值会结合el表达式一起使用</span><br><span class="line">    	  注意：c:<span class="keyword">if</span>标签没有<span class="keyword">else</span>情况，想要<span class="keyword">else</span>情况，可以再定义一个c:<span class="keyword">if</span>标签</span><br><span class="line">    --%&gt;</span><br><span class="line">&lt;c:if test="false"&gt;&lt;/c:if&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>choose：相当于java中的switch</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;c:choose&gt;</span><br><span class="line">  &lt;c:when test="$&#123;number==0&#125;"&gt;0&lt;/c:when&gt;</span><br><span class="line">  &lt;c:when test="$&#123;number==1&#125;"&gt;1&lt;/c:when&gt;</span><br><span class="line">  &lt;c:otherwise&gt;</span><br><span class="line">    数字有误</span><br><span class="line">  &lt;/c:otherwise&gt;</span><br><span class="line">&lt;/c:choose&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p>foreach：相当于java中的for循环</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;%--</span><br><span class="line">  varStatus:循环状态对象</span><br><span class="line">    index:容器中元素的索引，从<span class="number">0</span>开始</span><br><span class="line">    count:循环次数，从<span class="number">1</span>开始</span><br><span class="line">--%&gt;</span><br><span class="line">&lt;%--</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line">--%&gt;</span><br><span class="line">  &lt;c:forEach begin=<span class="string">"1"</span> end=<span class="string">"10"</span> <span class="keyword">var</span>=<span class="string">"i"</span> step=<span class="string">"1"</span>&gt;</span><br><span class="line">    $&#123;i&#125;&lt;br&gt;</span><br><span class="line">  &lt;/c:forEach&gt;</span><br><span class="line">&lt;%--</span><br><span class="line">  <span class="keyword">for</span>(String s:list)&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">--%&gt;</span><br><span class="line">  &lt;c:forEach items=<span class="string">"$&#123;list&#125;"</span> <span class="keyword">var</span>=<span class="string">"str"</span> varStatus=<span class="string">"s"</span>&gt;</span><br><span class="line">    $&#123;s.index&#125;--$&#123;s.count&#125;--$&#123;str&#125;</span><br><span class="line">  &lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>J2EE</category>
+      </categories>
+      <tags>
+        <tag>J2EE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Filter和Listener-复习</title>
     <url>/2020/02/06/Filter%E5%92%8CListener-%E5%A4%8D%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="Filter和Listener"><a href="#Filter和Listener" class="headerlink" title="Filter和Listener"></a>Filter和Listener</h1><h2 id="Filter-过滤器"><a href="#Filter-过滤器" class="headerlink" title="Filter:过滤器"></a>Filter:过滤器</h2><ul>

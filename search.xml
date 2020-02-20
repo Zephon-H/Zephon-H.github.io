@@ -1,110 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Spring Boot-入门</title>
-    <url>/2020/02/20/Spring%20Boot-%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="Spring-Boot-入门"><a href="#Spring-Boot-入门" class="headerlink" title="Spring Boot-入门"></a>Spring Boot-入门</h1><h2 id="Spring-Boot简介"><a href="#Spring-Boot简介" class="headerlink" title="Spring Boot简介"></a>Spring Boot简介</h2><ul>
-<li><p>简化Spring应用开发的一个框架</p>
-</li>
-<li><p>整个Spring技术栈的一个大整合</p>
-</li>
-<li>J2EE开发的一站式解决方案</li>
-</ul>
-<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>2014年，martin fowler在博客中提出</p>
-<p>微服务：架构风格（服务微化）</p>
-<p>一个应用应该是一组小型服务；可通过HTTP的方式进行互通</p>
-<p>每一个功能元素最终都是一个可独立替换和独立升级的软件单元</p>
-<h2 id="Spring-Boot-HelloWorld"><a href="#Spring-Boot-HelloWorld" class="headerlink" title="Spring Boot HelloWorld"></a>Spring Boot HelloWorld</h2><p>一个功能：</p>
-<p>浏览器发送hello请求，服务器接受请求并处理，响应Hello World字符串</p>
-<ol>
-<li><p>创建一个maven工程</p>
-</li>
-<li><p>导入spring boot相关依赖</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写一个主程序，启动Spring Boot应用</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@SpringBootApplication</span> 来标注一个主程序类，说明这是一个Spring Boot应用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWordMainApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Spring 应用启动</span></span><br><span class="line">        SpringApplication.run(HelloWordMainApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>编写相关Controller、Service</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行主程序</p>
-</li>
-<li><p>简化部署</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    这个插件，可以将应用打包成一个可执行jar包--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>直接使用<code>java -jar</code>命令执行</p>
-</li>
-</ol>
-<h2 id="Hello-World探究"><a href="#Hello-World探究" class="headerlink" title="Hello World探究"></a>Hello World探究</h2><ol>
-<li><p>POM文件 </p>
-<ol>
-<li><p>父项目</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>它的父项目是：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>&gt;</span>../../spring-boot-dependencies<span class="tag">&lt;/<span class="name">relativePath</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用来真正管理Spring Boot应用里面的所有依赖版本--&gt;</span></span><br></pre></td></tr></table></figure>
-<p>Spring Boot的版本仲裁中心：</p>
-<p>以后导入依赖默认是不需要写版本的(没有在dependencies里面管理的依赖自然需要声明版本)</p>
-</li>
-<li><p>导入的启动器</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>spring-boot-starter-web：</p>
-<ul>
-<li>spring-boot-starter：spring-boot场景启动器，导入了web模块正常运行所依赖的组件</li>
-</ul>
-<p>Spring Boot将所有的功能场景都抽取出来，做成一个个starters(启动器)，只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来。需要什么功能就导入什么场景的启动器</p>
-</li>
-</ol>
-</li>
-<li><p>主程序类/主入口类</p>
-<ul>
-<li><p><strong>@SpringBootApplication</strong>：Spring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用</p>
-<ul>
-<li><p><strong>@SpringBootConfiguration</strong>：SpringBoot的配置类，标注在某个类上，表示这是一个SpringBoot的配置类</p>
-<ul>
-<li><p><strong>@Configuration</strong>：配置类上来标注这个注解</p>
-<blockquote>
-<p>配置类—-配置文件；</p>
-<p>配置类也是容器中的一个组件@Component</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>@EnableAutoConfiguration</strong>：开启自动配置功能</p>
-<blockquote>
-<p>需要配置的部分，Spring Boot自动配置，使用@EnableAutoConfiguration才能生效</p>
-</blockquote>
-<ul>
-<li><strong>@AutoConfigurationPackage</strong>：自动配置包<ul>
-<li><strong>@Import({Registrar.class})</strong>：Spring的底层注解@import，给容器中导入一个组件；将主配置类(@SpringBootApplication标注的类)的所在包及下面所有子包里面的所有组件扫描到Spring容器</li>
-</ul>
-</li>
-<li><strong>@Import({AutoConfigurationImportSelector.class})</strong>：给容器中导入组件<ul>
-<li><strong>AutoConfigurationImportSelector</strong>：导入哪些组件的选择器；将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中；会给容器中导入非常多的自动配置类；就是给容器中导入这个场景需要的所有组件，并配置好这些组件；有了自动配置类，就免去了手动编写配置注入功能组件等工作</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="使用Spring-Initializer快速创建SpringBoot项目"><a href="#使用Spring-Initializer快速创建SpringBoot项目" class="headerlink" title="使用Spring Initializer快速创建SpringBoot项目"></a>使用Spring Initializer快速创建SpringBoot项目</h2><ol>
-<li>选择我们需要的模块，向导会联网创建Spring Boot项目</li>
-<li>默认生成的Spring Boot项目<ul>
-<li>主程序已经生成好了，我们只需要编写我们自己的逻辑代码</li>
-<li>resources文件夹目录结构<ul>
-<li>static：保存所有的静态资源：js、css、images</li>
-<li>templates：保存所有的模板页面：Spring Boot默认jar包使用嵌入式的tomcat，默认不支持jsp页面，可以使用模板引擎(freemarker、thymeleaf)</li>
-<li>application.properties：Spring Boot应用配置文件 ，可以修改一些默认设置</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>Docker</title>
     <url>/2020/02/20/Docker/</url>
     <content><![CDATA[<h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><p><strong>Docker</strong>是一个开源的应用容器引擎</p>
@@ -747,6 +643,116 @@
 <li><p>自动配置原理</p>
 </li>
 </ul>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Boot-入门</title>
+    <url>/2020/02/16/Spring%20Boot-%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="Spring-Boot-入门"><a href="#Spring-Boot-入门" class="headerlink" title="Spring Boot-入门"></a>Spring Boot-入门</h1><h2 id="Spring-Boot简介"><a href="#Spring-Boot简介" class="headerlink" title="Spring Boot简介"></a>Spring Boot简介</h2><ul>
+<li><p>简化Spring应用开发的一个框架</p>
+</li>
+<li><p>整个Spring技术栈的一个大整合</p>
+</li>
+<li>J2EE开发的一站式解决方案</li>
+</ul>
+<h2 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h2><p>2014年，martin fowler在博客中提出</p>
+<p>微服务：架构风格（服务微化）</p>
+<p>一个应用应该是一组小型服务；可通过HTTP的方式进行互通</p>
+<p>每一个功能元素最终都是一个可独立替换和独立升级的软件单元</p>
+<h2 id="Spring-Boot-HelloWorld"><a href="#Spring-Boot-HelloWorld" class="headerlink" title="Spring Boot HelloWorld"></a>Spring Boot HelloWorld</h2><p>一个功能：</p>
+<p>浏览器发送hello请求，服务器接受请求并处理，响应Hello World字符串</p>
+<ol>
+<li><p>创建一个maven工程</p>
+</li>
+<li><p>导入spring boot相关依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写一个主程序，启动Spring Boot应用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@SpringBootApplication</span> 来标注一个主程序类，说明这是一个Spring Boot应用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWordMainApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Spring 应用启动</span></span><br><span class="line">        SpringApplication.run(HelloWordMainApplication.class,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写相关Controller、Service</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行主程序</p>
+</li>
+<li><p>简化部署</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    这个插件，可以将应用打包成一个可执行jar包--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>直接使用<code>java -jar</code>命令执行</p>
+</li>
+</ol>
+<h2 id="Hello-World探究"><a href="#Hello-World探究" class="headerlink" title="Hello World探究"></a>Hello World探究</h2><ol>
+<li><p>POM文件 </p>
+<ol>
+<li><p>父项目</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>它的父项目是：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.2.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">relativePath</span>&gt;</span>../../spring-boot-dependencies<span class="tag">&lt;/<span class="name">relativePath</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用来真正管理Spring Boot应用里面的所有依赖版本--&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Spring Boot的版本仲裁中心：</p>
+<p>以后导入依赖默认是不需要写版本的(没有在dependencies里面管理的依赖自然需要声明版本)</p>
+</li>
+<li><p>导入的启动器</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>spring-boot-starter-web：</p>
+<ul>
+<li>spring-boot-starter：spring-boot场景启动器，导入了web模块正常运行所依赖的组件</li>
+</ul>
+<p>Spring Boot将所有的功能场景都抽取出来，做成一个个starters(启动器)，只需要在项目里面引入这些starter相关场景的所有依赖都会导入进来。需要什么功能就导入什么场景的启动器</p>
+</li>
+</ol>
+</li>
+<li><p>主程序类/主入口类</p>
+<ul>
+<li><p><strong>@SpringBootApplication</strong>：Spring Boot应用标注在某个类上说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用</p>
+<ul>
+<li><p><strong>@SpringBootConfiguration</strong>：SpringBoot的配置类，标注在某个类上，表示这是一个SpringBoot的配置类</p>
+<ul>
+<li><p><strong>@Configuration</strong>：配置类上来标注这个注解</p>
+<blockquote>
+<p>配置类—-配置文件；</p>
+<p>配置类也是容器中的一个组件@Component</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>@EnableAutoConfiguration</strong>：开启自动配置功能</p>
+<blockquote>
+<p>需要配置的部分，Spring Boot自动配置，使用@EnableAutoConfiguration才能生效</p>
+</blockquote>
+<ul>
+<li><strong>@AutoConfigurationPackage</strong>：自动配置包<ul>
+<li><strong>@Import({Registrar.class})</strong>：Spring的底层注解@import，给容器中导入一个组件；将主配置类(@SpringBootApplication标注的类)的所在包及下面所有子包里面的所有组件扫描到Spring容器</li>
+</ul>
+</li>
+<li><strong>@Import({AutoConfigurationImportSelector.class})</strong>：给容器中导入组件<ul>
+<li><strong>AutoConfigurationImportSelector</strong>：导入哪些组件的选择器；将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中；会给容器中导入非常多的自动配置类；就是给容器中导入这个场景需要的所有组件，并配置好这些组件；有了自动配置类，就免去了手动编写配置注入功能组件等工作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="使用Spring-Initializer快速创建SpringBoot项目"><a href="#使用Spring-Initializer快速创建SpringBoot项目" class="headerlink" title="使用Spring Initializer快速创建SpringBoot项目"></a>使用Spring Initializer快速创建SpringBoot项目</h2><ol>
+<li>选择我们需要的模块，向导会联网创建Spring Boot项目</li>
+<li>默认生成的Spring Boot项目<ul>
+<li>主程序已经生成好了，我们只需要编写我们自己的逻辑代码</li>
+<li>resources文件夹目录结构<ul>
+<li>static：保存所有的静态资源：js、css、images</li>
+<li>templates：保存所有的模板页面：Spring Boot默认jar包使用嵌入式的tomcat，默认不支持jsp页面，可以使用模板引擎(freemarker、thymeleaf)</li>
+<li>application.properties：Spring Boot应用配置文件 ，可以修改一些默认设置</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>Spring</category>

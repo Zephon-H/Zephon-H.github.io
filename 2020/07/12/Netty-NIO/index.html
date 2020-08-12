@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="Netty-介绍和应用Netty介绍 Netty是由JBOSS提供的一个Java开源框架，现为GitHub上独立的项目  Netty是一个 异步的、基于事件驱动的网络应用框架，用以快速开发高性能、高可靠性的网络IO程序  Netty主要针对在TCP协议下，面向Clients端的高并发应用，或者Peer-toPeer场景下的大量数据持续传输的应用 Netty本质是一个 NIO框架，适用于服务器通讯相">
+<meta name="description" content="Netty-NIO-Buffer&amp;amp;Channel&amp;amp;Selector基本介绍 Java NIO全称Java non-blocking IO，是指JDK提供的新API。从JDK1.4开始，Java提供了一系列改进的输入&#x2F;输出的新特性，被统称为NIO(即New IO)，是同步非阻塞的  NIO相关类都被放在java.nio包及子包下，并对原java.io包中的很多类进行改写  NIO有三">
 <meta name="keywords" content="Netty">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty-介绍和应用">
-<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2020&#x2F;07&#x2F;10&#x2F;Netty-%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%BA%94%E7%94%A8&#x2F;index.html">
+<meta property="og:title" content="Netty-NIO-Buffer&amp;Channel&amp;Selector">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2020&#x2F;07&#x2F;12&#x2F;Netty-NIO&#x2F;index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="Netty-介绍和应用Netty介绍 Netty是由JBOSS提供的一个Java开源框架，现为GitHub上独立的项目  Netty是一个 异步的、基于事件驱动的网络应用框架，用以快速开发高性能、高可靠性的网络IO程序  Netty主要针对在TCP协议下，面向Clients端的高并发应用，或者Peer-toPeer场景下的大量数据持续传输的应用 Netty本质是一个 NIO框架，适用于服务器通讯相">
+<meta property="og:description" content="Netty-NIO-Buffer&amp;amp;Channel&amp;amp;Selector基本介绍 Java NIO全称Java non-blocking IO，是指JDK提供的新API。从JDK1.4开始，Java提供了一系列改进的输入&#x2F;输出的新特性，被统称为NIO(即New IO)，是同步非阻塞的  NIO相关类都被放在java.nio包及子包下，并对原java.io包中的很多类进行改写  NIO有三">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-07-11T04:14:18.807Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;gitee.com&#x2F;Zephon-H&#x2F;ImagesStore&#x2F;raw&#x2F;master&#x2F;img&#x2F;NIO-detail.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gitee.com&#x2F;Zephon-H&#x2F;ImagesStore&#x2F;raw&#x2F;master&#x2F;img&#x2F;Buffer.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gitee.com&#x2F;Zephon-H&#x2F;ImagesStore&#x2F;raw&#x2F;master&#x2F;img&#x2F;Selector%5Bkey,...%5D.png">
+<meta property="og:updated_time" content="2020-07-21T15:43:20.432Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gitee.com&#x2F;Zephon-H&#x2F;ImagesStore&#x2F;raw&#x2F;master&#x2F;img&#x2F;NIO-detail.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.zephon.ml/2020/07/10/Netty-介绍和应用/"/>
+  <link rel="canonical" href="http://www.zephon.ml/2020/07/12/Netty-NIO/"/>
 
 
 
 
 
-  <title>Netty-介绍和应用 | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Netty-NIO-Buffer&Channel&Selector | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -282,7 +286,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/07/10/Netty-%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%BA%94%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/07/12/Netty-NIO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zephon">
@@ -299,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Netty-介绍和应用</h1>
+          <h1 class="post-title" itemprop="name headline">Netty-NIO-Buffer&Channel&Selector</h1>
         
 
         <div class="post-meta">
@@ -311,8 +315,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-10T21:25:31+08:00">
-                2020-07-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-12T19:12:13+08:00">
+                2020-07-12
               </time>
             
 
@@ -365,7 +369,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  401字
+                  2.6k字
                 </span>
               
 
@@ -381,7 +385,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  9 分钟
                 </span>
               
             </div>
@@ -402,30 +406,141 @@
       
 
       
-        <h1 id="Netty-介绍和应用"><a href="#Netty-介绍和应用" class="headerlink" title="Netty-介绍和应用"></a>Netty-介绍和应用</h1><h2 id="Netty介绍"><a href="#Netty介绍" class="headerlink" title="Netty介绍"></a>Netty介绍</h2><ol>
-<li><p>Netty是由JBOSS提供的一个Java开源框架，现为GitHub上独立的项目</p>
+        <h1 id="Netty-NIO-Buffer-amp-Channel-amp-Selector"><a href="#Netty-NIO-Buffer-amp-Channel-amp-Selector" class="headerlink" title="Netty-NIO-Buffer&amp;Channel&amp;Selector"></a>Netty-NIO-Buffer&amp;Channel&amp;Selector</h1><h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><ol>
+<li><p>Java NIO全称Java non-blocking IO，是指JDK提供的新API。从JDK1.4开始，Java提供了一系列改进的输入/输出的新特性，被统称为NIO(即New IO)，是<strong>同步非阻塞</strong>的</p>
 </li>
-<li><p>Netty是一个 <strong>异步的、基于事件驱动的</strong>网络应用框架，用以快速开发高性能、高可靠性的网络IO程序</p>
+<li><p>NIO相关类都被放在java.nio包及子包下，并对原java.io包中的很多类进行改写</p>
 </li>
-<li>Netty主要针对在TCP协议下，面向Clients端的高并发应用，或者Peer-toPeer场景下的大量数据持续传输的应用</li>
-<li>Netty本质是一个 NIO框架，适用于服务器通讯相关的多种应用场景</li>
-<li>要透彻理解Netty，需要先学习NIO，这样才能阅读Netty的源码</li>
-</ol>
-<h2 id="Netty应用场景"><a href="#Netty应用场景" class="headerlink" title="Netty应用场景"></a>Netty应用场景</h2><h3 id="互联网行业"><a href="#互联网行业" class="headerlink" title="互联网行业"></a>互联网行业</h3><ol>
-<li><p>在分布式系统中，各个节点之间需要远程服务调用，高性能的RPC框架必不可少，Netty作为异步高性能的通信框架，往往作为基础通信组件被这些RPC框架使用</p>
+<li><p>NIO有三大核心部分：<strong>Channel(通道)</strong>、<strong>Buffer(缓冲区)</strong>、<strong>Selector(选择器)</strong></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/NIO-detail.png" alt="NIO-detail">)</p>
 </li>
-<li><p>典型的应用有：阿里分布式服务框架Dubbo的RPC框架使用Dubbo协议进行节点间通信，Dubbo协议默认使用Netty作为基础通信组件，用于实现各进行节点之间的内部通信</p>
+<li><p>NIO是面向缓冲区的，或者说是面向 块 编程的。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性，使用它可以提供非阻塞式的高伸缩性网络</p>
 </li>
-</ol>
-<h2 id="游戏行业"><a href="#游戏行业" class="headerlink" title="游戏行业"></a>游戏行业</h2><ol>
-<li><p>网络游戏中使用，提供了TCP/UDP和HTTP协议栈，方便定制和开发私有协议栈，账号登录服务器</p>
+<li><p>Java NIO的非阻塞模式，使一个线程从某通道发送请求或读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而<strong>不是保持线程阻塞</strong>，所以直到数据变的可以读取之前，该线程可以继续做其它的事情。非阻塞写也是如此，一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情</p>
 </li>
-<li><p>地图服务器之间可以方便的通过Netty进行高性能的通信</p>
+<li><p>通俗理解：NIO是可以做到用一个线程来处理多个操作的。假设有10000个请求过来，根据实际情况，可以分配50或100个线程来处理。不像之前的阻塞IO那样，必须分配10000个</p>
+</li>
+<li><p>HTTP2.0使用了多路复用的技术，做到同一个连接并发处理多个不，而且并发请求的数量比HTTP1.1大了好几个数量级</p>
 </li>
 </ol>
-<h3 id="大数据领域"><a href="#大数据领域" class="headerlink" title="大数据领域"></a>大数据领域</h3><ol>
-<li>经典的Hadoop的高性能通信和序列化组件的RPC框架，默认采用Netty进行跨界点通信</li>
-<li>它的Netty Service基于Netty框架二次封装实现</li>
+<h2 id="Buffer测试代码"><a href="#Buffer测试代码" class="headerlink" title="Buffer测试代码"></a>Buffer测试代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BasicBuffer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Buffer的使用</span></span><br><span class="line">        <span class="comment">// 创建一个Buffer，大小为5,即可以存放5个int</span></span><br><span class="line">        IntBuffer buffer = IntBuffer.allocate(<span class="number">5</span>);</span><br><span class="line">        <span class="comment">// 向buffer存放数据</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buffer.capacity(); i++) &#123;</span><br><span class="line">            buffer.put(i*<span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从buffer读取数据</span></span><br><span class="line">        <span class="comment">// 将buffer转换，读写切换</span></span><br><span class="line">        buffer.flip();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(buffer.hasRemaining())&#123;</span><br><span class="line">            System.out.println(buffer.get());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="NIO和BIO的比较"><a href="#NIO和BIO的比较" class="headerlink" title="NIO和BIO的比较"></a>NIO和BIO的比较</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BIO</th>
+<th>NIO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>处理数据</td>
+<td>以流的方式</td>
+<td>以块的方式</td>
+</tr>
+<tr>
+<td>效率</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>是否阻塞</td>
+<td>阻塞</td>
+<td>非阻塞</td>
+</tr>
+<tr>
+<td>操作基础</td>
+<td>基于字节流和字符流</td>
+<td>基于Channel(通道)和Buffer(缓冲区)进行操作，数据总是从通道读取到缓冲区中，或从缓冲区写入通道中。Selector(选择器)用于监听多个通道的事件(如：连接请求、数据到达等)，因此使用单个线程就可以监听多个客户端通道</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Selector、Channel和Buffer的关系"><a href="#Selector、Channel和Buffer的关系" class="headerlink" title="Selector、Channel和Buffer的关系"></a>Selector、Channel和Buffer的关系</h2><ol>
+<li>每个Channel都会对应一个Buffer</li>
+<li>Selector对应一个线程，一个线程对应多个Channel(连接)</li>
+<li>多个Channel注册到一个Selector</li>
+<li>程序切换到哪个Channel，是由事件(Event)决定的</li>
+<li>Selector会根据不同的事件，在各个通道上切换</li>
+<li>Buffer 就是一个内存块，底层是一个数组</li>
+<li>数据的读取/写入是通过Buffer，这和BIO有本质不同，BIO中要么是输入流，要么是输出流，不能双向，而NIO的Buffer是可读可写的，需要flip()切换</li>
+<li>Channel是双向的，可以反映底层操作系统的情况，如Linux底层操作系统通道就是双向的</li>
+</ol>
+<h2 id="Buffer-缓冲区"><a href="#Buffer-缓冲区" class="headerlink" title="Buffer(缓冲区)"></a>Buffer(缓冲区)</h2><h3 id="基本介绍-1"><a href="#基本介绍-1" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>缓冲区(Buffer)：缓冲区本质上是<strong>一个可以读写数据的内存块</strong>，可以理解是一个容器对象(含数组)，该对象提供了一组方法，可以更轻松地使用内存块，缓冲区对象内置了一些机制，能够跟踪和记录缓冲区的状态变化情况。Channel提供从文件、网络读取数据的渠道，但读取或写入的数据都必须经由Buffer</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/Buffer.png" alt="buffer"></p>
+<h3 id="Buffer类及其子类"><a href="#Buffer类及其子类" class="headerlink" title="Buffer类及其子类"></a>Buffer类及其子类</h3><ol>
+<li><p>在NIO中，Buffer是一个顶层父类，它是一个抽象类</p>
+<p>常用Buffer子类</p>
+<ul>
+<li>ByteBuffer：存储字节数据到缓冲区</li>
+<li>ShortBuffer：存储短整数数据到缓冲区</li>
+<li>CharBuffer：存储字符数据到缓冲区</li>
+<li>IntBuffer：存储整数数据到缓冲区</li>
+<li>LongBuffer：存储长整数数据到缓冲区</li>
+<li>DoubleBuffer：存储小数到缓冲区</li>
+<li>FloatBuffer：存储小数到缓冲区</li>
+</ul>
+</li>
+<li><p>Buffer类定义的所有的缓冲区都具有四个属性来提供关于其所包含的数据元素的信息</p>
+<p>| 属性     | 描述                                                         |<br>| ———— | —————————————————————————————— |<br>| capacity | 容量，即可以容纳的最大数据量，在级次区创建时被设定并且不能改变 |<br>| limit    | 表示缓冲区的当前终点，不能对缓冲区超过极限的位置进行读写操作，且极限是可以修改的 |<br>| position | 位置，下一个要被读或写的元素的索引，每次读写缓冲区数据时都会改变该值，为下次读写作准备 |<br>| mark     | 标记                                                         |</p>
+</li>
+<li><p>Buffer类相关方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回此缓冲区的容量</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">capacity</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 返回此缓冲区的位置</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">position</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 设置此缓冲区的位置</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> finall Buffer <span class="title">position</span><span class="params">(<span class="keyword">int</span> newPosition)</span></span>;</span><br><span class="line"><span class="comment">// 返回此缓冲区的限制</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">limit</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 设置此缓冲区的限制</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">limit</span><span class="params">(inte new Limit)</span></span>;</span><br><span class="line"><span class="comment">//清除此缓冲区，即将各个标记恢复到初始状态，但数据并没有真正擦除</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 反转此缓冲区</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 告知在当前位置和限制之间是否有元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasRemaining</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 告知此缓冲区是否为只读缓冲区</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">isReadOnly</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 告知此缓冲区是否具有可访问的底层实现数组</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">boolean</span> <span class="title">hasArray</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 返回此缓冲区的底层实现数组</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Object <span class="title">array</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="ByteBuffer"><a href="#ByteBuffer" class="headerlink" title="ByteBuffer"></a>ByteBuffer</h3><p>   从前面可以看出，对于Java中的基本数据类型(boolean除外)，都有一个Buffer类型与之相对应，<strong>最常用</strong>的自然是ByteBuffer类(二进制数据)，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 常用方法</span></span><br><span class="line"><span class="comment">// 创建直接缓冲区</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocateDirect</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>;</span><br><span class="line"><span class="comment">// 设置缓冲区的初始容量</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ByteBuffer <span class="title">allocate</span><span class="params">(<span class="keyword">int</span> capacity)</span></span>;</span><br><span class="line"><span class="comment">// 缓冲区存取相关API</span></span><br><span class="line"><span class="comment">// 从当前位置position上get，get之后，position会自动+1</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 从绝对位置get</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span></span>;</span><br><span class="line"><span class="comment">// 从当前位置上put，put之后，position会自动+1</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span><span class="params">(<span class="keyword">byte</span> b)</span></span>;</span><br><span class="line"><span class="comment">// 从绝对位置上put</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span><span class="params">(<span class="keyword">int</span> index,<span class="keyword">byte</span> b)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Channel-通道"><a href="#Channel-通道" class="headerlink" title="Channel(通道)"></a>Channel(通道)</h2><h3 id="基本介绍-2"><a href="#基本介绍-2" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li><p>NIO的通道类似于流，但有些区别：</p>
+<ul>
+<li>通道可以同时进行读写，而流只能读或只能写</li>
+<li>通道可以实现异步读写数据</li>
+<li>通道可以从缓冲读数据，也可以写数据到缓冲</li>
+</ul>
+</li>
+<li><p>BIO中的stream是单向的，如FileInputStream对旬只能进行读取数据的操作，而NIO的通道(Channel)是双向的，可以读操作，也可以写操作</p>
+</li>
+<li><p>Channel在NIO中是一个接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Channel</span> <span class="keyword">extends</span> <span class="title">Closeable</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常用的Channel类有：FileChannel、DatagramChannel、ServerSocketChannel和SocketChannel</p>
+</li>
+<li><p>FileChannel用于文件的数据读写，DatagramChannel用于UDP的数据读写，ServerSocketChannel和SocketChannel用于TCP的数据读写</p>
+</li>
+</ol>
+<h3 id="FileChannel类"><a href="#FileChannel类" class="headerlink" title="FileChannel类"></a>FileChannel类</h3><p>FileChannel主要用于对本地文件进行IO操作，常见的方法有</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从通道读取数据并放到缓冲区中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(ByteBuffer dst)</span></span>;</span><br><span class="line"><span class="comment">// 把缓冲区的数据写到通道中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">write</span><span class="params">(ByteBuffer src)</span></span>;</span><br><span class="line"><span class="comment">// 从目标通道中复制数据到当前通道</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">transferFrom</span><span class="params">(ReadableByteChannel src,<span class="keyword">long</span> position,<span class="keyword">long</span> count)</span></span>;</span><br><span class="line"><span class="comment">// 把数据从当前通道复制给目标通道</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">transferTo</span><span class="params">(<span class="keyword">long</span> position,<span class="keyword">long</span> count,WriteableByteChannel target)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="Selector-选择器"><a href="#Selector-选择器" class="headerlink" title="Selector(选择器)"></a>Selector(选择器)</h2><h3 id="基本介绍-3"><a href="#基本介绍-3" class="headerlink" title="基本介绍"></a>基本介绍</h3><ol>
+<li>Java的NIO，用非阻塞的IO方式。可以用一个线程，处理多个客户端连接，就会使用到Selector(选择器)</li>
+<li><strong>Selector能够检测多个注册的通道上是否有事件发生(注意：多个Channel以事件的方式可以注册到同一个Selector)</strong>，如果有事件发生，便获取事件然后针对每个事件进行相应的处理。这样就可以只用一个单线程去管理多个通道，也就是管理多个连接和请求</li>
+<li>只有在连接真正有读写事件发生时，才会进行读写，就大大减少了系统开销，并且不必为每个连接都创建一个线程，不用去维护多个线程</li>
+<li>避免了多线程之间的上下文切换导致的开销</li>
+</ol>
+<h3 id="Selector特点说明"><a href="#Selector特点说明" class="headerlink" title="Selector特点说明"></a>Selector特点说明</h3><ol>
+<li>Netty的IO线程NioEventLoop聚合了Selector(选择器，也叫多路复用器)，可以同时并发处理成百上千个客户端连接</li>
+<li>当线程从某客户端Socket通道进行读写数据时，若没有数据可用时，该线程可以进行其它任务</li>
+<li>线程通常将非阻塞IO的空闲时间用于在其它通道上执行IO操作，所以单独的线程可以管理多个输入和输出通道</li>
+<li>由于读写操作都是非阻塞的，这就可以充分提升IO线程的运行效率，避免由于频繁I/O阻塞导致的线程挂起</li>
+<li>一个I/O线程可以并发处理N个客户端连接和读写操作，这从根本上解决了传统同步阻塞I/O一连接一线程模型，架构的性能、弹性伸缩能力和可靠性都得到了极大的提升</li>
+</ol>
+<h3 id="Selector类相关方法"><a href="#Selector类相关方法" class="headerlink" title="Selector类相关方法"></a>Selector类相关方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 得到一个选择器对象</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Selector <span class="title">open</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 监控所有注册的通道，当其中有IO操作进行时，将对应的SelectionKey加入到内部集合中并返回，参数用来设置超时时间</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">long</span> timeout)</span></span>;</span><br><span class="line"><span class="comment">// 从内部集合中得到所有的SelectionKey</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;SelectionKey&gt; <span class="title">selectedKeys</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li><p>NIO中的ServerSocketChannel功能类似于ServerSocket，SocketChannel功能类似Socket</p>
+</li>
+<li><p>selector相关方法说明</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 阻塞</span></span><br><span class="line">selector.select();</span><br><span class="line"><span class="comment">// 阻塞1000毫秒，在1000毫秒后返回</span></span><br><span class="line">selector.select(<span class="number">1000</span>);</span><br><span class="line"><span class="comment">// 唤醒selector</span></span><br><span class="line">selector.wakeup();</span><br><span class="line"><span class="comment">// 不阻塞，立刻返还</span></span><br><span class="line">selector.selectNow();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="NIO非阻塞网络编程原理分析图"><a href="#NIO非阻塞网络编程原理分析图" class="headerlink" title="NIO非阻塞网络编程原理分析图"></a>NIO非阻塞网络编程原理分析图</h2><p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/Selector%5Bkey,...%5D.png" alt=""></p>
+<ol>
+<li>当客户端连接时，会通过ServerSocketChannel得到对应的SocketChannel</li>
+<li>将SocketChannel注册到Selector上<code>register(Selector sel,int ops)</code>，一个Selector上可以注册多个SocketChannel</li>
+<li>注册后返回一个SelectionKey，会和该Selector关联(以集合的方式)</li>
+<li>Selector进行监听(select()方法)，返回有事件发生的通道的个数</li>
+<li>进一步得到各个SelectionKey(有事件发生)</li>
+<li>再通过SelectionKey反向获取SocketChannel，方法是channel()</li>
+<li>可以通过得到的channel，完成业务处理</li>
 </ol>
 
       
@@ -486,8 +601,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/22/Nginx/" rel="next" title="Nginx入门">
-                <i class="fa fa-chevron-left"></i> Nginx入门
+              <a href="/2020/07/11/Netty-BIO/" rel="next" title="Netty-BIO">
+                <i class="fa fa-chevron-left"></i> Netty-BIO
               </a>
             
           </div>
@@ -496,8 +611,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/07/11/Netty-BIO/" rel="prev" title="Netty-BIO">
-                Netty-BIO <i class="fa fa-chevron-right"></i>
+              <a href="/2020/07/12/Netty-NIO-Buffer&Channel&Selector/" rel="prev" title="Netty-NIO-Buffer&Channel&Selector">
+                Netty-NIO-Buffer&Channel&Selector <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +749,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-count">100</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -717,7 +832,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-介绍和应用"><span class="nav-number">1.</span> <span class="nav-text">Netty-介绍和应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty介绍"><span class="nav-number">1.1.</span> <span class="nav-text">Netty介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty应用场景"><span class="nav-number">1.2.</span> <span class="nav-text">Netty应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互联网行业"><span class="nav-number">1.2.1.</span> <span class="nav-text">互联网行业</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏行业"><span class="nav-number">1.3.</span> <span class="nav-text">游戏行业</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大数据领域"><span class="nav-number">1.3.1.</span> <span class="nav-text">大数据领域</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-NIO-Buffer-amp-Channel-amp-Selector"><span class="nav-number">1.</span> <span class="nav-text">Netty-NIO-Buffer&amp;Channel&amp;Selector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本介绍"><span class="nav-number">1.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer测试代码"><span class="nav-number">1.2.</span> <span class="nav-text">Buffer测试代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO和BIO的比较"><span class="nav-number">1.3.</span> <span class="nav-text">NIO和BIO的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Selector、Channel和Buffer的关系"><span class="nav-number">1.4.</span> <span class="nav-text">Selector、Channel和Buffer的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer-缓冲区"><span class="nav-number">1.5.</span> <span class="nav-text">Buffer(缓冲区)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本介绍-1"><span class="nav-number">1.5.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer类及其子类"><span class="nav-number">1.5.2.</span> <span class="nav-text">Buffer类及其子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ByteBuffer"><span class="nav-number">1.5.3.</span> <span class="nav-text">ByteBuffer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-通道"><span class="nav-number">1.6.</span> <span class="nav-text">Channel(通道)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本介绍-2"><span class="nav-number">1.6.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FileChannel类"><span class="nav-number">1.6.2.</span> <span class="nav-text">FileChannel类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Selector-选择器"><span class="nav-number">1.7.</span> <span class="nav-text">Selector(选择器)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本介绍-3"><span class="nav-number">1.7.1.</span> <span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Selector特点说明"><span class="nav-number">1.7.2.</span> <span class="nav-text">Selector特点说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Selector类相关方法"><span class="nav-number">1.7.3.</span> <span class="nav-text">Selector类相关方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">1.7.4.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO非阻塞网络编程原理分析图"><span class="nav-number">1.8.</span> <span class="nav-text">NIO非阻塞网络编程原理分析图</span></a></li></ol></li></ol></div>
             
 
           </div>

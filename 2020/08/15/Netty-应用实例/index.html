@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Netty," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Netty-应用实例实例-群聊系统 需求：  编写一个Netty群聊系统，实现服务器端和客户端之间的数据简单通讯(非阻塞) 实现多个群聊 服务器端：可以监测用户上线、离线，并实现消息转发功能 客户端：通过channel可以无阻塞发送消息给其它所有用户，同时可以接受其它用户发送的消息      12345678910111213141516171819202122232425262728293031">
+<meta name="keywords" content="Netty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty-应用实例">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.zephon.ml&#x2F;2020&#x2F;08&#x2F;15&#x2F;Netty-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B&#x2F;index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Netty-应用实例实例-群聊系统 需求：  编写一个Netty群聊系统，实现服务器端和客户端之间的数据简单通讯(非阻塞) 实现多个群聊 服务器端：可以监测用户上线、离线，并实现消息转发功能 客户端：通过channel可以无阻塞发送消息给其它所有用户，同时可以接受其它用户发送的消息      12345678910111213141516171819202122232425262728293031">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-22T12:59:42.742Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.zephon.ml/2020/08/15/Netty-应用实例/"/>
+
+
+
+
+
+  <title>Netty-应用实例 | Zephon Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	
+	<a href="https://github.com/Zephon-H" target="_blank" rel="noopener"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Zephon Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-download">
+          <a href="/download/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-download"></i> <br />
+            
+            分享
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" target="_blank" rel="noopener" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/08/15/Netty-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar1.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Netty-应用实例</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-15T19:23:49+08:00">
+                2020-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Netty/" itemprop="url" rel="index">
+                    <span itemprop="name">Netty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Netty-应用实例"><a href="#Netty-应用实例" class="headerlink" title="Netty-应用实例"></a>Netty-应用实例</h1><h2 id="实例-群聊系统"><a href="#实例-群聊系统" class="headerlink" title="实例-群聊系统"></a>实例-群聊系统</h2><blockquote>
+<p>需求：</p>
+<ol>
+<li>编写一个Netty群聊系统，实现服务器端和客户端之间的数据简单通讯(非阻塞)</li>
+<li>实现多个群聊</li>
+<li>服务器端：可以监测用户上线、离线，并实现消息转发功能</li>
+<li>客户端：通过channel可以无阻塞发送消息给其它所有用户，同时可以接受其它用户发送的消息</li>
+</ol>
+</blockquote>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> port;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Server</span><span class="params">(<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.port = port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理客户端请求</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line"></span><br><span class="line">            b.group(bossGroup,workerGroup)</span><br><span class="line">                    .channel(NioServerSocketChannel.class)</span><br><span class="line">                    .option(ChannelOption.SO_BACKLOG,<span class="number">128</span>)</span><br><span class="line">                    .childOption(ChannelOption.SO_KEEPALIVE,<span class="keyword">true</span>)</span><br><span class="line">                    .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                            ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">                            <span class="comment">// 添加解码器</span></span><br><span class="line">                            pipeline.addLast(<span class="string">"decoder"</span>,<span class="keyword">new</span> StringDecoder());</span><br><span class="line">                            <span class="comment">// 添加编码器</span></span><br><span class="line">                            pipeline.addLast(<span class="string">"encoder"</span>,<span class="keyword">new</span> StringEncoder());</span><br><span class="line">                            <span class="comment">// 添加业务处理器</span></span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> GroupChatServerHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            System.out.println(<span class="string">"netty 服务器启动"</span>);</span><br><span class="line">            ChannelFuture channelFuture = b.bind(port).sync();</span><br><span class="line">            <span class="comment">// 监听关闭事件</span></span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workerGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Server(<span class="number">7000</span>).run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GroupChatServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">String</span>&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 定义一个channel组，管理所有的channel</span></span><br><span class="line">    <span class="comment">// GlobalEventExecutor.INSTANCE：是全局的事件执行器，是一个单例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ChannelGroup channelGroup = <span class="keyword">new</span> DefaultChannelGroup(GlobalEventExecutor.INSTANCE);</span><br><span class="line">    SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd hh:mm:ss"</span>);</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, String msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 获取到当前channel</span></span><br><span class="line">        Channel channel = ctx.channel();</span><br><span class="line">        <span class="comment">// 遍历channelGroup，根据不同的情况，回送不同消息</span></span><br><span class="line">        channelGroup.forEach(ch -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span>(channel != ch)&#123;</span><br><span class="line">                ch.writeAndFlush(sdf.format(<span class="keyword">new</span> Date()) + <span class="string">" [客户端]"</span> + channel.remoteAddress() +<span class="string">"发送了消息："</span> + msg + <span class="string">"\n"</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">// 回显自己发送的消息</span></span><br><span class="line">                ch.writeAndFlush(<span class="string">"[自己]发送了消息"</span> + msg + <span class="string">"\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionCaught</span><span class="params">(ChannelHandlerContext ctx, Throwable cause)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 关闭</span></span><br><span class="line">        ctx.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表示连接建立后，执行</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ctx</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handlerAdded</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 将消息推送给客户端</span></span><br><span class="line">        <span class="comment">// 该方法会加将channelGroup中所有的channel遍历，并发送消息，不需要自己遍历</span></span><br><span class="line">        channelGroup.writeAndFlush(sdf.format(<span class="keyword">new</span> Date()) + <span class="string">" [客户端]"</span>+ctx.channel().remoteAddress()+<span class="string">"加入聊天\n"</span>);</span><br><span class="line">        <span class="comment">// 将当前channel加入到channelGroup</span></span><br><span class="line">        channelGroup.add(ctx.channel());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表示连接断开后，执行</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ctx</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handlerRemoved</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 将消息推送给客户端</span></span><br><span class="line">        <span class="comment">// 该方法会加将channelGroup中所有的channel遍历，并发送消息，不需要自己遍历</span></span><br><span class="line">        channelGroup.writeAndFlush(sdf.format(<span class="keyword">new</span> Date()) +  <span class="string">" [客户端]"</span>+ctx.channel().remoteAddress()+<span class="string">"离开了\n"</span>);</span><br><span class="line">        <span class="comment">// 不需要手动从channelGroup中移除channel</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表示channel处于活动状态，提示xx上线</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ctx</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelActive</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(ctx.channel().remoteAddress() + <span class="string">" 上线了"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表示channel处于非活动状态，提示xx离线</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ctx</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">channelInactive</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(ctx.channel().remoteAddress() + <span class="string">" 离线了"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String host;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> port;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Client</span><span class="params">(String host,<span class="keyword">int</span> port)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.host = host;</span><br><span class="line">        <span class="keyword">this</span>.port = port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        EventLoopGroup group = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Bootstrap b = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">            b.group(group)</span><br><span class="line">                    .channel(NioSocketChannel.class)</span><br><span class="line">                    .handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                            <span class="comment">// 得到pipeline</span></span><br><span class="line">                            ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">                            <span class="comment">// 加入相关handler</span></span><br><span class="line">                            pipeline.addLast(<span class="string">"decoder"</span>,<span class="keyword">new</span> StringDecoder());</span><br><span class="line">                            pipeline.addLast(<span class="string">"encoder"</span>,<span class="keyword">new</span> StringEncoder());</span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> GroupChatClientHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            ChannelFuture channelFuture = b.connect(host, port).sync();</span><br><span class="line">            <span class="comment">// 得到channel</span></span><br><span class="line">            Channel channel = channelFuture.channel();</span><br><span class="line">            System.out.println(<span class="string">"-----"</span> + channel.remoteAddress() + <span class="string">"-----"</span>);</span><br><span class="line">            <span class="comment">// 客户端需要输入信息，创建一个扫描器</span></span><br><span class="line">            Scanner scanner = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">            <span class="keyword">while</span>(scanner.hasNext())&#123;</span><br><span class="line">                String msg = scanner.nextLine();</span><br><span class="line">                <span class="comment">// 通过channel 发送到服务器端</span></span><br><span class="line">                channel.writeAndFlush(msg + <span class="string">"\r\n"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            group.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Client(<span class="string">"127.0.0.1"</span>,<span class="number">7000</span>).run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GroupChatClientHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">String</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, String msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(msg.trim());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实例-心跳检测机制"><a href="#实例-心跳检测机制" class="headerlink" title="实例-心跳检测机制"></a>实例-心跳检测机制</h2><blockquote>
+<p>需求：</p>
+<ol>
+<li>编写Netty心跳检测机制案例，当服务器超过3秒没有读时，就提示读空闲</li>
+<li>当服务器超过5秒没有写操作时，就提示写空闲</li>
+<li>当服务器超过7秒没有读或写操作时，就提示读写空闲</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ServerBootstrap serverBootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">            serverBootstrap.group(bossGroup,workerGroup)</span><br><span class="line">                    .channel(NioServerSocketChannel.class)</span><br><span class="line">                    .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO))</span><br><span class="line">                    .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                            ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">                            <span class="comment">// 加入一个netty提供的IdleStateHandler</span></span><br><span class="line">                            <span class="comment">// 说明：</span></span><br><span class="line">                            <span class="comment">// 1：IdleStateHandler 是netty提供的处理空闲状态的处理器</span></span><br><span class="line">                            <span class="comment">// 2. IdleStateHandler(</span></span><br><span class="line">                            <span class="comment">//            long readerIdleTime, long writerIdleTime, long allIdleTime,</span></span><br><span class="line">                            <span class="comment">//            TimeUnit unit)</span></span><br><span class="line">                            <span class="comment">// readerIdleTime：表示多长时间没有读，就会发送一个心跳检测包，检测还是连接状态</span></span><br><span class="line">                            <span class="comment">// writerIdleTime：表示多长时间没有写，就会发送一个心跳检测包，检测是否连接</span></span><br><span class="line">                            <span class="comment">// allIdleTime：表示多长时间没有读写，就会发送一个心跳检测包，检测是否连接</span></span><br><span class="line">                            <span class="comment">// 3. 文档说明：当channel没有执行read、write或read和write，就会触发</span></span><br><span class="line">                            <span class="comment">// 4. 当IdleStateEvent 触发后，就会传递给pipeline的下一个handler处理</span></span><br><span class="line">                            <span class="comment">//    通过调用(触发)下一个handler的userEventTriggered，在该方法中去处理IdleStateEvent(读空闲、写空闲、读写空闲)</span></span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> IdleStateHandler(<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>, TimeUnit.SECONDS));</span><br><span class="line"></span><br><span class="line">                            <span class="comment">// 加入一个对空闲检测进一步处理的自定义handler</span></span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> MyServerHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            ChannelFuture channelFuture = serverBootstrap.bind(<span class="number">7000</span>).sync();</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workerGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyServerHandler</span> <span class="keyword">extends</span> <span class="title">ChannelInboundHandlerAdapter</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userEventTriggered</span><span class="params">(ChannelHandlerContext ctx, Object evt)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(evt <span class="keyword">instanceof</span> IdleStateEvent)&#123;</span><br><span class="line">             IdleStateEvent event = (IdleStateEvent) evt;</span><br><span class="line">             String eventType = <span class="keyword">null</span>;</span><br><span class="line">             <span class="keyword">switch</span> (event.state())&#123;</span><br><span class="line">                 <span class="keyword">case</span> READER_IDLE:</span><br><span class="line">                     eventType = <span class="string">"读空闲"</span>;</span><br><span class="line">                     <span class="keyword">break</span>;</span><br><span class="line">                 <span class="keyword">case</span> WRITER_IDLE:</span><br><span class="line">                     eventType = <span class="string">"写空闲"</span>;</span><br><span class="line">                     <span class="keyword">break</span>;</span><br><span class="line">                 <span class="keyword">case</span> ALL_IDLE:</span><br><span class="line">                     eventType = <span class="string">"读写空闲"</span>;</span><br><span class="line">                     <span class="keyword">break</span>;</span><br><span class="line">             &#125;</span><br><span class="line">            System.out.println(ctx.channel().remoteAddress() + <span class="string">"-- 超时事件 --"</span>+eventType);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实例-通过WebSocket编程实现服务器和客户端长连接"><a href="#实例-通过WebSocket编程实现服务器和客户端长连接" class="headerlink" title="实例-通过WebSocket编程实现服务器和客户端长连接"></a>实例-通过WebSocket编程实现服务器和客户端长连接</h2><blockquote>
+<p>需求：</p>
+<ol>
+<li>Http协议是无状态的，浏览器和服务器的请求响应一次，下一次会重新创建连接</li>
+<li>要求：实现基于webSocket的长连接的全双工的交互</li>
+<li>改变Http协议多次请求的约束，实现长连接了，服务器可以发送消息给浏览器</li>
+<li>客户端浏览器和服务器端会相互感知，比如服务器关闭了，浏览器会感知，同样浏览器关闭了，服务器会感知</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        EventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        EventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        ServerBootstrap b = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">        b.group(bossGroup,workerGroup)</span><br><span class="line">                .channel(NioServerSocketChannel.class)</span><br><span class="line">                .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO))</span><br><span class="line">                .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                        ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">                        <span class="comment">// 基于HTTP协议，使用HTTP编码解码器</span></span><br><span class="line">                        pipeline.addLast(<span class="keyword">new</span> HttpServerCodec());</span><br><span class="line">                        <span class="comment">// 以块方式写，添加chunkedWriteHandler处理器</span></span><br><span class="line">                        pipeline.addLast(<span class="keyword">new</span> ChunkedWriteHandler());</span><br><span class="line">                        <span class="comment">/**</span></span><br><span class="line"><span class="comment">                         * 说明：</span></span><br><span class="line"><span class="comment">                         * 1. http数据在传输过程中是分段，HttpObjectAggregator 就是可以将多个段聚合</span></span><br><span class="line"><span class="comment">                         * 2. 这就是为什么当浏览器发送大量数据时，就会发出多次http请求</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line">                        pipeline.addLast(<span class="keyword">new</span> HttpObjectAggregator(<span class="number">8192</span>));</span><br><span class="line">                        <span class="comment">/**</span></span><br><span class="line"><span class="comment">                         * 说明：</span></span><br><span class="line"><span class="comment">                         * 1. 对于websocket，数据是以帧的形式传递的</span></span><br><span class="line"><span class="comment">                         * 2. 可以看到WebSocketFrame下面有6个子类</span></span><br><span class="line"><span class="comment">                         * 3. 浏览器请求时，形式：ws://localhost:8888/xxx 表示请求的uri</span></span><br><span class="line"><span class="comment">                         * 4. WebSocketServerProtocolHandler 核心功能是将http协议升级为ws协议，保持长连接</span></span><br><span class="line"><span class="comment">                         * 5. 协议切换是通过101状态码实现</span></span><br><span class="line"><span class="comment">                         */</span></span><br><span class="line">                        pipeline.addLast(<span class="keyword">new</span> WebSocketServerProtocolHandler(<span class="string">"/hello"</span>));</span><br><span class="line">                        <span class="comment">// 自定义handler</span></span><br><span class="line">                        pipeline.addLast(<span class="keyword">new</span> MyServerHandler());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        ChannelFuture channelFuture = b.bind(<span class="number">8888</span>).sync();</span><br><span class="line">        channelFuture.channel().closeFuture().sync();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TextWebSocketFrame：表示一个文本帧</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyServerHandler</span> <span class="keyword">extends</span> <span class="title">SimpleChannelInboundHandler</span>&lt;<span class="title">TextWebSocketFrame</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">channelRead0</span><span class="params">(ChannelHandlerContext ctx, TextWebSocketFrame msg)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"服务器收到消息："</span>+msg.text());</span><br><span class="line">        <span class="comment">// 回复浏览器</span></span><br><span class="line">        ctx.writeAndFlush(<span class="keyword">new</span> TextWebSocketFrame(<span class="string">"服务器时间："</span> + LocalDateTime.now() + <span class="string">" "</span> + msg.text()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当web客户端连接后，触发方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> ctx</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handlerAdded</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// id：表示唯一的值，有LongText(唯一)和ShortText(不唯一)两种形式</span></span><br><span class="line">        System.out.println(<span class="string">"handlerAdded被调用 "</span> + ctx.channel().id().asLongText());</span><br><span class="line">        System.out.println(<span class="string">"handlerAdded被调用 "</span> + ctx.channel().id().asShortText());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handlerRemoved</span><span class="params">(ChannelHandlerContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"handlerRemoved被调用 "</span> + ctx.channel().id().asLongText());</span><br><span class="line">        System.out.println(<span class="string">"handlerRemoved被调用 "</span> + ctx.channel().id().asShortText());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionCaught</span><span class="params">(ChannelHandlerContext ctx, Throwable cause)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"异常发生 "</span>+cause.getMessage());</span><br><span class="line">        ctx.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="actionscript">    <span class="keyword">var</span> socket;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 判断当前浏览器是否支持websocket</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">if</span> ( <span class="built_in">window</span>.WebSocket)&#123;</span></span><br><span class="line"><span class="actionscript">        socket = <span class="keyword">new</span> WebSocket(<span class="string">"ws://localhost:8888/hello"</span>)</span></span><br><span class="line"><span class="actionscript">        <span class="comment">// ev 收到服务器端回送的消息</span></span></span><br><span class="line"><span class="javascript">        socket.onmessage = <span class="function"><span class="params">ev</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> resText = <span class="built_in">document</span>.getElementById(<span class="string">'resText'</span>);</span></span><br><span class="line"><span class="actionscript">            resText.value = resText.value + <span class="string">'\n'</span> + ev.data</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="actionscript">        <span class="comment">// 连接开启(感知连接开启)</span></span></span><br><span class="line"><span class="javascript">        socket.onopen = <span class="function"><span class="params">ev</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> resText = <span class="built_in">document</span>.getElementById(<span class="string">'resText'</span>);</span></span><br><span class="line"><span class="actionscript">            resText.value = <span class="string">"连接开启.."</span></span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="javascript">        socket.onclose = <span class="function"><span class="params">ev</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">let</span> resText = <span class="built_in">document</span>.getElementById(<span class="string">'resText'</span>);</span></span><br><span class="line"><span class="actionscript">            resText.value = resText.value + <span class="string">"\n连接关闭.."</span></span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="actionscript">    &#125;<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="actionscript">        alert(<span class="string">"当前浏览器不支持websocket"</span>)</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="actionscript">    <span class="comment">// 发送消息到服务器</span></span></span><br><span class="line"><span class="actionscript">    <span class="function"><span class="keyword">function</span> <span class="title">send</span><span class="params">(message)</span> </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">if</span>(!<span class="built_in">window</span>.socket)&#123;</span></span><br><span class="line"><span class="actionscript">            <span class="keyword">return</span>;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="actionscript">        <span class="keyword">if</span>(socket.readyState == WebSocket.OPEN)&#123;</span></span><br><span class="line"><span class="actionscript">            <span class="comment">// 通过socket发送消息</span></span></span><br><span class="line"><span class="undefined">            socket.send(message);</span></span><br><span class="line"><span class="actionscript">        &#125;<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="actionscript">            alert(<span class="string">"连接未开启"</span>)</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">onsubmit</span>=<span class="string">"return false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">"message"</span> <span class="attr">style</span>=<span class="string">"height: 300px;width: 300px"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"发送消息"</span> <span class="attr">onclick</span>=<span class="string">"send(this.form.message.value)"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">"resText"</span> <span class="attr">style</span>=<span class="string">"height: 300px;width: 300px"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"清空内容"</span> <span class="attr">onclick</span>=<span class="string">"document.getElementById('resText').value = ''"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Zephon 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Zephon 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty/" rel="tag"><i class="fa fa-tag"></i> Netty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/14/Netty-%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%E7%BB%84%E4%BB%B6/" rel="next" title="Netty-核心模块组件">
+                <i class="fa fa-chevron-left"></i> Netty-核心模块组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/17/Netty-GoogleProtobuf/" rel="prev" title="Netty-GoogleProtobuf">
+                Netty-GoogleProtobuf <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+  	  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-1106127810827644"
+     data-ad-slot="2635376206"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar1.gif"
+                alt="Zephon" />
+            
+              <p class="site-author-name" itemprop="name">Zephon</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">107</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Zephon-H" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="qq1528498238@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/u010367977" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-link"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-应用实例"><span class="nav-number">1.</span> <span class="nav-text">Netty-应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实例-群聊系统"><span class="nav-number">1.1.</span> <span class="nav-text">实例-群聊系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例-心跳检测机制"><span class="nav-number">1.2.</span> <span class="nav-text">实例-心跳检测机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例-通过WebSocket编程实现服务器和客户端长连接"><span class="nav-number">1.3.</span> <span class="nav-text">实例-通过WebSocket编程实现服务器和客户端长连接</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<div class = "">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1106127810827644",
+    enable_page_level_ads: true
+  });
+</script>
+</div>
+
+
+<div class ="">
+  <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("10/31/2018 12:31:35");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+</div>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+
+  
+
+  
+  
+  <div class="powered-by">
+<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+  本站访客数:<span id="busuanzi_value_site_uv">人次</span>
+</span>
+</div>
+  
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
+
+<script type="text/javascript" src="/js/src/love.js"></script>

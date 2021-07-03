@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 --- more ---">
+  <meta name="description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 目标定位">
 <meta property="og:type" content="article">
 <meta property="og:title" content="卷积神经网络-目标检测">
 <meta property="og:url" content="http://www.zephon.ml/2020/12/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 --- more ---">
+<meta property="og:description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 目标定位">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png">
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228123954111.png">
@@ -54,7 +54,7 @@
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110735645.png">
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229142922008.png">
 <meta property="article:published_time" content="2020-12-28T03:30:02.000Z">
-<meta property="article:modified_time" content="2020-12-29T06:38:00.000Z">
+<meta property="article:modified_time" content="2021-07-03T14:30:09.774Z">
 <meta property="article:author" content="Zephon">
 <meta property="article:tag" content="计算机视觉">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-29 14:38:00" itemprop="dateModified" datetime="2020-12-29T14:38:00+08:00">2020-12-29</time>
+                <time title="修改时间：2021-07-03 22:30:09" itemprop="dateModified" datetime="2021-07-03T22:30:09+08:00">2021-07-03</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -298,14 +298,13 @@
       
         <h1 id="卷积神经网络-目标检测">卷积神经网络-目标检测</h1>
 <p>目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。</p>
-<p>--- more ---</p>
 <h2 id="目标定位">目标定位</h2>
 <h3 id="什么是目标定位和检测">什么是目标定位和检测</h3>
 <p>之前所学的图片分类问题，主要是给定一张图片，将图片进行分类，如图，给定图片，判定为"Car"类</p>
 <p>而定位分类问题，这意味着，不仅需要用算法判断图片中是不是一辆汽车，还需要在图片中标注出它的位置，如图，使用边框将汽车圈起来</p>
 <p>而目标检测，则对应的图片中可能有多个对象需要检测并确定位置</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png" alt="" /><figcaption>image-20201228113741768</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png" alt="image-20201228113741768" /><figcaption aria-hidden="true">image-20201228113741768</figcaption>
 </figure>
 <h3 id="位置分类">位置分类</h3>
 <p>图片分类问题之前已经有所了解了，如输入一张图片到多层卷积神经网络，然后会输出一个特征向量，并通过softmax单元来预测图片类型，这就是图片分类的基本流程</p>
@@ -320,13 +319,13 @@
 <p>边框高度：bh</p>
 <p>边框宽度：bw</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228123954111.png" alt="" /><figcaption>image-20201228123954111</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228123954111.png" alt="image-20201228123954111" /><figcaption aria-hidden="true">image-20201228123954111</figcaption>
 </figure>
 <h3 id="定义目标标签y">定义目标标签y</h3>
 <p>神经网络需要输出的是四个数字和一个分类标签即<span class="math inline">\(b_x,b_y,b_h,b_w,class\ label(1-4)\)</span></p>
 <p><span class="math inline">\(y = \begin{bmatrix} P_c \\ b_x \\ b_y \\ b_h \\ b_w \\ c_1 \\ c_2 \\ c_3 \end{bmatrix} \\ P_c：被检测对象属于某一分类的概率(背景分类除外)，如果P_c为0，则没有被检测对象，其它参数无意义 \\ 如果检测到对象：b_x、b_y、b_w、b_h、c_1、c_2、c_3 \\ c_1,c_2,c_3表现该对应属于1-3中的哪一类\)</span></p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228124818356.png" alt="" /><figcaption>image-20201228124818356</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228124818356.png" alt="image-20201228124818356" /><figcaption aria-hidden="true">image-20201228124818356</figcaption>
 </figure>
 <h3 id="损失函数">损失函数</h3>
 <p><span class="math display">\[
@@ -341,7 +340,7 @@ L(\hat y,y) = x = \begin{cases}
 <h2 id="特征点检测landmark-detection">特征点检测(Landmark detection)</h2>
 <p>对于人脸来说，通常可能会将眼角、眼眶、鼻梁、嘴角等作为你们俩检测的特征点；而对于人体姿态检测，则可能会定义一些关键特征点如胸部的中点、左肩、左肘、腰等，然后通过神经网络标人物姿态的关键特征点，再输出这些标注过的特征点，就相当于输出了人物的姿态动作</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228133314846.png" alt="" /><figcaption>image-20201228133314846</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228133314846.png" alt="image-20201228133314846" /><figcaption aria-hidden="true">image-20201228133314846</figcaption>
 </figure>
 <blockquote>
 <p>要明确一点：特征点一的特性必须在不同的图片中保持一致</p>
@@ -353,16 +352,16 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="汽车检测示例">汽车检测示例</h3>
 <p>首先创建一个标签训练集</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140303024.png" alt="" /><figcaption>image-20201228140303024</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140303024.png" alt="image-20201228140303024" /><figcaption aria-hidden="true">image-20201228140303024</figcaption>
 </figure>
 <h3 id="滑动窗口检测">滑动窗口检测</h3>
 <p>如图，首先通过卷积网络判断图中框内是否有汽车</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140413919.png" alt="" /><figcaption>image-20201228140413919</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140413919.png" alt="image-20201228140413919" /><figcaption aria-hidden="true">image-20201228140413919</figcaption>
 </figure>
 <p>如果没有，则继续处理第二个图像</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140512762.png" alt="" /><figcaption>image-20201228140512762</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140512762.png" alt="image-20201228140512762" /><figcaption aria-hidden="true">image-20201228140512762</figcaption>
 </figure>
 <p>依次重复操作，直到遍历整个图片</p>
 <p>然后再重复上述操作，但将边框大小调大，遍历完成后，再重复，仍然将边框调大，如此，无论汽车在图片什么位置，总会有一个窗口能检测到它</p>
@@ -374,20 +373,20 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="将fc层转成卷积层">将FC层转成卷积层</h3>
 <p>如图，假设对象检测算法输入一个14×14×3的图像，使用16个5×5的过滤器后，映射为10×10×16，然后通过2×2的最大池化操作，图像减小到5×5×16，然后添加一个连接400个单元的全连接层，接着再加一个全连接层，最终通过softmax单元输出</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142154833.png" alt="" /><figcaption>image-20201228142154833</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142154833.png" alt="image-20201228142154833" /><figcaption aria-hidden="true">image-20201228142154833</figcaption>
 </figure>
 <p>将全连接层转换成卷积层：</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142510296.png" alt="" /><figcaption>image-20201228142510296</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142510296.png" alt="image-20201228142510296" /><figcaption aria-hidden="true">image-20201228142510296</figcaption>
 </figure>
 <h3 id="通过卷积实现滑动窗口目标检测">通过卷积实现滑动窗口目标检测</h3>
 <p>如图，假设输入是14×14×3，和之前一样，通过卷积网后，输出1×1×4，假设将输入处理为16×16×3，则一系列处理后输出2×2×4，相当于一次计算了四次滑动窗口的值</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143559460.png" alt="" /><figcaption>image-20201228143559460</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143559460.png" alt="image-20201228143559460" /><figcaption aria-hidden="true">image-20201228143559460</figcaption>
 </figure>
 <p>由于最大池化参数为2，所以相当于以大小为2的步幅在原始图片上应用神经网络</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143859644.png" alt="" /><figcaption>image-20201228143859644</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143859644.png" alt="image-20201228143859644" /><figcaption aria-hidden="true">image-20201228143859644</figcaption>
 </figure>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1312.6229">参考文献:OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks</a>)</p>
 <blockquote>
@@ -397,13 +396,13 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="输出正确的边框">输出正确的边框</h3>
 <p>在滑动窗口方法中，取出这些离散的位置集合，然后在它们上面运算分类器，如果滑动窗口的大小和边框大小不符合，如图，可能就无法保证边框的正确性，那么如何让这个算法输出更精准的边框呢？</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228144404612.png" alt="" /><figcaption>image-20201228144404612</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228144404612.png" alt="image-20201228144404612" /><figcaption aria-hidden="true">image-20201228144404612</figcaption>
 </figure>
 <h3 id="yolo-算法">YOLO 算法</h3>
 <p>如图，假设输入图像是100×100的，然后在图像上放一个网格，为实现方便，此处用3×3网格，实际上会用更加精细的网格，基本思想是使用图像分类和定位算法，然后逐一应用到9个格子上。</p>
 <p>对于什么都没有格子，<span class="math inline">\(P_c=0\)</span>，则直接跳过，对于有目标的格子，则取目标的中点，然后将目标分配给包含对象中点的格子</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150026755.png" alt="" /><figcaption>image-20201228150026755</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150026755.png" alt="image-20201228150026755" /><figcaption aria-hidden="true">image-20201228150026755</figcaption>
 </figure>
 <p>对于参数的取值，通常的约定是：</p>
 <p><span class="math inline">\(b_x,b_y\)</span>必须是0~1之间，而<span class="math inline">\(b_h,b_w\)</span>则可能大于1</p>
@@ -416,7 +415,7 @@ L(\hat y,y) = x = \begin{cases}
 <p>在目标检测任务中，我们希望同时能定位对象，于是，引入评估目标检测结果的函数-交并比(IoU)函数</p>
 <p>IoU：计算两个边界框交集和并集之比，如图，<span class="math inline">\(IoU=\frac{黄色阴影面积}{绿色阴影面积}\)</span></p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150827635.png" alt="" /><figcaption>image-20201228150827635</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150827635.png" alt="image-20201228150827635" /><figcaption aria-hidden="true">image-20201228150827635</figcaption>
 </figure>
 <blockquote>
 <p>一般约定 ，在计算机检测任务中，如果IoU大于或等于0.5，则证明检测正确，如果预测框和实际框完善重叠，则IoU=1。</p>
@@ -425,7 +424,7 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="非极大值抑制示例">非极大值抑制示例</h3>
 <p>假设需要在如图上检测行人和汽车，可能会在上面放19×19网格，理论上每辆车只有一个中点，所以理论上应该只有一个格子作出有车的预测，但实践中，当进行目标分类和定位算法时，对于每个格子都运算一次，因此，有的邻近的格子可能会认为中点也在该格子内</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229100808790.png" alt="" /><figcaption>image-20201229100808790</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229100808790.png" alt="image-20201229100808790" /><figcaption aria-hidden="true">image-20201229100808790</figcaption>
 </figure>
 <p>而Non-max suppression就是用来解决这个问题的</p>
 <p>因为需要在361个格子上都运行一次，因此最后可能会对同一对象做出多次检测，而Non-max suppression做的就是清理这些检测结果，这样，每辆车只检测一次</p>
@@ -435,7 +434,7 @@ L(\hat y,y) = x = \begin{cases}
 <li>这样之后，Non-max suppression会逐一审视剩下的检测框，所有检测到的和这个最大边界框有高交并比、高度重叠的其它边界框则输出会被抑制，如图用暗色标记</li>
 </ol>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229101702105.png" alt="" /><figcaption>image-20201229101702105</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229101702105.png" alt="image-20201229101702105" /><figcaption aria-hidden="true">image-20201229101702105</figcaption>
 </figure>
 <blockquote>
 <p>non max：只输出概率最大的分类结果，但抑制很接近但不是最大的其它预测结果</p>
@@ -443,7 +442,7 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="非极大值抑制算法">非极大值抑制算法</h3>
 <p>如图，对于每个预测结果格式是<span class="math inline">\(\begin{bmatrix}p_c\\ b_x\\ b_y\\ b_h\\ b_w \end{bmatrix}\)</span>,丢弃所有<span class="math inline">\(p_c \le 0.6\)</span>的结果，对于剩下的所有边框：选择<span class="math inline">\(p_c\)</span>最大边框的作为输出结果，丢弃上一步后剩下的所有<span class="math inline">\(IoU \ge 0.5\)</span>的边框</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229102537025.png" alt="" /><figcaption>image-20201229102537025</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229102537025.png" alt="image-20201229102537025" /><figcaption aria-hidden="true">image-20201229102537025</figcaption>
 </figure>
 <h2 id="anchor-boxes">Anchor Boxes</h2>
 <blockquote>
@@ -452,7 +451,7 @@ L(\hat y,y) = x = \begin{cases}
 <h3 id="重叠目标">重叠目标</h3>
 <p>如图，使用3×3的网格，则行人的中点和汽车的中点几乎在同一个地方，所以对于对应的那个格子，如果y输出和之前一样的向量，将无法输出检测结果，而是必须从两个检测结果中选择一个</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229103401743.png" alt="" /><figcaption>image-20201229103401743</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229103401743.png" alt="image-20201229103401743" /><figcaption aria-hidden="true">image-20201229103401743</figcaption>
 </figure>
 <p>而Anchor box的思路则是：</p>
 <p>预先定义两个不同形状的anchor box，然后将预测结果和这两个anchor box关联起来，一般而言，实际情况下可能会用更多(如5个或更多)的anchor box。</p>
@@ -469,37 +468,37 @@ y=\begin{bmatrix} p_c\\ b_x\\ b_y\\b_h\\b_w\\c_1\\c_2\\c_3\\p_c\\b_x\\b_y\\b_h\\
 <p>则对于训练图像中的每个目标被分配到包含目标中点和与目标形状IoU最高的anchor box的格子中，即目标在目标标签中的编码方式为(grid cell,anchor box)</p>
 <h3 id="anchor-box示例">Anchor box示例</h3>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105105568.png" alt="" /><figcaption>image-20201229105105568</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105105568.png" alt="image-20201229105105568" /><figcaption aria-hidden="true">image-20201229105105568</figcaption>
 </figure>
 <h2 id="综合yolo目标检测算法">综合：Yolo目标检测算法</h2>
 <h3 id="训练集">训练集</h3>
 <p>输入：图片</p>
 <p>输出：shape：3×3(假设图片分成3×3格)×2(anchor box数量)×8(向量维度:5(<span class="math inline">\(p_c\)</span>+边框参数(<span class="math inline">\(b_x,b_y,b_w,b_h\)</span>))+类别种数(<span class="math inline">\(c_1,c_2,c_3\)</span>))，</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105955274.png" alt="" /><figcaption>image-20201229105955274</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105955274.png" alt="image-20201229105955274" /><figcaption aria-hidden="true">image-20201229105955274</figcaption>
 </figure>
 <h3 id="做出预测">做出预测</h3>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110321783.png" alt="" /><figcaption>image-20201229110321783</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110321783.png" alt="image-20201229110321783" /><figcaption aria-hidden="true">image-20201229110321783</figcaption>
 </figure>
 <h3 id="输出non-max-supressed结果">输出non-max supressed结果</h3>
 <ul>
 <li>对于每个格子，会有2个预测边框，其中一个<span class="math inline">\(p_c\)</span>很低</li>
 </ul>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110512960.png" alt="" /><figcaption>image-20201229110512960</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110512960.png" alt="image-20201229110512960" /><figcaption aria-hidden="true">image-20201229110512960</figcaption>
 </figure>
 <ul>
 <li>丢弃概率低的预测</li>
 </ul>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110558587.png" alt="" /><figcaption>image-20201229110558587</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110558587.png" alt="image-20201229110558587" /><figcaption aria-hidden="true">image-20201229110558587</figcaption>
 </figure>
 <ul>
 <li>对每个类别 ，单独运算non-max suppresion，生成最终预测结果(如有三种类别：行人、汽车、摩托车，则需要分别对其进行non-max suppression)</li>
 </ul>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110735645.png" alt="" /><figcaption>image-20201229110735645</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110735645.png" alt="image-20201229110735645" /><figcaption aria-hidden="true">image-20201229110735645</figcaption>
 </figure>
 <h2 id="候选区域">候选区域</h2>
 <h3 id="region-proposalr-cnn">Region proposal：R-CNN</h3>
@@ -508,7 +507,7 @@ y=\begin{bmatrix} p_c\\ b_x\\ b_y\\b_h\\b_w\\c_1\\c_2\\c_3\\p_c\\b_x\\b_y\\b_h\\
 </blockquote>
 <p>这个算法尝试选出一些在上面运算卷积网络分类器更有意义的区域，所以这里不再针对每个滑动窗口跑检测算法，而是只选择一些窗口，在少数窗口上运行卷积网络分类器，选出候选区域的方法是图像分割算法，</p>
 <figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229142922008.png" alt="" /><figcaption>image-20201229142922008</figcaption>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229142922008.png" alt="image-20201229142922008" /><figcaption aria-hidden="true">image-20201229142922008</figcaption>
 </figure>
 <h3 id="更快的算法">更快的算法</h3>
 <p>R-CNN：提出候选区域，然后对每个候选区域跑一次分类器，每个区域输出一个标签和一个边界框</p>

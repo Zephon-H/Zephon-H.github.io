@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709201923841.png">
 <meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709203201111.png">
 <meta property="article:published_time" content="2021-07-09T13:23:35.000Z">
-<meta property="article:modified_time" content="2021-07-09T12:25:20.150Z">
+<meta property="article:modified_time" content="2021-07-10T09:33:40.916Z">
 <meta property="article:author" content="Zephon">
 <meta property="article:tag" content="机器&#x2F;深度学习自学">
 <meta name="twitter:card" content="summary">
@@ -225,10 +225,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-07-09 21:23:35 / 修改时间：20:25:20" itemprop="dateCreated datePublished" datetime="2021-07-09T21:23:35+08:00">2021-07-09</time>
+              <time title="创建时间：2021-07-09 21:23:35" itemprop="dateCreated datePublished" datetime="2021-07-09T21:23:35+08:00">2021-07-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-10 17:33:40" itemprop="dateModified" datetime="2021-07-10T17:33:40+08:00">2021-07-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -252,7 +258,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.4k</span>
+              <span>6.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -284,18 +290,18 @@
 <p>对于二分类问题：</p>
 <p><span class="math inline">\(y=0或1\)</span></p>
 <p>有一个输出单元：</p>
-<p><span class="math inline">\(h_\Theta(x) \in \R\)</span></p>
+<p><span class="math inline">\(h_\Theta(x) \in \mathbb R\)</span></p>
 <p><span class="math inline">\(S_L=1简化为：K=1\)</span></p>
 <p>对于多分类问题(K类)：</p>
-<p><span class="math inline">\(y\in \R^K\)</span></p>
+<p><span class="math inline">\(y\in \mathbb R^K\)</span></p>
 <p>有K个输出单元</p>
-<p><span class="math inline">\(h_\Theta(x) \in \R^k\)</span></p>
+<p><span class="math inline">\(h_\Theta(x) \in \mathbb R^k\)</span></p>
 <p><span class="math inline">\(S_L=K \ (K\ge 3)\)</span></p>
 <h3 id="代价函数-1">代价函数</h3>
 <p>逻辑回归中代价函数：</p>
 <p><span class="math inline">\(J(\theta) = -\frac{1}{m}[\sum_{i=1}^my^{(i)}\log h_\theta(x^{(i)})+(1-y^{(i)})\log(1-h_\theta(x^{(i)}))]+\frac{\lambda}{2m}\sum_{j=1}^n \theta_j^2\)</span></p>
 <p>在神经网络中：</p>
-<p><span class="math inline">\(h_\Theta(x)\in \R^K \ (h_\Theta(x))_i=第i个输出\)</span></p>
+<p><span class="math inline">\(h_\Theta(x)\in \mathbb R^K \ (h_\Theta(x))_i=第i个输出\)</span></p>
 <p><span class="math inline">\(\begin{split} J(\Theta) &amp;=-\frac{1}{m}[\sum_{i=1}^m\sum_{k=1}^Ky_k^{(i)}\log(h_\Theta(x^{(i)}))_k+(1-y^{(i)}_k)\log(1-(h_\Theta(x^{(i)}))_k)] \\ &amp;+\frac{\lambda}{2m}\sum_{l=1}^{L-1}\sum_{i=1}^{S_l}\sum_{j=1}^{S_l+1}(\Theta_{ji}^{(l)})^2 \end{split}\)</span></p>
 <h2 id="反向传播算法">反向传播算法</h2>
 <p><span class="math inline">\(\begin{split} J(\Theta) &amp;=-\frac{1}{m}[\sum_{i=1}^m\sum_{k=1}^Ky_k^{(i)}\log(h_\Theta(x^{(i)}))_k+(1-y^{(i)}_k)\log(1-(h_\Theta(x^{(i)}))_k)] \\ &amp;+\frac{\lambda}{2m}\sum_{l=1}^{L-1}\sum_{i=1}^{S_l}\sum_{j=1}^{S_l+1}(\Theta_{ji}^{(l)})^2 \end{split}\)</span></p>
@@ -303,7 +309,7 @@
 <p>则需要计算：</p>
 <ul>
 <li><p><span class="math inline">\(J(\Theta)\)</span></p></li>
-<li><p><span class="math inline">\(\frac{\part}{\part\Theta_{ij}^{(l)}}J(\Theta)\)</span> <span class="math inline">\((\Theta_{ij}^{(l)}\in \R)\)</span></p></li>
+<li><p><span class="math inline">\(\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)\)</span> <span class="math inline">\((\Theta_{ij}^{(l)}\in \mathbb R)\)</span></p></li>
 </ul>
 <h3 id="梯度计算">梯度计算</h3>
 <p>假设给定训练样本<span class="math inline">\((x,y)\)</span>，神经网络结果如图，则：</p>
@@ -330,13 +336,13 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <blockquote>
 <p>其中，没有<span class="math inline">\(\delta^{(1)}\)</span>，因为第一层对应输入层</p>
 </blockquote>
-<p><span class="math inline">\(\frac{\part}{\part\Theta_{ij}^{(l)}}J(\Theta)=a_j^{(l)}\delta_i^{(l+1)}(忽视标准化项，即\lambda=0)\)</span></p>
+<p><span class="math inline">\(\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)=a_j^{(l)}\delta_i^{(l+1)}(忽视标准化项，即\lambda=0)\)</span></p>
 <h3 id="反向传播算法总结">反向传播算法总结</h3>
 <blockquote>
 <p>训练集：<span class="math inline">\(\{(x^{(1)},y^{(1)}),\cdots,(x^{(m)},y^{(m)}) \}\)</span></p>
 </blockquote>
 <ol type="1">
-<li><p>设置<span class="math inline">\(\Delta_{ij}^{l}=0 \ (对于所有的l,i,j)\)</span> (用来计算偏导项：<span class="math inline">\(\frac{\part}{\part \Theta_{ij}^{(l)}}J(\Theta)\)</span>)</p></li>
+<li><p>设置<span class="math inline">\(\Delta_{ij}^{l}=0 \ (对于所有的l,i,j)\)</span> (用来计算偏导项：<span class="math inline">\(\frac{\partial}{\partial \Theta_{ij}^{(l)}}J(\Theta)\)</span>)</p></li>
 <li><p>遍历：</p>
 <p>对于<span class="math inline">\(i\)</span>从1到m：</p>
 <p>​ 设置：<span class="math inline">\(a^{(1)}=x^{(i)}\)</span></p>
@@ -347,7 +353,7 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <p>​ <span class="math inline">\(\Delta_{ij}^{(l)}:=\Delta_{ij}^{(l)}+a_j^{(l)}\delta_i^{(l+1)}(向量化：\Delta^{(l)}:=\Delta^{(l)}+\delta^{(l+1)}(a^{(l)})^T)\)</span></p>
 <p>​ 如果<span class="math inline">\(j \ne 0\)</span>，<span class="math inline">\(D_{ij}^{(l)}:=\frac{1}{m}\Delta_{ij}^{(l)}+\lambda\Theta_{ij}^{(l)}\)</span></p>
 <p>​ 如果<span class="math inline">\(j=0\)</span>，<span class="math inline">\(D_{ij}^{(l)}:=\frac{1}{m}\Delta_{ij}^{(l)}\)</span></p>
-<p>​ <span class="math inline">\(\frac{\part}{\part\Theta_{ij}^{(l)}}J(\Theta)=D_{ij}^{(l)}\)</span></p>
+<p>​ <span class="math inline">\(\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)=D_{ij}^{(l)}\)</span></p>
 <h2 id="理解反向传播">理解反向传播</h2>
 <p>如图：</p>
 <p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709194811584.png" /></p>
@@ -361,7 +367,7 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <p><span class="math inline">\(\begin{split} J(\Theta) &amp;=-\frac{1}{m}[\sum_{i=1}^m\sum_{k=1}^Ky_k^{(i)}\log(h_\Theta(x^{(i)}))_k+(1-y^{(i)}_k)\log(1-(h_\Theta(x^{(i)}))_k)] \\ &amp;+\frac{\lambda}{2m}\sum_{l=1}^{L-1}\sum_{i=1}^{S_l}\sum_{j=1}^{S_l+1}(\Theta_{ji}^{(l)})^2 \end{split}\)</span></p>
 <p>对于某个样本，1个输出单元，并且忽略正则项<span class="math inline">\((\lambda=0)\)</span>则：</p>
 <p><span class="math inline">\(cost(i)=y^{(i)} \log h_\Theta(x^{(i)})+(1-y^{(i)})\log(1-h_\Theta(x^{(i)}))\)</span></p>
-<p><span class="math inline">\(\delta_j^{(l)}=\frac{\part}{\part z^{(l)}_j}cost(i)\)</span></p>
+<p><span class="math inline">\(\delta_j^{(l)}=\frac{\partial}{\partial z^{(l)}_j}cost(i)\)</span></p>
 </blockquote>
 <p>在进行反向传播时</p>
 <p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709200905474.png" /></p>
@@ -369,10 +375,10 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <h2 id="梯度检测">梯度检测</h2>
 <h3 id="梯度的数值估计">梯度的数值估计</h3>
 <p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709194815761.png" /></p>
-<p>假设有一个代价函数<span class="math inline">\(J(\Theta)\)</span>，对应的有一个<span class="math inline">\(\theta \in \R\)</span>，如果想估计<span class="math inline">\(\theta\)</span>在函数上对应的导数，则该导数就是函数在该点切线的斜率，从数值上来求近似导数则首先需要计算<span class="math inline">\(\theta+\epsilon\)</span>，然后计算<span class="math inline">\(\theta-\epsilon\)</span>，然后需要将这两个值对应的点用直线连起来，则连线的斜率就是所求的该点导数的近似值，而这个连线的斜率就是该段的垂直高度除以该段的水平宽度，则高度差为<span class="math inline">\(J(\Theta+\epsilon)-J(\Theta-\epsilon)\)</span>，而宽度差为<span class="math inline">\(2\epsilon\)</span>，所以<span class="math inline">\(\frac{d}{d\Theta}J(\Theta) \approx \frac{J(\Theta+\epsilon)-J(\Theta-\epsilon)}{2\epsilon}\)</span>，<span class="math inline">\(\epsilon=10^{-4}\)</span></p>
-<p>对于参数向量<span class="math inline">\(\theta\)</span>，<span class="math inline">\(\theta \in \R^{n}，\theta=[\theta_1,\theta_2,\cdots,\theta_n]\)</span> <span class="math display">\[
-\frac{\part}{\part \theta_1}J(\theta)\approx\frac{J(\theta_1+\epsilon,\theta_2,\cdots,\theta_n)-J(\theta_1-\epsilon,\theta_2,\cdots,\theta_n)}{2\epsilon} \\ \frac{\part}{\part \theta_2}J(\theta)\approx\frac{J(\theta_1,\theta_2+\epsilon,\cdots,\theta_n)-J(\theta_1,\theta_2-\epsilon,\cdots,\theta_n)}{2\epsilon} \\ \cdots \\
-\frac{\part}{\part \theta_n}J(\theta)\approx\frac{J(\theta_1,\theta_2,\cdots,\theta_n+\epsilon)-J(\theta_1,\theta_2,\cdots,\theta_n-\epsilon)}{2\epsilon}
+<p>假设有一个代价函数<span class="math inline">\(J(\Theta)\)</span>，对应的有一个<span class="math inline">\(\theta \in \mathbb R\)</span>，如果想估计<span class="math inline">\(\theta\)</span>在函数上对应的导数，则该导数就是函数在该点切线的斜率，从数值上来求近似导数则首先需要计算<span class="math inline">\(\theta+\epsilon\)</span>，然后计算<span class="math inline">\(\theta-\epsilon\)</span>，然后需要将这两个值对应的点用直线连起来，则连线的斜率就是所求的该点导数的近似值，而这个连线的斜率就是该段的垂直高度除以该段的水平宽度，则高度差为<span class="math inline">\(J(\Theta+\epsilon)-J(\Theta-\epsilon)\)</span>，而宽度差为<span class="math inline">\(2\epsilon\)</span>，所以<span class="math inline">\(\frac{d}{d\Theta}J(\Theta) \approx \frac{J(\Theta+\epsilon)-J(\Theta-\epsilon)}{2\epsilon}\)</span>，<span class="math inline">\(\epsilon=10^{-4}\)</span></p>
+<p>对于参数向量<span class="math inline">\(\theta\)</span>，<span class="math inline">\(\theta \in \mathbb R^{n}，\theta=[\theta_1,\theta_2,\cdots,\theta_n]\)</span> <span class="math display">\[
+\frac{\partial}{\partial \theta_1}J(\theta)\approx\frac{J(\theta_1+\epsilon,\theta_2,\cdots,\theta_n)-J(\theta_1-\epsilon,\theta_2,\cdots,\theta_n)}{2\epsilon} \\ \frac{\partial}{\partial \theta_2}J(\theta)\approx\frac{J(\theta_1,\theta_2+\epsilon,\cdots,\theta_n)-J(\theta_1,\theta_2-\epsilon,\cdots,\theta_n)}{2\epsilon} \\ \cdots \\
+\frac{\partial}{\partial \theta_n}J(\theta)\approx\frac{J(\theta_1,\theta_2,\cdots,\theta_n+\epsilon)-J(\theta_1,\theta_2,\cdots,\theta_n-\epsilon)}{2\epsilon}
 \]</span> 最后检查是否有：<span class="math inline">\(导数值\approx反向传播计算出的导数值\)</span></p>
 <blockquote>
 <p>总结：</p>
@@ -388,16 +394,14 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <p>一种初始化方法是将其全部设为0，尽管在逻辑回归中这样做是可以的，但实际上在训练网络时，将所有参数初始化为0是不可行的。</p>
 <p>如图，以图中对应的神经网络为例：</p>
 <p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709201923841.png" /></p>
-<p>如果将所有参数都初始化为0，这就意味着所有参数一样，也就会导致<span class="math inline">\(a_1^{(2)}\)</span>和<span class="math inline">\(a_2^{(2)}\)</span>都是以同一输入函数来计算，于是，对于所有训练样本，总会得到<span class="math inline">\(a_1^{(2)}=a_2^{(2)}\)</span>，也会得到<span class="math inline">\(\delta_1^{(2)}=\delta_2^{(2)}\)</span>，同时也会使得<span class="math inline">\(\frac{\part}{\part \Theta_{01}^{(1)}}J(\Theta)=\frac{\part}{\part \Theta_{03}^{(1)}}J(\Theta)\)</span>，这样，即使更新参数后，也会有<span class="math inline">\(\Theta_{01}^{(1)}=\Theta_{02}^{(1)}\)</span></p>
+<p>如果将所有参数都初始化为0，这就意味着所有参数一样，也就会导致<span class="math inline">\(a_1^{(2)}\)</span>和<span class="math inline">\(a_2^{(2)}\)</span>都是以同一输入函数来计算，于是，对于所有训练样本，总会得到<span class="math inline">\(a_1^{(2)}=a_2^{(2)}\)</span>，也会得到<span class="math inline">\(\delta_1^{(2)}=\delta_2^{(2)}\)</span>，同时也会使得<span class="math inline">\(\frac{\partial}{\partial \Theta_{01}^{(1)}}J(\Theta)=\frac{\partial}{\partial \Theta_{03}^{(1)}}J(\Theta)\)</span>，这样，即使更新参数后，也会有<span class="math inline">\(\Theta_{01}^{(1)}=\Theta_{02}^{(1)}\)</span></p>
 <p>所以，每次更新后，这两个隐藏单元的每个参数输入都是相等的，也就是每个输入单元输出的两条线对应的权重仍然相等，这就意味着即使梯度下降进行了一次迭代，仍然有<span class="math inline">\(a_1^{(2)}=a_2^{(2)}\)</span>，这也就意味着这个神经网络得不出比较有用的函数。</p>
 <p>以上问题也被称为<strong>对称权重问题</strong>，也就是所有的权重都是一样的。</p>
 <p>因此，在神经网络模型中，在对参数进行初始化时，需要使用<strong>随机初始化</strong>思想。</p>
 <h2 id="整合">整合</h2>
 <h3 id="训练一个神经网络">训练一个神经网络</h3>
 <p>在训练一个神经网络时，我们要做的第一件事，就是选择一种网络架构 ，这个架构指的是神经元之间的连接模式，如图，可能是以下几种架构中的一种：</p>
-<figure>
-<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709203201111.png" alt="image-20210709203201111" /><figcaption aria-hidden="true">image-20210709203201111</figcaption>
-</figure>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210709203201111.png" /></p>
 <p>那么，我们该如何进行选择呢？</p>
 <ol type="1">
 <li>定义输入单元的数量：即特征的维度<span class="math inline">\(x^{(i)}\)</span></li>
@@ -409,8 +413,8 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
 <li><p>随机初始化权重，通常初始化为很小的接近于零的值</p></li>
 <li><p>实现前向传播算法，计算对于任一<span class="math inline">\(x^{(i)}\)</span>的<span class="math inline">\(h_\Theta(x^{(i)})\)</span></p></li>
 <li><p>代码实现计算代价函数<span class="math inline">\(J(\Theta)\)</span></p></li>
-<li><p>实现反向传播算法来计算偏导项<span class="math inline">\(\frac{\part}{\part\Theta_{jk}^{(l)}}J(\Theta)\)</span></p></li>
-<li><p>使用梯度检查来比较使用反向传播计算的<span class="math inline">\(\frac{\part}{\part\Theta_{jk}^{(l)}}J(\Theta)\)</span>和使用梯度数值估计求出的<span class="math inline">\(J(\Theta)\)</span>对应的偏导数值</p>
+<li><p>实现反向传播算法来计算偏导项<span class="math inline">\(\frac{\partial}{\partial\Theta_{jk}^{(l)}}J(\Theta)\)</span></p></li>
+<li><p>使用梯度检查来比较使用反向传播计算的<span class="math inline">\(\frac{\partial}{\partial\Theta_{jk}^{(l)}}J(\Theta)\)</span>和使用梯度数值估计求出的<span class="math inline">\(J(\Theta)\)</span>对应的偏导数值</p>
 <p>关闭梯度检查</p></li>
 <li><p>使用梯度下降或其它优化算法和反向传播算法结合，计算<span class="math inline">\(J(\Theta)\)</span>最小时对应的参数<span class="math inline">\(\Theta\)</span></p></li>
 </ol>
@@ -590,12 +594,12 @@ a^{(4)} &amp;= h_\Theta(x)=g(z^{(4)})
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">667k</span>
+    <span title="站点总字数">669k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">10:06</span>
+    <span title="站点阅读时长">10:08</span>
 </div>
 
 <br />

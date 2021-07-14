@@ -20,20 +20,25 @@
     var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="优劣解距离法Topsis介绍 TOPSIS （Technique for Order Preference by Similarity to an Ideal Solution ）法是C.L.Hwang和K.Yoon于1981年首次提出，TOPSIS法根据有限个评价对象与理想化目标的接近程度进行排序的方法，是在现有的对象中进行相对优劣的评价。可翻译成逼近理想解排序法，国内常简称优劣解距法。">
+  <meta name="description" content="Part1-机器学习系统设计 确定执行的优先级 假定需要搭建一个垃圾邮件分类器，它是一个监督学习，输入x是邮件的特征，y是1(垃圾邮件)或0(非垃圾邮件)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数模-优劣解距离法">
-<meta property="og:url" content="http://www.zephon.ml/2019/10/22/%E6%95%B0%E6%A8%A1-%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95/index.html">
+<meta property="og:title" content="Part1-机器学习系统设计">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/14/Part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/index.html">
 <meta property="og:site_name" content="Zephon Blog">
-<meta property="og:description" content="优劣解距离法Topsis介绍 TOPSIS （Technique for Order Preference by Similarity to an Ideal Solution ）法是C.L.Hwang和K.Yoon于1981年首次提出，TOPSIS法根据有限个评价对象与理想化目标的接近程度进行排序的方法，是在现有的对象中进行相对优劣的评价。可翻译成逼近理想解排序法，国内常简称优劣解距法。">
+<meta property="og:description" content="Part1-机器学习系统设计 确定执行的优先级 假定需要搭建一个垃圾邮件分类器，它是一个监督学习，输入x是邮件的特征，y是1(垃圾邮件)或0(非垃圾邮件)">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-10-22T05:19:46.000Z">
-<meta property="article:modified_time" content="2019-10-23T01:19:13.321Z">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714135707833.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714143121914.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714143401135.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714145222500.png">
+<meta property="article:published_time" content="2021-07-14T07:06:15.000Z">
+<meta property="article:modified_time" content="2021-07-14T07:06:30.726Z">
 <meta property="article:author" content="Zephon">
-<meta property="article:tag" content="数模">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714135707833.png">
 
-<link rel="canonical" href="http://www.zephon.ml/2019/10/22/%E6%95%B0%E6%A8%A1-%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95/">
+<link rel="canonical" href="http://www.zephon.ml/2021/07/14/Part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
 
 
 <script id="page-configurations">
@@ -46,7 +51,7 @@
   };
 </script>
 
-  <title>数模-优劣解距离法 | Zephon Blog</title>
+  <title>Part1-机器学习系统设计 | Zephon Blog</title>
   
 
 
@@ -195,7 +200,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2019/10/22/%E6%95%B0%E6%A8%A1-%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/14/Part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar1.gif">
@@ -208,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数模-优劣解距离法
+          Part1-机器学习系统设计
         </h1>
 
         <div class="post-meta">
@@ -217,23 +222,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-10-22 13:19:46" itemprop="dateCreated datePublished" datetime="2019-10-22T13:19:46+08:00">2019-10-22</time>
+              <time title="创建时间：2021-07-14 15:06:15 / 修改时间：15:06:30" itemprop="dateCreated datePublished" datetime="2021-07-14T15:06:15+08:00">2021-07-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-10-23 09:19:13" itemprop="dateModified" datetime="2019-10-23T09:19:13+08:00">2019-10-23</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%A8%A1/" itemprop="url" rel="index"><span itemprop="name">数模</span></a>
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
                 </span>
             </span>
 
@@ -250,14 +249,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
+              <span>3.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -269,53 +268,99 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="优劣解距离法Topsis"><a href="#优劣解距离法Topsis" class="headerlink" title="优劣解距离法Topsis"></a>优劣解距离法Topsis</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p> <strong>TOPSIS （Technique for Order Preference by Similarity to an Ideal Solution ）法</strong>是C.L.Hwang和K.Yoon于1981年首次提出，TOPSIS法根据有限个评价对象与理想化目标的接近程度进行排序的方法，是在现有的对象中进行相对优劣的评价。可翻译成逼近理想解排序法，国内常简称优劣解距法。</p>
-<h2 id="指标分类"><a href="#指标分类" class="headerlink" title="指标分类"></a>指标分类</h2><ul>
-<li>极大型指标(效益性指标)：越大越好，例如成绩</li>
-<li>极小型指标(成本型指标)：越小越好，例如费用</li>
-<li>中间型指标：越接近某个值越好，例如水质量评估的PH值 </li>
-<li>区间型指标：落在某个区间最好，例如体温</li>
-</ul>
-<p>将所有指标转化为极大型称为指标正向化(最常用)</p>
-<p>极小型指标转换为极大型指标的公式：max-x</p>
-<p>为了消去不同指标量纲(单位)的影响，需要对已经正向化的矩阵进行标准化处理</p>
-<p>标准化计算公式:</p>
-<script type="math/tex; mode=display">
-标准化矩阵中的元素\frac{z_{ij}=x_{ij}}{\sqrt(\sum_{i=1}^{n}(x_{ij}^2))}</script><h2 id="计算得分"><a href="#计算得分" class="headerlink" title="计算得分"></a>计算得分</h2><p>计算评分公式：$\frac{x与最小值的距离}{x与最大值的距离+x与最小值的距离}$</p>
-<p>定义最大值$ Z^+=(Z_1^{+},Z_2^{+},\cdots,Z_{m}^{+})=(max(z_{11},z_{21},\cdots,z_{n1}),max(z_{12},z_{22},\cdots,z_{n2}),\cdots,max(z_{1m},z_{2m},\cdots,z_{nm})) $</p>
-<p>定义最大值$ Z^-=(Z_1^{-},Z_2^{-},\cdots,Z_{m}^{-})=(min(z_{11},z_{21},\cdots,z_{n1}),min(z_{12},z_{22},\cdots,z_{n2}),\cdots,min(z_{1m},z_{2m},\cdots,z_{nm})) $</p>
-<p>定义第i(i=1,2,…n)个评价对象与最大值的距离$ D_i^+=\sqrt{\sum_{j=1}^m(Z_j^+-z_{ij})^2} $</p>
-<p>定义第i(i=1,2,…n)个评价对象与最小值的距离$ D_i^-=\sqrt{\sum_{j=1}^m(Z_j^—z_{ij})^2} $</p>
-<p>则可以计算出第i(i=1,2,…,n)个评价类对象未归一化的得分：$ S_i=\frac{D_i^-}{D_i^++D_i^-} $</p>
-<p>0$\leqslant S_i\leqslant$1，且$S_i$越大$D_i^+$越小，即越接近最大值。</p>
-<h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><ol>
-<li>将原始矩阵正向化，所谓将原始矩阵正向化，就是将所有的指标类型统一转化为极大型指标<ul>
-<li>极小型转为极大型公式：max-x</li>
-<li>中间型转为极大型公式：$ M=max(|x_i-x_{best}|,x_i^{‘}=1-\frac{|x_i-x_{best}|}{M}) $</li>
-<li>区间型转为极大型公式：$ M=max(a-min(x_i),max(x_i)-b),x_i^{‘}=\begin{cases} 1-\frac{a-x}{M}，x<a\\ 1 ,a\leqslant x \leqslant b\\1-\frac{x-b}{M}，x>b\end{cases}  $</li>
-</ul>
-</li>
-<li>正向化矩阵标准化<ul>
-<li>目的是消除不同指标量纲(单位)的影响</li>
-<li>直接使用标准化公式$ z_{ij}=\frac{x_{ij}}{\sqrt{\sum_{i=1}^{n}x_{ij}^2}} $（每一个元素/sqrt(其所在列的元素的平方和)）</li>
-</ul>
-</li>
-<li>计算得分并归一化<ul>
-<li>方法即<strong>计算得分</strong>中的步骤</li>
-</ul>
-</li>
-</ol>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><ol>
-<li><p>可以使用<strong>层次分析法</strong>给评价指标确定权重：$\sum_{j=1}^m\omega_j=1$</p>
-</li>
-<li><p>基于熵权法对Topsis模型修正</p>
+        <h1 id="part1-机器学习系统设计">Part1-机器学习系统设计</h1>
+<h2 id="确定执行的优先级">确定执行的优先级</h2>
+<p>假定需要搭建一个垃圾邮件分类器，它是一个监督学习，输入x是邮件的特征，y是1(垃圾邮件)或0(非垃圾邮件)</p>
+<h3 id="对于邮件特征如何选取呢">对于邮件特征如何选取呢？</h3>
+<p>可以选择100个可以表示垃圾或非垃圾邮件的单词</p>
+<blockquote>
+<p>如：选择的单词是：deal,buy,discont,now,...</p>
+<p>则对于邮件内容为Deal of the week! Buy now!对应的x可能是：</p>
+<p><span class="math inline">\(x=\left[ \begin{matrix} 0\\ 1 \\ 1 \\ \cdots \\ 1 \\ \cdots \end{matrix} \right]\begin{matrix} discont\\ buy \\ deal \\ \cdots \\ now \\ \cdots \end{matrix}，\ x\in \mathbb R^{100}\)</span></p>
+<p>即：<span class="math inline">\(x_j = \left\{ \begin{align} &amp;1,如果x_j出现在邮件中 \\ &amp;0,如果x_j没有出现在邮件中 \end{align} \right.\)</span></p>
+</blockquote>
+<blockquote>
+<p>注：在实际工作中，普遍的做法是在训练集中选出出现频率最多的n个单词(n通常在10000到50000之间)，然后将它们作为特征向。</p>
+</blockquote>
+<h3 id="如何在有限时间下尽可能降低错误率呢">如何在有限时间下，尽可能降低错误率呢？</h3>
 <ul>
-<li>商权法依据原理：指标的变异程度(方差)越小，所反映的信息量也越少，其对应的权值也应该越低。</li>
-<li>信息量：越有可能发生的事情，信息量越少；越不可能发生的事情，信息量就越多。</li>
-<li>衡量事情发生的可能性的大小：概率</li>
+<li>收集大量的数据</li>
+<li>使用更加复杂的特征(如：邮件头信息、邮件主体信息、检测拼写错误)</li>
 </ul>
-</li>
+<h2 id="误差分析">误差分析</h2>
+<p>推荐方法：</p>
+<ul>
+<li>通过一个简单的算法来快速实现它，然后在交叉验证集上验证</li>
+<li>画出学习曲线来检测出高偏差问题或高方差问题，然后判断是否使用更多数据或特征</li>
+<li>误差分析：说明当前系统的优缺点，指导我们想出办法来改进。如实现垃圾邮件分类器时，观察交叉验证集的情况，然后看看那些被错误分类的文件，观察它们共同的特征和规律，进而设计新特征</li>
+</ul>
+<p>例：</p>
+<blockquote>
+<p>假设我们正在做一个垃圾邮件分类器，<span class="math inline">\(m_{cv}=500\)</span>，假设结果有较高的错误率，错误分类了100个交叉验证集样本，现在，我们要做的是手动核查这100个错误，然后手工为它们分类，同时考虑：</p>
+<ol type="1">
+<li>这些邮件是什么类型的邮件（如：卖药的、卖假货的、钓鱼的等）</li>
+<li>有什么线索或特征能帮助正确地进行分类（如：拼写错误、奇怪的邮件头、奇怪标点等）</li>
 </ol>
+</blockquote>
+<h3 id="数值估计的重要性">数值估计的重要性</h3>
+<p>对学习算法要有一种数值估计的方法，意思就是当改进学习算法时，如果算法能够返回一个数值评价指标，来估计算法执行的效果，将会很有帮助。</p>
+<p>如：决定是否应该将 discount/discounts/discounted/discounting 视为同一个单词？</p>
+<p>可以使用词干提取软件</p>
+<p>误差分析或许无法帮助决定它对于算法结果是否有效果，唯一的做法就是尝试它，其后看它在实际中是否有用。而如果要这样做的话，通过数值估计来评估算法的效果将会非常有用，如：</p>
+<p>在不使用词干提取时，错误率为5%；在使用词干提取时，错误率为3%，则可以很快判断出使用词干提取是一个有效方法。</p>
+<p>在这个特征问题下，这是很自然的单一规则的数值评价指标，就叫做交叉验证错误率，但也有一些其它带有数值评价指标的例子，还需要进行一些处理。</p>
+<blockquote>
+<p>注：通常推荐在交叉验证集上进行误差分析</p>
+</blockquote>
+<h2 id="不对称性分类的误差评估">不对称性分类的误差评估</h2>
+<p>例：</p>
+<blockquote>
+<p>以癌症分类为例，我们拥有病人的特征变量，我们希望知道他们是否患有癌症。则：</p>
+<p>训练逻辑回归模型<span class="math inline">\(h_\theta(x)\)</span> （y=1表现患有癌症，y=0表示没有）</p>
+</blockquote>
+<p>假设我们在测试集上测试，发现错误率只有1%，有99%的正确诊断，看起来不错，但是假如我们发现在测试集中只有0.5%的患者真正得了癌症，因此在我们的筛选程序中，有0.5%的患者患了癌症。</p>
+<p>因此，在这个例子中，1%的错误率就不再显得那么好了，因为：</p>
+<blockquote>
+<p>假设我们的算法所有的输出都<span class="math inline">\(y=0\)</span>，则意味着，其实错误率只有0.5%，这甚至比上述例子更好，这是一个非机器学习算法。</p>
+</blockquote>
+<p>这种情况发生正例和负例的比率非常接近于一个极端情况，我们把这种情况称为<strong>不对称性分类</strong>，这种情况下，使用分类误差或分类精确度来作为评估度量就可能会产生如下问题：如有一个算法的精确度是99.2%，即误差只有0.8%，假设对算法进行了一些改变，结果精确度变成了99.5%，这样到底是否是算法的提升呢？使用数值对误差进行评估是调整算法非常有用的一种方法，而如果有一个不对称分类的话，用分类精确度就并不能很好地衡量算法，此时就需要一个不同的误差度量值或者不同的评估度量值。</p>
+<h3 id="查准率召回率">查准率/召回率</h3>
+<p>假设我们正在使用测试集来评估一个分类模型，对于测试集中的样本，假设是一个二分类问题，则每个结果都会为0或1，我们的学习算法要做的就是值的预测，并且学习算法会为每个测试集中的实例做出预测，预测值也是0或1，即如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714135707833.png" /></p>
+<p>这样，我们就有另一种方式来评估算法的表现，我们要计算两个数字，<strong>查准率</strong>和<strong>召回率</strong></p>
+<p>查准率：(对于所有我们预测患有癌症的病人中有多大比率的病人是真正患有癌症的？)</p>
+<p><span class="math inline">\(查准率=\frac{True\ positive}{\#predicted\ positive}=\frac{True\ positive}{True\ positive+False\ positive}\)</span></p>
+<p>召回率：(如果所有测试集或验证集中的病人，确实得了癌症，有多大比例我们正确预测他们得了癌症，召回：可以理解为挽救了多少病人)</p>
+<p><span class="math inline">\(召回率=\frac{True\ positive}{\#actual\ positive}=\frac{True\ positive}{True\ positive+False\ negative}\)</span></p>
+<p>这样，对于上述的预测值总是<span class="math inline">\(y=0\)</span>的，则召回率就是0，这样就能轻易发现算法的问题。</p>
+<blockquote>
+<p>总之，如果一个分类模型，具有较高的查准率和召回率，则可以确信地说这个算法表现很好</p>
+</blockquote>
+<h2 id="查准率和召回率的权衡">查准率和召回率的权衡</h2>
+<p>假设还是以上述癌症预测为例，我们使用逻辑回归预测<span class="math inline">\(0 \le h_\theta(x) \le 1\)</span>，则如果<span class="math inline">\(h_\theta(x) \ge 0.5,y=1\)</span>；<span class="math inline">\(h_\theta(x)&lt;0.5,y=0\)</span>，假设我们想要能非常自信地说明<span class="math inline">\(y=1\)</span>的情况，由于癌症对于人的影响是较大，所以在有较高准确性前，不能随意判断。</p>
+<p>这样，一种方法是调整阈值，即：<span class="math inline">\(h_\theta(x) \ge 0.7,y=1;h_\theta(x)&lt;0.7,y=0\)</span>，这样就会有较高的查准率，而召回率则会降低。</p>
+<p>同样的，假设我们希望避免遗漏掉患有癌症的人，由于如果一个人患有癌症，但我们并没有告诉他，则这可能造成严重后果，这种情况下，我们就需要将阈值设置得较低，如0.3，这样就会有较高的召回率，而查准率则会降低。</p>
+<p>对应地，可能画出它们之间的关系曲线，如图(也有可能是其它样式的)：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714143121914.png" /></p>
+<h3 id="f_1值-f值"><span class="math inline">\(F_1\)</span>值 (F值)</h3>
+<p>如何比较不同的查准率和召回率？具体地，如果我们有如图三个算法对应不同的查准率和召回率，如何进行比较？</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714143401135.png" /></p>
+<p>可能可以使用平均值：<span class="math inline">\(Average=\frac{P+R}{2}\)</span>，但这可能并不是一个很好的解决办法，因为其对于极端情况处理不好</p>
+<p>使用<span class="math inline">\(F_1\)</span> Score：<span class="math inline">\(F_1=2\frac{PR}{P+R}\)</span></p>
+<p>通过<span class="math inline">\(F_1\)</span>值计算，可以得出三个算法对应的值分别是：0.444,0.175,0.0392；可以看出，算法1相对较好</p>
+<p><span class="math inline">\(P=0或R=0 \Rightarrow F=0\)</span></p>
+<p><span class="math inline">\(P=1且R=1 \Rightarrow F=1\)</span></p>
+<h2 id="机器学习数据">机器学习数据</h2>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210714145222500.png" /></p>
+<p>如图，大多情况下，随着数据集的增大，算法表现会越来越好</p>
+<h3 id="大数据原理">大数据原理</h3>
+<ul>
+<li><p>假设特征<span class="math inline">\(x\in \mathbb R^{n+1}\)</span>包含足够的信息来正确地<span class="math inline">\(y\)</span></p>
+<p>如对于房价预测中，只给定房屋面积，而没有其它信息，即使数据再多，可能预测结果也不是那么准确。</p>
+<p>或者说：给定这个输入x，如果是人类专家，能准确地预测出y么？</p></li>
+<li><p>使用一个具有很多参数的学习算法(如：有许多特征的逻辑回归或线性回归、有很多隐藏单元的神经网络)(本身就是低偏差、高方差的模型)</p></li>
+<li><p>使用非常大的数据集</p></li>
+</ul>
 
     </div>
 
@@ -331,7 +376,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://www.zephon.ml/2019/10/22/%E6%95%B0%E6%A8%A1-%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95/" title="数模-优劣解距离法">http://www.zephon.ml/2019/10/22/数模-优劣解距离法/</a>
+    <a href="http://www.zephon.ml/2021/07/14/Part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="Part1-机器学习系统设计">http://www.zephon.ml/2021/07/14/Part1-机器学习系统设计/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
@@ -343,7 +388,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E6%95%B0%E6%A8%A1/" rel="tag"><i class="fa fa-tag"></i> 数模</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
           </div>
 
         
@@ -352,13 +397,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/10/21/%E6%95%B0%E6%A8%A1-%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/" rel="prev" title="数模-层次分析法">
-      <i class="fa fa-chevron-left"></i> 数模-层次分析法
+    <a href="/2021/07/13/Part1-%E6%AD%A3%E5%88%99%E5%8C%96%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%92%8C%E5%81%8F%E5%B7%AE%E6%96%B9%E5%B7%AE%E7%BB%83%E4%B9%A0/" rel="prev" title="Part1-正则化线性回归和偏差方差练习">
+      <i class="fa fa-chevron-left"></i> Part1-正则化线性回归和偏差方差练习
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/10/23/%E6%95%B0%E6%A8%A1-%E5%8D%81%E5%A4%A7%E7%AE%97%E6%B3%95/" rel="next" title="数模-十大算法">
-      数模-十大算法 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -422,7 +464,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E5%8A%A3%E8%A7%A3%E8%B7%9D%E7%A6%BB%E6%B3%95Topsis"><span class="nav-number">1.</span> <span class="nav-text">优劣解距离法Topsis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E6%A0%87%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">指标分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%BE%97%E5%88%86"><span class="nav-number">1.3.</span> <span class="nav-text">计算得分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.4.</span> <span class="nav-text">使用步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">1.5.</span> <span class="nav-text">扩展</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">Part1-机器学习系统设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%89%A7%E8%A1%8C%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.1.</span> <span class="nav-text">确定执行的优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E9%82%AE%E4%BB%B6%E7%89%B9%E5%BE%81%E5%A6%82%E4%BD%95%E9%80%89%E5%8F%96%E5%91%A2"><span class="nav-number">1.1.1.</span> <span class="nav-text">对于邮件特征如何选取呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%89%E9%99%90%E6%97%B6%E9%97%B4%E4%B8%8B%E5%B0%BD%E5%8F%AF%E8%83%BD%E9%99%8D%E4%BD%8E%E9%94%99%E8%AF%AF%E7%8E%87%E5%91%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">如何在有限时间下，尽可能降低错误率呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">误差分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E4%BC%B0%E8%AE%A1%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">1.2.1.</span> <span class="nav-text">数值估计的重要性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%AF%B9%E7%A7%B0%E6%80%A7%E5%88%86%E7%B1%BB%E7%9A%84%E8%AF%AF%E5%B7%AE%E8%AF%84%E4%BC%B0"><span class="nav-number">1.3.</span> <span class="nav-text">不对称性分类的误差评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E5%87%86%E7%8E%87%E5%8F%AC%E5%9B%9E%E7%8E%87"><span class="nav-number">1.3.1.</span> <span class="nav-text">查准率&#x2F;召回率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E5%87%86%E7%8E%87%E5%92%8C%E5%8F%AC%E5%9B%9E%E7%8E%87%E7%9A%84%E6%9D%83%E8%A1%A1"><span class="nav-number">1.4.</span> <span class="nav-text">查准率和召回率的权衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#f_1%E5%80%BC-f%E5%80%BC"><span class="nav-number">1.4.1.</span> <span class="nav-text">\(F_1\)值 (F值)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%95%B0%E6%8D%AE"><span class="nav-number">1.5.</span> <span class="nav-text">机器学习数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">大数据原理</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -189,6 +189,170 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/02/07/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CJSTL%E6%A0%87%E7%AD%BE-%E5%A4%8D%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/07/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CJSTL%E6%A0%87%E7%AD%BE-%E5%A4%8D%E4%B9%A0/" class="post-title-link" itemprop="url">EL表达式和JSTL标签-复习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-07 12:53:21" itemprop="dateCreated datePublished" datetime="2020-02-07T12:53:21+08:00">2020-02-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-09 20:18:15" itemprop="dateModified" datetime="2020-02-09T20:18:15+08:00">2020-02-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/J2EE/" itemprop="url" rel="index"><span itemprop="name">J2EE</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="EL表达式和JSTL标签"><a href="#EL表达式和JSTL标签" class="headerlink" title="EL表达式和JSTL标签"></a>EL表达式和JSTL标签</h1><h2 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h2><ul>
+<li><p>概念：Expression Language 表达式语言</p>
+</li>
+<li><p>作用：替换和简化jsp页面中java代码的编写</p>
+</li>
+<li><p>语法：${表达式}</p>
+</li>
+<li><p>注意：</p>
+<ul>
+<li>jsp默认支持el表达式的，如果要忽略EL表达式，可<ol>
+<li>设置jsp中page指令中：isELIgnored=”true” 忽略当前jsp页面中所有el表达式</li>
+<li>\ ${表达式}：忽略当前这个el表达式</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>使用：</p>
+<ul>
+<li><p>运算</p>
+<ol>
+<li>算数运算符：+ - * /(div) %(mod)</li>
+<li>比较运算符：&gt; &lt; &gt;= &lt;= != ==</li>
+<li>逻辑运算符：&amp;&amp;(and) ||(or) !(not)</li>
+<li>空运算符：empty<ul>
+<li>功能：判断字符串/集合/数组对象是否为null并且长度是否为0 <code>$&#123;empty list&#125;</code> </li>
+<li><code>$&#123;not empty str&#125;</code></li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>获取值</p>
+<ol>
+<li>EL表达式只能从域对象中获取值</li>
+<li>语法：<ol>
+<li>${域名称.键名}：从指定域中获取指定键的值<ul>
+<li>域名称：<ol>
+<li>pageScope—&gt;pageContext</li>
+<li>requestScope—&gt;request</li>
+<li>sessionScope—&gt;session</li>
+<li>applicationScope—&gt;application(ServletContext)</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>${键名}：表示依次从最小的域中查找是否有该键对应的值，直到找到为止</li>
+</ol>
+</li>
+<li>获取对象、List集合、Map集合的值<ol>
+<li>对象：<code>$&#123;域名称.键名.属性名&#125;</code><ul>
+<li>本质上会去调用对象的getter方法</li>
+</ul>
+</li>
+<li>List集合：<code>$&#123;域名称.键名[索引]&#125;</code></li>
+<li>Map集合：<code>$&#123;域名称.键名.key名称&#125;   $&#123;域名称.键名[&quot;key名称&quot;]&#125;</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>隐匿对象</p>
+<ul>
+<li><p>EL表达式有11个隐式对象</p>
+</li>
+<li><p>pageContext：获取jsp其它八个内置对象</p>
+<p>${pageContext.request.contextPath}：动态获取虚拟目录</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/07/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%92%8CJSTL%E6%A0%87%E7%AD%BE-%E5%A4%8D%E4%B9%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/02/06/Filter%E5%92%8CListener-%E5%A4%8D%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1105,100 +1269,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2019/12/13/%E5%85%B6%E5%AE%83-%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar1.gif">
-      <meta itemprop="name" content="Zephon">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Zephon Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/13/%E5%85%B6%E5%AE%83-%E6%95%B0%E6%8D%AE%E8%8E%B7%E5%8F%96/" class="post-title-link" itemprop="url">数据获取</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-13 16:15:46 / 修改时间：16:13:48" itemprop="dateCreated datePublished" datetime="2019-12-13T16:15:46+08:00">2019-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%B6%E5%AE%83/" itemprop="url" rel="index"><span itemprop="name">其它</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>159</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数据获取"><a href="#数据获取" class="headerlink" title="数据获取"></a>数据获取</h1><ol>
-<li><p>iiMedia Research(艾媒咨询)/综合类研报 <a target="_blank" rel="noopener" href="https://research.cicc.com/index">点击访问</a></p>
-</li>
-<li><p>艺恩/影视类数据分析<a target="_blank" rel="noopener" href="http://www.endata.com.cn/">点击访问</a></p>
-</li>
-<li>中文互联网数据研究资讯中心/综合类研报<a target="_blank" rel="noopener" href="http://www.199it.com/archives/category/sharingeconomy">点击访问</a></li>
-<li>易观智库商业信息服务平台<a target="_blank" rel="noopener" href="https://www.analysys.cn/">点击访问</a></li>
-<li>北京赛诺市场研究<a target="_blank" rel="noopener" href="http://cn.sino-mr.com/about/profile">点击访问</a></li>
-<li>移动数据报告-移动观象台<a target="_blank" rel="noopener" href="http://mi.talkingdata.com/reports.html?category=IndustryReport">点击访问</a></li>
-<li>旅游圈/旅游财经研报<a target="_blank" rel="noopener" href="https://www.dotour.cn/">点击访问</a></li>
-<li>金研报/金融类研报<a target="_blank" rel="noopener" href="https://research.cicc.com/index">点击访问</a></li>
-<li>卡思数据/自媒体访问数据<a target="_blank" rel="noopener" href="https://www.caasdata.com/index/rank/index.html">点击访问</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1269,7 +1339,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1324,12 +1394,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">679k</span>
+    <span title="站点总字数">682k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">10:17</span>
+    <span title="站点阅读时长">10:20</span>
 </div>
 
 <br />

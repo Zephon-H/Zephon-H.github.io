@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深度学习-误差分析 执行误差分析  引言：假设在进行一个猫分类的训练，目前已经达到了90%的正确率，经过查看发现错误的数据中有许多的关于狗的被识别错误，这里是否需要正对狗收集更多的图片？或设计一些只处理狗的算法功能？或做一个项目专门处理狗？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习-误差分析">
+<meta property="og:url" content="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="深度学习-误差分析 执行误差分析  引言：假设在进行一个猫分类的训练，目前已经达到了90%的正确率，经过查看发现错误的数据中有许多的关于狗的被识别错误，这里是否需要正对狗收集更多的图片？或设计一些只处理狗的算法功能？或做一个项目专门处理狗？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225114359778.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225115046338.png">
+<meta property="article:published_time" content="2020-12-24T11:42:46.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.011Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225114359778.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深度学习-误差分析 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习-误差分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-24 19:42:46" itemprop="dateCreated datePublished" datetime="2020-12-24T19:42:46+08:00">2020-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="深度学习-误差分析">深度学习-误差分析</h1>
+<h2 id="执行误差分析">执行误差分析</h2>
+<blockquote>
+<p>引言：假设在进行一个猫分类的训练，目前已经达到了90%的正确率，经过查看发现错误的数据中有许多的关于狗的被识别错误，这里是否需要正对狗收集更多的图片？或设计一些只处理狗的算法功能？或做一个项目专门处理狗？</p>
+</blockquote>
+<p>错误分析流程：</p>
+<ol type="1">
+<li>收集一些比如100个错误标记的验证集的例子</li>
+<li>检查其中有多少个是狗</li>
+<li>假如狗的概率是5%，则对应的100个中有5个是狗标记错误的，这样的话，如果采取上述一些比较耗费时间的措施，就有可能浪费了很多时间，但最多也只能将正确率从90%提升到90.5%，这个值也可以称为是改善算法性能的上限</li>
+<li>假如狗的概率是50%，则这种情况下，花费一些时间去解决狗的问题可能效果就更好，可能就将正确率从90%提升到了95%</li>
+</ol>
+<p>有时，在进行错误分析的同时，也可以并行评估几个问题：</p>
+<p>以猫检测器为例：</p>
+<ol type="1">
+<li>或许可以改善针对狗的图片的性能</li>
+<li>或许可以改善针对一些猫科动物如狮子、豹等的误识别问题</li>
+<li>或许可以改善在模糊图像上的性能</li>
+</ol>
+<p>综上可以使用表格进行记录如：</p>
+<table>
+<thead>
+<tr class="header">
+<th>Image</th>
+<th>狗识别错误</th>
+<th>猫科动物识别错误</th>
+<th>模糊图像</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Y</td>
+<td></td>
+<td></td>
+<td>泰迪犬</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td></td>
+<td></td>
+<td>Y</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td></td>
+<td>Y</td>
+<td>Y</td>
+<td>下雨天的大型猫科动物</td>
+</tr>
+<tr class="even">
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td>总百分比</td>
+<td>8%</td>
+<td>43%</td>
+<td>61%</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>然后根据统计百分比，决定是否值得去处理每个不同的错误类型</p>
+<h2 id="清楚标注错误的数据">清楚标注错误的数据</h2>
+<blockquote>
+<p>如果发现数据中有一些标记错误的例子，应该怎么办？</p>
+</blockquote>
+<ol type="1">
+<li>考虑训练集，事实证明，深度学习算法对于训练集中的随机错误是相当健壮的，只要标记出错 的例子离随机错误不太远，如果错误足够随机，那么放着这些错误不管可能也没问题，而不用花费时间去修复，只要数据集足够大，实际错误率一般不会太高</li>
+<li>如果是验证集或测试集中有这些标记出错的例子，一般建议在错误分析时，添加一个额外的列，这样就可以进行统计了，如果这些标记错误严重影响了在开发集上评估算法的能力，就应该花时间去修正，但如果没有严重影响，可能就不应该浪费时间去修正，比较修正最大可能带来的正确率的提升是否足够多</li>
+</ol>
+<p>修正验证集或测试集的错误样本：</p>
+<ul>
+<li>无论怎样，都要同时作用到验证集和测试集上，从而确保他们来自相同分布</li>
+<li>考虑同时检验算法判断正确和判断错误的例子</li>
+<li>可能决定只修正开发集和测试集中的标签，因为它们通常比训练集小的多，这样其实是可以的，但需要进行一些步骤用于处理训练集分布和验证集、测试集不同的情况，但是验证集和测试集来自同一分布非常重要</li>
+</ul>
+<h2 id="快速搭建第一个系统并进行迭代">快速搭建第一个系统，并进行迭代</h2>
+<p>以语音识别为例：</p>
+<ul>
+<li>嘈杂的背景
+<ul>
+<li>咖啡厅噪音</li>
+<li>汽车噪音</li>
+<li>...</li>
+</ul></li>
+<li>带口音的声音</li>
+<li>远距离声音</li>
+<li>儿童声音</li>
+<li>口吃等类似的声音</li>
+<li>...</li>
+</ul>
+<blockquote>
+<p>一般来说，对于几乎所有的机器学习程序，都会有很多的不同方向可以选择前进，并且每个方向都是相对合理的，可以改善系统，但挑战在于，如何选择一个方向集中精力处理</p>
+</blockquote>
+<ul>
+<li>设定验证集和测试集</li>
+<li>迅速建立初始化系统</li>
+<li>使用偏差/方差分析和错误分析等来确定下下一步优先做什么</li>
+</ul>
+<h2 id="在不同分布上训练和测试">在不同分布上训练和测试</h2>
+<blockquote>
+<p>eg: 假设需要开发一个识别猫的App，从网上找到的训练数据集往往是比较清楚的高清图片等，但用户可能会上传一些用手机拍摄的模糊照片。因此，有两个数据来源，一个是真正关心的数据分布，来自应用上传的数据，一般比较业余，另一个数据来源就是从网上获取的相对专业的猫图片，因此你可能会获取这样一些数据，大量的如200,000张清楚的图片，和少量的如10,000张模糊的图片，相当于它们并不来自同一分布，那么应该怎么做？</p>
+</blockquote>
+<p>选择1：将这些图片合在一起，相当于有了210,000张照片，然后随机分配到训练、开发和测试集中，这样做好处在于：训练集、验证集和测试集都来自同一分布，更好管理；坏处在于：如果观察验证集则会发现这些图片中很多图片来自网上下载的高清图片，并不是真正关心的数据分布，真正要处理的是手机上传的图片，因此通常<strong>不建议</strong>使用这种方式</p>
+<p>选择2：训练集是来自网上下载的200,000张图片，如果需要再加上5000张来自手机上传的图片，然后对于验证集和测试集，则都是手机上传的图片，这样划分的好处在于：现在验证集中针对的目标就是想要处理的目标；坏处在于：现在的训练集分布和验证集、测试集分布不一样，但事实证明这样划分，在长期能带来更好的性能</p>
+<blockquote>
+<p>eg: 假设你需要实现一个语音激活后视镜，那么可能会从网上获取或购买一些各种语音数据，但不一定和你的目的相关，这些数据非常多(如500,000段语音)，还会有一些语音激活后视镜的相关语间数据，而这些就相对比较少(如20,000段语音)</p>
+</blockquote>
+<p>在这个例子中，可以这样划分数据集：</p>
+<p>将500,000段语音作为训练集，然后对于验证集和测试集每个包括10,000段语音激活后视镜相关的语音，或510K+5K+5K划分</p>
+<h2 id="不匹配数据分布的偏差和方差">不匹配数据分布的偏差和方差</h2>
+<blockquote>
+<p>还是以猫分类器为例，假设人类错误率约为0%，因此贝叶斯错误率(或贝叶斯最优错误率)在这个问题中基本为0%，假设训练集错误率是1%，验证集错误率是10%</p>
+</blockquote>
+<p>如果验证集和训练集来自同一分布，可能会认为这里存在很大的方差问题，算法不能很好的泛化；</p>
+<p>但如果训练集和验证集来自不同的分布，就不能下定上述结论了，因为可能算法在验证集上做得不错，可能是因为训练集容易识别，因为训练集都是高清图上，而验证集则比较难识别，因此，可能算法并没有方差问题，这只是反映了验证集中包含更难分类的图片</p>
+<blockquote>
+<p>因此，当训练集和验证集来自不同的分布时，再看训练错误和验证错误，有两件事情发生了变化 ：</p>
+<ol type="1">
+<li>算法只使用了训练集数据，并没有使用验证集数据</li>
+<li>验证集数据来自不同的分布</li>
+</ol>
+<p>所以，很难确认这增加的9%的错误率有多少是因为算法没用到验证集的数据导致的</p>
+</blockquote>
+<p>为了解决这种问题，定义一种新的数据集——训练-验证数据集是有必要的，它和训练集数据分布一样，但不用来训练，具体步骤是：随机打散一些训练集，然后分出一部分作为 训练-验证集，就像验证集和测试集一样，训练集和训练-验证集也来自同一分布，但不同的是，现在，只在训练集上训练神经网络，然后需要查看的是分类器在训练集上的错误、在训练-验证集上的错误、还有在验证集上的错误</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225114359778.png" alt="image-20201225114359778" /><figcaption>image-20201225114359778</figcaption>
+</figure>
+<p>假设上述问题中的训练集错误率是1%，训练-验证集错误率是9%，验证集错误率是10%，则说明算法存在方差问题；</p>
+<p>同样假设上述问题中的训练集错误率是1%，训练-验证集错误率是1.5%，验证集错误是10%，则说明存在数据不匹配问题</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225115046338.png" alt="image-20201225115046338" /><figcaption>image-20201225115046338</figcaption>
+</figure>
+<h2 id="处理数据不匹配">处理数据不匹配</h2>
+<ul>
+<li>如果发现有严重的数据不匹配问题，通常会做错误分析，了解训练集和验证、测试集的具体差异</li>
+<li>可以尝试将训练集数据变得更像验证集，或收集更多类似验证集和测试集的数据</li>
+<li>人工合成数据</li>
+</ul>
+<h2 id="迁移学习">迁移学习</h2>
+<blockquote>
+<p>神经网络可以从一个任务中学习，并将这些学习的内容应用到另一个独立的任务中</p>
+</blockquote>
+<p>假设有一个已经训练好的图像识别神经网络，有输入图像x和识别对象y，将这个神经网络拿出进行迁移，如放射性诊断，可以做的是将神经网络最后的输出层拿走，然后将进入最后一层的权重删掉，然后为最后一层重新赋予随机权重，然后让它在放射诊断数据上训练</p>
+<p>即要实现迁移学习，要做的就是将数据集换成新的x和y，x就是上述的放射性诊断图，y是诊断结果，然后将最后一层的权重随机初始化，然后在这个新数据集上重新训练网络。如果新数据集很小，你可能只需要重新训练最后一层的权重，并保持其它参数不变；但如果有足够多的数据，可以重新训练神经网络中剩下的所有层</p>
+<p>规则通常是：如果有一个小数据集，就只训练输出层前的最后一层或两层，如果有大量数据，则可以重新训练网络中的所有参数</p>
+<p>如果重新训练网络中的所有参数，那么这个在图像识别数据的初期训练阶段(称为预训练)，如果以后更新所有权重，然后在新数据上训练，这个过程也称为微调</p>
+<blockquote>
+<p>为什么会有这样的效果呢？</p>
+<p>有很多低层次特征如边缘检测、曲线检测、阳性对象检测等，从大的图像识别数据库中学习的这些能力，可能有助于算法在新数据诊断中做得更好</p>
+</blockquote>
+<p>迁移学习，通常迁移来源问题中有很多数据，但迁移目标问题中通常数据相对较少，而反过来往往是不可行的。</p>
+<blockquote>
+<p>总结：什么时候迁移学习是有意义的？</p>
+<ul>
+<li><p>想提高任务B的性能</p></li>
+<li><p>任务A和任务B有一样类型的输入</p></li>
+<li><p>任务A的数据比任务B的数据多</p></li>
+<li><p>任务A的低层次特征对任务B有帮助</p></li>
+</ul>
+</blockquote>
+<h2 id="多任务学习">多任务学习</h2>
+<blockquote>
+<p>在迁移学习中，步骤是串行的，从任务A学习，然后迁移到任务B</p>
+<p>而在多任务学习中，是现时开始学习的，尝试让单个神经网络同时做几件事情，然后希望让每个任务都能帮到其它任务</p>
+</blockquote>
+<p>以自动驾驶为例：</p>
+<p>神经网络的输入x是一张图片，输出y是一个四维向量，对应的是预测图中有没有行人、有没有车、有没有停车标志、有没有交通灯</p>
+<p>对应的损失函数：<span class="math inline">\(\frac{1}{m} \sum_{i=1}^m \sum_{j=1}^4 L(\hat y_j^{(i)},y_j^{(i)}) \ (此处L使用的是Logistic \ loss)\)</span></p>
+<p>与softmax回归不同的是，softmax将单个标签分配给单个样本，而这里这张图可以有很多不同的标签</p>
+<p>如果训练一个神经网络，试图最小化这个代价函数，进行的就是多任务学习，因为现在做是建立单个神经网络，观察每张图，然后解决四个问题，此外，也可以训练四个不同的神经网络，但神经网络的一些早期特征在识别不同物体时都会用到，然后就会发现，训练一个神经网络做四件事会比训练四个完全独立的神经网络分别做四件事性能要更好。</p>
+<blockquote>
+<p>多任务学习什么时候有意义？</p>
+<ul>
+<li>训练的一组任务可以共用低层次特征</li>
+<li>通常每个任务的数据量很接近</li>
+<li>可以训练一个足够大的神经网络同时做好所有的工作</li>
+</ul>
+</blockquote>
+<p><code>通常迁移学习的使用频率比多任务学习更高</code></p>
+<h2 id="什么是端到端学习">什么是端到端学习</h2>
+<blockquote>
+<p>简而言之，以前有一些数据处理系统或学习系统，它们需要多个阶段的处理，而端到端深度学习，就是忽略所有这些不同的阶段，用单个神经网络代替。</p>
+</blockquote>
+<p>以语音识别为例：</p>
+<p>目标是对于输入音频x，映射一个输出对应文本y</p>
+<p>传统上，语音识别需要很多阶段的处理，首先提取一些特征，然后使用机器学习算法找到"音素"(phoneme:声音的基本单位)，再将单位串在一起构成独立的词，最后将词串起来构成文本</p>
+<p>而端到端深度学习做的是，训练一个巨大的神经网络，输入是一个音频x，输出是文本y，直接绕过了中间步骤，训练出一个从x到y的映射</p>
+<blockquote>
+<p>而端到端深度学习的的一个挑战是可能需要大量的数据，才能让训练结果变得足够好</p>
+</blockquote>
+<p>以身份验证系统为例：</p>
+<p>一种做法是，将获取的图片作为输入x，而输出y则是对应的身份，但由于人站位不同、距离不同等，拍摄的图片可能会各种各样</p>
+<p>因此，迄今为止最好的做法是：使用多步方法，首先使用一个算法进行人脸检测，检测到人脸，然后放大对应的部分，并裁剪图像，使人脸居中显示，然后再输入到神经网络中，通常神经网络判别身份，结果显示，这种将任务分成两个更简单的任务，通常在整体上得到的表现更好。</p>
+<blockquote>
+<p>为什么分成两步更好呢？</p>
+<ol type="1">
+<li>解决的两个问题，每个问题实际上要简单得多</li>
+<li>两个子任务的训练数据都很多；对于人脸检测的数据，网络上有许多，而对于第二步，可看作是检测两张图片上的人是否是同一个，对就的网络上数据也有很多，而对于原始的一步方法对应的输入输出对应的数据，则相对很少了</li>
+</ol>
+</blockquote>
+<h2 id="是否使用端到端学习">是否使用端到端学习</h2>
+<p>端到端学习的优点：</p>
+<ol type="1">
+<li>只让数据说话；只要有足够多的数据，不用关注中间繁琐的其它步骤</li>
+<li>所需手动设计的组件更少</li>
+</ol>
+<p>缺点：</p>
+<ol type="1">
+<li>可能需要大量的数据(有时如果没有大量数据，可以尝试将任务拆分成可能收集到大量数据的子任务)</li>
+<li>排除了可能有用的手动设计的组件</li>
+</ol>
+<p>因此，是否使用端到端学习的关键的问题在于：</p>
+<blockquote>
+<p>是否有足够的数据能够直接学习复杂的从x映射到y的函数？</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/" title="深度学习-误差分析">http://www.zephon.ml/2020/12/24/深度学习-误差分析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/" rel="prev" title="深度学习-超参数调试处理">
+      <i class="fa fa-chevron-left"></i> 深度学习-超参数调试处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/25/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80/" rel="next" title="卷积神经网络-基础">
+      卷积神经网络-基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">深度学习-误差分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">执行误差分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%85%E6%A5%9A%E6%A0%87%E6%B3%A8%E9%94%99%E8%AF%AF%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">清楚标注错误的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%B3%BB%E7%BB%9F%E5%B9%B6%E8%BF%9B%E8%A1%8C%E8%BF%AD%E4%BB%A3"><span class="nav-number">1.3.</span> <span class="nav-text">快速搭建第一个系统，并进行迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%88%86%E5%B8%83%E4%B8%8A%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.4.</span> <span class="nav-text">在不同分布上训练和测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8C%B9%E9%85%8D%E6%95%B0%E6%8D%AE%E5%88%86%E5%B8%83%E7%9A%84%E5%81%8F%E5%B7%AE%E5%92%8C%E6%96%B9%E5%B7%AE"><span class="nav-number">1.5.</span> <span class="nav-text">不匹配数据分布的偏差和方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%95%B0%E6%8D%AE%E4%B8%8D%E5%8C%B9%E9%85%8D"><span class="nav-number">1.6.</span> <span class="nav-text">处理数据不匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.7.</span> <span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.8.</span> <span class="nav-text">多任务学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.9.</span> <span class="nav-text">什么是端到端学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E4%BD%BF%E7%94%A8%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.10.</span> <span class="nav-text">是否使用端到端学习</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

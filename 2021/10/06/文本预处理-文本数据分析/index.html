@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="文本预处理-文本数据分析 文本数据分析的作用  文本数据分析能够有效帮助我们理解数据语料，快速检查出语料可能存在的问题，并指导之后模型训练过程中一些超参数的选择">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本预处理-文本数据分析">
+<meta property="og:url" content="http://www.zephon.ml/2021/10/06/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="文本预处理-文本数据分析 文本数据分析的作用  文本数据分析能够有效帮助我们理解数据语料，快速检查出语料可能存在的问题，并指导之后模型训练过程中一些超参数的选择">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006175331202.png">
+<meta property="og:image" content="c:/Users/Zephon/AppData/Roaming/Typora/typora-user-images/image-20211006175351275.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181533053.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181547709.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181652995.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181704976.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006205928598.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006210018536.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220052298.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220125067.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220302903.png">
+<meta property="article:published_time" content="2021-10-06T14:11:15.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006175331202.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/10/06/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>文本预处理-文本数据分析 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/10/06/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文本预处理-文本数据分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-06 22:11:15" itemprop="dateCreated datePublished" datetime="2021-10-06T22:11:15+08:00">2021-10-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="文本预处理-文本数据分析">文本预处理-文本数据分析</h1>
+<h2 id="文本数据分析的作用">文本数据分析的作用</h2>
+<ul>
+<li>文本数据分析能够有效帮助我们理解数据语料，快速检查出语料可能存在的问题，并指导之后模型训练过程中一些超参数的选择</li>
+</ul>
+<h2 id="常用的几种文本数据分析方法">常用的几种文本数据分析方法</h2>
+<ul>
+<li>标签数量分布</li>
+<li>句子长度分布</li>
+<li>词频统计与关键词词云</li>
+</ul>
+<h2 id="实验数据">实验数据</h2>
+<ul>
+<li><p>中文酒店评论语料：</p>
+<ul>
+<li>属于二分类的中文情感分析语料，该语料存放在"./cn_data"目录下</li>
+<li>其中train.tsv代表训练集，dev.tsv代表验证集，二者数据样式相同</li>
+</ul></li>
+<li><p>train.tsv数据样式</p>
+<blockquote>
+<p>sentence label</p>
+<p>早餐不好，服务不到位，晚餐无西餐，早餐晚餐相同，房间条件不好，餐厅不分吸烟区，房间不分有无烟房. 0</p>
+</blockquote></li>
+<li><p>train.tsv数据样式说明</p>
+<ul>
+<li>train.tsv中的数据内容共分为2列，第一列数据代表具有感情色彩的评论文本；第二列数据，0或1，代表每条文本数据是积极或消极的评论，0代表消极，1代表积极</li>
+</ul></li>
+</ul>
+<h4 id="获得训练集和验证集的标签数量分布">获得训练集和验证集的标签数量分布</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.style.use(<span class="string">&#x27;fivethirtyeight&#x27;</span>)</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 分别读取训练集和验证集</span></span><br><span class="line">train_data = pd.read_csv(<span class="string">&quot;./cn_data/train.tsv&quot;</span>, sep=<span class="string">&quot;\t&quot;</span>)</span><br><span class="line">valid_data = pd.read_csv(<span class="string">&quot;./cn_data/dev.tsv&quot;</span>, sep=<span class="string">&quot;\t&quot;</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># 获得训练数据标签数量分布</span></span><br><span class="line">sns.countplot(<span class="string">&quot;label&quot;</span>, data=train_data)</span><br><span class="line">plt.title(<span class="string">&quot;train_data&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line">  </span><br><span class="line"><span class="comment"># 获取验证数据标签数量分布</span></span><br><span class="line">sns.countplot(<span class="string">&quot;label&quot;</span>, data=valid_data)</span><br><span class="line">plt.title(<span class="string">&quot;valid_data&quot;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006175331202.png" /></p>
+<p><img src="C:\Users\Zephon\AppData\Roaming\Typora\typora-user-images\image-20211006175351275.png" /></p>
+</blockquote>
+<ul>
+<li><p>分析：</p>
+<ul>
+<li>在深度学习模型评估中，我们一般使用ACC作为评估指标，若想将ACC的基线定义在50%左右，则需要正负样本比例维持在1:1左右，否则就要进行收入必要的数据增强或数据删减。</li>
+</ul></li>
+</ul>
+<h4 id="获取训练集和验证集的句子长度分布">获取训练集和验证集的句子长度分布</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在训练数据中添加新的句子长度列，每个元素的值都是对应的句子列的长度</span></span><br><span class="line">train_data[<span class="string">&#x27;sentence_length&#x27;</span>] = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x:<span class="built_in">len</span>(x), train_data[<span class="string">&#x27;sentence&#x27;</span>]))</span><br><span class="line"><span class="comment"># 绘制句子长度列的数量分布图</span></span><br><span class="line">sns.countplot(<span class="string">&quot;sentence_length&quot;</span>, data=train_data)</span><br><span class="line"><span class="comment"># 主要关注count长度分布的纵坐标，不需要绘制横坐标，横坐标范围通过dict图进行查看</span></span><br><span class="line">plt.xticks([])</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制dist长度的分布图</span></span><br><span class="line">sns.distplot(train_data[<span class="string">&quot;sentence_length&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主要关注dist长度分布横坐标，不需要绘制纵坐标</span></span><br><span class="line">plt.yticks([])</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在验证数据中添加新的句子长度列，每个元素的值都是对应的句子列的长度</span></span><br><span class="line">valid_data[<span class="string">&quot;sentence_length&quot;</span>] = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x:<span class="built_in">len</span>(x), valid_data[<span class="string">&quot;sentence&quot;</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制句子长度列的数量分布图</span></span><br><span class="line">sns.countplot(<span class="string">&quot;sentence_length&quot;</span>, data=valid_data)</span><br><span class="line"><span class="comment"># 主要关注count长度分布的纵坐标，不需要绘制横坐标，横坐标范围通过dist图进行查看</span></span><br><span class="line">plt.xticks([])</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制dist长度分布图</span></span><br><span class="line">sns.distplot(valid_data[<span class="string">&quot;sentence_length&quot;</span>])</span><br><span class="line"><span class="comment"># 主要关注dist长度分布横坐标，不需要绘制纵坐标</span></span><br><span class="line">plt.yticks([])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181533053.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181547709.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181652995.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006181704976.png" /></p>
+</blockquote>
+<ul>
+<li>分析
+<ul>
+<li>通过绘制句子长度分布图，可以得知语料中大部分句子长度的分布范围，因为模型的输入要求固定尺寸的张量，合理的长度范围对之后进行句子截断补齐(规范长度)直到关键的指导作用。上图中大部分句子就是在20~250之间</li>
+</ul></li>
+</ul>
+<h4 id="获取训练集和验证集正负样本长度散点分布">获取训练集和验证集正负样本长度散点分布</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绘制训练集长度分布的散点图</span></span><br><span class="line">sns.stripplot(y=<span class="string">&quot;sentence_length&quot;</span>, x=<span class="string">&quot;label&quot;</span>, data=train_data)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># 绘制验证集长度分布的散点图</span></span><br><span class="line">sns.stripplot(y=<span class="string">&quot;sentence_length&quot;</span>, x=<span class="string">&quot;label&quot;</span>, data=valid_data)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006205928598.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006210018536.png" /></p>
+</blockquote>
+<ul>
+<li>分析
+<ul>
+<li>通过查看正负样本长度散点图，可以有效定位异常点的出现位置，帮助我们更准确进行人工语料审查。上图中在训练集正样本中出现了异常点，它的句子长度近3500左右，需要人工审查</li>
+</ul></li>
+</ul>
+<h4 id="获得训练集与验证集不同词汇总数统计">获得训练集与验证集不同词汇总数统计</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入jieba用于分词</span></span><br><span class="line"><span class="comment"># 导入chain方法用于扁平化列表</span></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> chain</span><br><span class="line"><span class="comment"># 进行训练集的句子进行分词，并统计出不同词汇的总数</span></span><br><span class="line">train_vocab = <span class="built_in">set</span>(chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x : jieba.lcut(x), train_data[<span class="string">&quot;sentence&quot;</span>])))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;训练集共包含不同词汇总数为：&quot;</span>, <span class="built_in">len</span>(train_vocab))</span><br><span class="line"><span class="comment"># 进行验证集的句子进行分词，并统计出不同词汇的总数</span></span><br><span class="line">valid_vocab = <span class="built_in">set</span>(chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x:jieba.lcut(x), valid_data[<span class="string">&quot;sentence&quot;</span>])))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;验证集共包含不再词汇总数为：&quot;</span>, <span class="built_in">len</span>(valid_vocab))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>训练集共包含不同词汇总数为： 12162</p>
+<p>验证集共包含不再词汇总数为： 6857</p>
+</blockquote>
+<h4 id="获得训练集上正负样本的高频形容词词云">获得训练集上正负样本的高频形容词词云</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用jieba中的词性标注功能</span></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_a_list</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;用于获取形容词列表&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 使用jieba的记性标注方法切分文本，获得具有词性属性flag和词汇属性的word的对象，从而判断flag是否为形容词，来返回对应的词汇</span></span><br><span class="line">    r = []</span><br><span class="line">    <span class="keyword">for</span> g <span class="keyword">in</span> pseg.lcut(text):</span><br><span class="line">        <span class="keyword">if</span> g.flag == <span class="string">&quot;a&quot;</span>:</span><br><span class="line">            r.append(g.word)</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入绘制词云的工具包</span></span><br><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_word_cloud</span>(<span class="params">keywords_list</span>):</span></span><br><span class="line">    <span class="comment"># 实例化绘制词云的类，其中参数font_path是字体路径，为了能显示中文</span></span><br><span class="line">    <span class="comment"># max_words指词云图像最多显示多少个词，background_color为背景颜色</span></span><br><span class="line">    wordcloud = WordCloud(font_path=<span class="string">&quot;./SimHei.ttf&quot;</span>, max_words=<span class="number">100</span>, background_color=<span class="string">&quot;white&quot;</span>)</span><br><span class="line">    <span class="comment"># 将传入的列表转化成词云生成器需要的字符串形式</span></span><br><span class="line">    keywords_string = <span class="string">&quot; &quot;</span>.join(keywords_list)</span><br><span class="line">    <span class="comment"># 生成词云</span></span><br><span class="line">    wordcloud.generate(keywords_string)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 绘制图像并显示</span></span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.imshow(wordcloud, interpolation=<span class="string">&quot;bilinear&quot;</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获得训练集上正样本</span></span><br><span class="line">p_train_data = train_data[train_data[<span class="string">&quot;label&quot;</span>]==<span class="number">1</span>][<span class="string">&quot;sentence&quot;</span>]</span><br><span class="line"><span class="comment"># 对正样本的每个句子的形容词</span></span><br><span class="line">train_p_a_vocab = chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x: get_a_list(x), p_train_data))</span><br><span class="line"><span class="comment">#print(train_p_n_vocab)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获得训练集上负样本</span></span><br><span class="line">n_train_data = train_data[train_data[<span class="string">&quot;label&quot;</span>]==<span class="number">0</span>][<span class="string">&quot;sentence&quot;</span>]</span><br><span class="line"><span class="comment">#print()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取负样本的每个句子的形容词</span></span><br><span class="line">train_n_a_vocab = chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x:get_a_list(x), n_train_data))</span><br><span class="line"></span><br><span class="line">get_word_cloud(train_p_a_vocab)</span><br><span class="line">get_word_cloud(train_n_a_vocab)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220052298.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220125067.png" /></p>
+</blockquote>
+<h4 id="获得验证集上正负样本的形容词词云">获得验证集上正负样本的形容词词云</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获得验证集上正样本</span></span><br><span class="line">p_valid_data = valid_data[valid_data[<span class="string">&quot;label&quot;</span>]==<span class="number">1</span>][<span class="string">&quot;sentence&quot;</span>]</span><br><span class="line"><span class="comment"># 对正样本的每个句子的形容词</span></span><br><span class="line">valid_p_a_vocab = chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x: get_a_list(x), p_valid_data))</span><br><span class="line"><span class="comment"># 获得验证集上负样本</span></span><br><span class="line">n_valid_data = valid_data[valid_data[<span class="string">&quot;label&quot;</span>]==<span class="number">0</span>][<span class="string">&quot;sentence&quot;</span>]</span><br><span class="line">valid_n_a_vocab = chain(*<span class="built_in">map</span>(<span class="keyword">lambda</span> x: get_a_list(x), n_valid_data))</span><br><span class="line">get_word_cloud(valid_p_a_vocab)</span><br><span class="line">get_word_cloud(valid_n_a_vocab)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211006220302903.png" /></p>
+</blockquote>
+<ul>
+<li>分析
+<ul>
+<li>根据高频形容词词云显示，可以对当前语料质量进行简单评估，同时对违反语料标签含义的词汇进行人工审查和修正，来保证绝大多数语料符合训练标准。上图中的正样本大多数是褒义词，而负样本大多数是贬义词，基本符合要求，但负样本中也存在“便利”这样的褒义词，因此可以人工进行审查</li>
+</ul></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/10/06/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" title="文本预处理-文本数据分析">http://www.zephon.ml/2021/10/06/文本预处理-文本数据分析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/06/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E5%BC%A0%E9%87%8F%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95/" rel="prev" title="文本预处理-文本张量表示方法">
+      <i class="fa fa-chevron-left"></i> 文本预处理-文本张量表示方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/07/%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E7%89%B9%E5%BE%81%E5%A4%84%E7%90%86/" rel="next" title="文本预处理-文本特征处理">
+      文本预处理-文本特征处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86-%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">文本预处理-文本数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">文本数据分析的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">常用的几种文本数据分析方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.</span> <span class="nav-text">实验数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E8%AE%AD%E7%BB%83%E9%9B%86%E5%92%8C%E9%AA%8C%E8%AF%81%E9%9B%86%E7%9A%84%E6%A0%87%E7%AD%BE%E6%95%B0%E9%87%8F%E5%88%86%E5%B8%83"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">获得训练集和验证集的标签数量分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%AE%AD%E7%BB%83%E9%9B%86%E5%92%8C%E9%AA%8C%E8%AF%81%E9%9B%86%E7%9A%84%E5%8F%A5%E5%AD%90%E9%95%BF%E5%BA%A6%E5%88%86%E5%B8%83"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">获取训练集和验证集的句子长度分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%AE%AD%E7%BB%83%E9%9B%86%E5%92%8C%E9%AA%8C%E8%AF%81%E9%9B%86%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC%E9%95%BF%E5%BA%A6%E6%95%A3%E7%82%B9%E5%88%86%E5%B8%83"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">获取训练集和验证集正负样本长度散点分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E8%AE%AD%E7%BB%83%E9%9B%86%E4%B8%8E%E9%AA%8C%E8%AF%81%E9%9B%86%E4%B8%8D%E5%90%8C%E8%AF%8D%E6%B1%87%E6%80%BB%E6%95%B0%E7%BB%9F%E8%AE%A1"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">获得训练集与验证集不同词汇总数统计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E8%AE%AD%E7%BB%83%E9%9B%86%E4%B8%8A%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC%E7%9A%84%E9%AB%98%E9%A2%91%E5%BD%A2%E5%AE%B9%E8%AF%8D%E8%AF%8D%E4%BA%91"><span class="nav-number">1.3.0.5.</span> <span class="nav-text">获得训练集上正负样本的高频形容词词云</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E9%AA%8C%E8%AF%81%E9%9B%86%E4%B8%8A%E6%AD%A3%E8%B4%9F%E6%A0%B7%E6%9C%AC%E7%9A%84%E5%BD%A2%E5%AE%B9%E8%AF%8D%E8%AF%8D%E4%BA%91"><span class="nav-number">1.3.0.6.</span> <span class="nav-text">获得验证集上正负样本的形容词词云</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

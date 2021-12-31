@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Part1-推荐系统 问题综述 例：预测电影评分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-推荐系统">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/20/Part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Part1-推荐系统 问题综述 例：预测电影评分">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-20T10:00:13.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/07/20/Part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Part1-推荐系统 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/20/Part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-推荐系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-20 18:00:13" itemprop="dateCreated datePublished" datetime="2021-07-20T18:00:13+08:00">2021-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="part1-推荐系统">Part1-推荐系统</h1>
+<h2 id="问题综述">问题综述</h2>
+<p>例：预测电影评分</p>
+<blockquote>
+<p>用户使用一到五分来对电影进行评分</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">电影</th>
+<th style="text-align: center;">Alice</th>
+<th style="text-align: center;">Bob</th>
+<th style="text-align: center;">Carol</th>
+<th style="text-align: center;">Dave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Love at last</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Romance forever</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Cute puppies of love</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">?</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Nonstop car chases</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Sword vs. karate</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+</tr>
+</tbody>
+</table>
+<p>注：</p>
+<p><span class="math inline">\(n_u\)</span>：用户的数量</p>
+<p><span class="math inline">\(n_m\)</span>：电影的数量</p>
+<p><span class="math inline">\(r(i,j)\)</span>：如果用户<span class="math inline">\(j\)</span>给电影<span class="math inline">\(i\)</span>评分了，则对应值为1</p>
+<p><span class="math inline">\(y^{(i,j)}\)</span>：只要<span class="math inline">\(r(i,j)\)</span>被定义时才有用，且表示用户<span class="math inline">\(j\)</span>给电影<span class="math inline">\(i\)</span>的评分值</p>
+</blockquote>
+<p>因此，推荐系统的问题就是，给出<span class="math inline">\(r(i,j)\)</span>和<span class="math inline">\(y^{(i,j)}\)</span>数据，然后去查找没有被评级的电影，并试图预测这些电影的评价星级</p>
+<h2 id="基于内容的推荐算法">基于内容的推荐算法</h2>
+<blockquote>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">电影</th>
+<th style="text-align: center;">Alice</th>
+<th style="text-align: center;">Bob</th>
+<th style="text-align: center;">Carol</th>
+<th style="text-align: center;">Dave</th>
+<th style="text-align: center;"><span class="math inline">\(x_1\)</span><br />(romance)</th>
+<th style="text-align: center;"><span class="math inline">\(x_2\)</span><br />(action)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Love at last</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.9</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Romance forever</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">0.01</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Cute puppies of love</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0.99</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Nonstop car chases</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.1</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Sword vs. karate</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.9</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>如表，我们假设每个电影都有两个特征<span class="math inline">\(x_1,x_2\)</span>，其中<span class="math inline">\(x_1\)</span>衡量一部电影为爱情片的程度，<span class="math inline">\(x_2\)</span>衡量一部电影为动作片的程度。</p>
+<p>对于任一用户<span class="math inline">\(j\)</span>，学习参数<span class="math inline">\(\theta^{(j)}\in \mathbb R^3\)</span>，使用<span class="math inline">\((\theta^{(j)})^Tx^{(i)}\)</span>预测用户<span class="math inline">\(j\)</span>对电影<span class="math inline">\(i\)</span>的评分</p>
+<p><span class="math inline">\(x^{(i)} = \left[ \begin{matrix} 1\\ x_1^{(i)} \\ x_2^{(i)} \end{matrix} \right]\)</span></p>
+<h3 id="综述">综述</h3>
+<p><span class="math inline">\(r(i,j)\)</span>：如果用户<span class="math inline">\(j\)</span>给电影<span class="math inline">\(i\)</span>评分了，则对应值为1</p>
+<p><span class="math inline">\(y^{(i,j)}\)</span>：只要<span class="math inline">\(r(i,j)\)</span>被定义时才有用，且表示用户<span class="math inline">\(j\)</span>给电影<span class="math inline">\(i\)</span>的评分值</p>
+<p><span class="math inline">\(\theta^{(j)}\)</span>：用户<span class="math inline">\(j\)</span>对应的参数向量</p>
+<p><span class="math inline">\(x^{(i)}\)</span>：电影<span class="math inline">\(i\)</span>对应的特征向量</p>
+<p>对于用户<span class="math inline">\(j\)</span>和电影<span class="math inline">\(i\)</span>，预测评分：<span class="math inline">\((\theta^{(j)})^T(x^{(i)})\)</span></p>
+<p><span class="math inline">\(m^{(j)}\)</span>：用户<span class="math inline">\(j\)</span>评分了的电影的数量</p>
+<p>为了学习<span class="math inline">\(\theta^{(j)}\)</span>：</p>
+<p><span class="math inline">\(\min_{\theta^{(j)}}\frac{1}{2m^{(j)}}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2m^{(i)}}\sum_{k=1}^n (\theta_k^{(j)})^2\)</span></p>
+<p>相当于：</p>
+<p><span class="math inline">\(\min_{\theta^{(j)}}\frac{1}{2}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{k=1}^n (\theta_k^{(j)})^2\)</span></p>
+<h3 id="优化目标">优化目标</h3>
+<p>为了学习<span class="math inline">\(\theta^{(j)}\)</span>(用户<span class="math inline">\(j\)</span>的参数)：</p>
+<p><span class="math inline">\(\min_{\theta^{(j)}}\frac{1}{2}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{k=1}^n (\theta_k^{(j)})^2\)</span></p>
+<p>为了学习<span class="math inline">\(\theta^{(1)},\theta^{(2)},\cdots,\theta^{(n_u)}\)</span>：</p>
+<p><span class="math inline">\(\min_{(\theta^{(1)},\cdots,\theta^{(n_u)})} \frac{1}{2}\sum_{j=1}^{n_u}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2\)</span></p>
+<h3 id="优化算法">优化算法</h3>
+<p><span class="math inline">\(\min_{(\theta^{(1)},\cdots,\theta^{(n_u)})} \frac{1}{2}\sum_{j=1}^{n_u}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2\)</span></p>
+<p>梯度下降： <span class="math display">\[
+\theta_k^{(j)}:=\theta_k^{(j)}-\alpha\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)}(对于k=0) \\ 
+\theta_k^{(j)}:=\theta_k^{(j)}-\alpha(\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)}+\lambda\theta_k^{(j)})(对于k \ne 0)
+\]</span></p>
+<h2 id="协同过滤">协同过滤</h2>
+<h3 id="问题动机">问题动机</h3>
+<p>对于上述问题，<span class="math inline">\(x_1\)</span>和<span class="math inline">\(x_2\)</span>这两个特征，并无法直接得到，而是需要人为去确定，耗时耗力。那么应该怎样更容易得到这些特征呢？</p>
+<p>现在，我们稍稍改变一下这个假设，假设我们采访每位用户，得到他们对于爱情类电影的喜欢程度和对于动作类电影的喜欢程度，得到如下结果：</p>
+<p><span class="math inline">\(\theta^{(1)} = \left[ \begin{matrix}0 \\ 5 \\ 0 \end{matrix} \right],\theta^{(2)}=\left[ \begin{matrix}0 \\ 5 \\ 0 \end{matrix} \right],\theta^{(3)}=\left[ \begin{matrix}0 \\ 0 \\ 5 \end{matrix} \right], \theta^{(4)} = \left[ \begin{matrix}0 \\ 0 \\ 5 \end{matrix} \right]\)</span>,其中第二个表示喜欢爱情类电影程度，第三个表示喜欢动作类电影程度</p>
+<p>这样就可以通过 <span class="math display">\[
+(\theta^{(1)})^Tx^{(1)} \approx 5 \\
+(\theta^{(2)})^Tx^{(2)} \approx 5 \\
+(\theta^{(3)})^Tx^{(3)} \approx 0 \\
+(\theta^{(4)})^Tx^{(4)} \approx 0 
+\]</span> 求出<span class="math inline">\(x^{(1)} = \left[ \begin{matrix}1 \\ 1.0 \\ 0.0 \end{matrix} \right]\)</span></p>
+<h3 id="算法通用与优化">算法通用与优化</h3>
+<p>给定<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span>，需要学习<span class="math inline">\(x^{(i)}\)</span>:</p>
+<p><span class="math inline">\(\min_{x^{(i)}} \frac{1}{2} \sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{k=1}^n(x_k^{(i)})^2\)</span></p>
+<p>给定<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span>，需要学习<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)}\)</span>:</p>
+<p><span class="math inline">\(\min_{(x^{(1)},\cdots,x^{(n_m)})}\frac{1}{2}\sum_{i=1}^{n_m}\sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^n(x_k^{(i)})^2\)</span></p>
+<h3 id="协同过滤-1">协同过滤</h3>
+<p>给定<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)}(和电影评分)\)</span></p>
+<p>​ 可以估计<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span></p>
+<p>给定<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span></p>
+<p>​ 可以估计<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)}\)</span></p>
+<p>即猜定<span class="math inline">\(\theta\)</span>，然后<span class="math inline">\(\theta \to x \to \theta \to x \to \theta \to x \to \cdots\)</span></p>
+<h2 id="协同过滤算法">协同过滤算法</h2>
+<h3 id="协同过滤优化目标">协同过滤优化目标</h3>
+<p>给定<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)}\)</span>，估计<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span>:</p>
+<p>​ <span class="math inline">\(\min_{(x^{(1)},\cdots,x^{(n_m)})}\frac{1}{2}\sum_{i=1}^{n_m}\sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^n(x_k^{(i)})^2\)</span></p>
+<p>给定<span class="math inline">\(\theta^{(1)},\cdots,\theta^{(n_u)}\)</span>，估计<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)}\)</span>：</p>
+<p>​ <span class="math inline">\(\min_{(\theta^{(1)},\cdots,\theta^{(n_u)})} \frac{1}{2}\sum_{j=1}^{n_u}\sum_{i:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2\)</span></p>
+<p>将这两个合并成一个： <span class="math display">\[
+J(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)})=\frac{1}{2} \sum_{(i,j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^n(x_k^{(i)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2
+\]</span> <span class="math inline">\(\min_{(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)})}J(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)})\)</span></p>
+<p>这里不再遵循<span class="math inline">\(x_0=1\)</span>，<span class="math inline">\(x\in \mathbb R^{(n+1)}\)</span>而是<span class="math inline">\(x \in \mathbb R^n\)</span>,<span class="math inline">\(\theta \in \mathbb R^n\)</span></p>
+<h3 id="协同过滤算法-1">协同过滤算法</h3>
+<ol type="1">
+<li><p>初始化<span class="math inline">\(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)}\)</span>为小的随机值(有点像神经网络训练中的初始化)</p></li>
+<li><p>使用梯度下降来最小化<span class="math inline">\(J(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)})\)</span> <span class="math display">\[
+x_k^{(i)} := x_k^{(i)}-\alpha(\sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})\theta_k^{(j)}+\lambda x_k^{(i)}) \\
+\theta_k^{(j)} := \theta_k^{(j)}-\alpha(\sum_{j:r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})x_k^{(i)}+\lambda \theta_k^{(j)}) \\
+\]</span></p></li>
+<li><p>给定一个具有参数<span class="math inline">\(\theta\)</span>的用户和一部具有特征<span class="math inline">\(x\)</span>的电影，就可以使用<span class="math inline">\(\theta^Tx\)</span>预测用户对电影的评分</p></li>
+</ol>
+<h2 id="矢量化低轶矩阵分解">矢量化低轶矩阵分解</h2>
+<blockquote>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">电影</th>
+<th style="text-align: center;">Alice</th>
+<th style="text-align: center;">Bob</th>
+<th style="text-align: center;">Carol</th>
+<th style="text-align: center;">Dave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Love at last</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Romance forever</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Cute puppies of love</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">?</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Nonstop car chases</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Sword vs. karate</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">?</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><span class="math inline">\(Y=\left[ \begin{matrix} 5 &amp; 5 &amp; 0 &amp; 0 \\ 5 &amp; ? &amp; ? &amp; 0 \\ ? &amp; 4 &amp; 0 &amp; ? \\ 0 &amp; 0 &amp; 5 &amp; 4 \\ 0 &amp; 0 &amp; 5 &amp; ? \end{matrix} \right]\)</span></p>
+<p>预测评分：<span class="math inline">\(\left[ \begin{matrix} (\theta^{(1)})^T(x^{(1)}) &amp; (\theta^{(2)})^T(x^{(1)}) &amp; \cdots &amp; (\theta^{(n_u)})^T(x^{(1)}) \\ (\theta^{(1)})^T(x^{(2)}) &amp; (\theta^{(2)})^T(x^{(2)}) &amp; \cdots &amp; (\theta^{(n_u)})^T(x^{(2)}) \\ \cdots &amp; \cdots &amp; \cdots &amp; \cdots \\ (\theta^{(1)})^T(x^{(n_m)}) &amp; (\theta^{(2)})^T(x^{(n_m)}) &amp; \cdots &amp; (\theta^{(n_u)})^T(x^{(n_m)}) \end{matrix} \right]\)</span></p>
+<p><span class="math inline">\(X = \left[\begin{matrix}-(x^{(1)})^T- \\ -(x^{(2)})^T- \\ \cdots \\ -(x^{(n_m)})^T \end{matrix} \right]\)</span></p>
+<p><span class="math inline">\(\Theta = \left[\begin{matrix}-(\theta^{(1)})^T- \\ -(\theta^{(2)})^T- \\ \cdots \\ -(\theta^{(n_u)})^T \end{matrix} \right]\)</span></p>
+<p>则<span class="math inline">\(y_{predict} = X\Theta^T\)</span></p>
+<p>这个协同过滤算法也叫做<strong>低秩矩阵分解(Low rank matrix factorvization)</strong></p>
+<h3 id="找相关的电影">找相关的电影</h3>
+<p>对于每个产品<span class="math inline">\(i\)</span>，我们学习一个特征向量<span class="math inline">\(x^{(i)} \in \mathbb R^n\)</span></p>
+<p>如果找到与电影<span class="math inline">\(i\)</span>相关的电影<span class="math inline">\(j\)</span>？</p>
+<p><span class="math inline">\(||x^{(i)}-x^{(j)}||\)</span>很小$<span class="math inline">\(电影\)</span>j<span class="math inline">\(和电影\)</span>i$相似</p>
+<p>5个与电影<span class="math inline">\(i\)</span>最相似的电影：找5个有最小的距离<span class="math inline">\(||x^{(i)}-x^{(j)}||\)</span>的电影<span class="math inline">\(j\)</span></p>
+<h3 id="实现细节均值规范化">实现细节：均值规范化</h3>
+<p>例：假设有一个没有给任何电影评分的用户，加上之前所说的四个用户</p>
+<p>那么，协同过滤算法会对这个没评分的用户做什么？</p>
+<p><span class="math inline">\(\min_{(x^{(1)},\cdots,x^{(n_m)},\theta^{(1)},\cdots,\theta^{(n_u)})}\frac{1}{2} \sum_{(i,j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2+\frac{\lambda}{2}\sum_{i=1}^{n_m}\sum_{k=1}^n(x_k^{(i)})^2+\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2\)</span></p>
+<p>假设<span class="math inline">\(n=2\)</span>，即我们需要学习两个特征变量</p>
+<p><span class="math inline">\(\theta^{(5)} \in \mathbb R^2\)</span></p>
+<p>由于该用户没有评分，所以：<span class="math inline">\(\frac{1}{2} \sum_{(i,j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)}-y^{(i,j)})^2=0\)</span></p>
+<p>因此，<span class="math inline">\(\frac{\lambda}{2}\sum_{j=1}^{n_u}\sum_{k=1}^n(\theta_k^{(j)})^2\)</span>是影响<span class="math inline">\(\theta^{(5)}\)</span>的唯一项，也就是说，我们需要找一个<span class="math inline">\(\theta^{(5)}\)</span>来使该项尽可能小</p>
+<p>即：<span class="math inline">\(\frac{\lambda}{2}((\theta_1^{(5)})^2+(\theta_2^{(5)})^2)\)</span></p>
+<p>这样得到的就会是<span class="math inline">\(\theta^{(5)} = \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right]\)</span>，进而预测的结果都会是0，所以这种结果不太好</p>
+<h3 id="均值规范化">均值规范化</h3>
+<p>均值规范化可以用来解决上述问题</p>
+<p><span class="math inline">\(Y=\left[ \begin{matrix} 5 &amp; 5 &amp; 0 &amp; 0 &amp;? \\ 5 &amp; ? &amp; ? &amp; 0 &amp;? \\ ? &amp; 4 &amp; 0 &amp; ? &amp;? \\ 0 &amp; 0 &amp; 5 &amp; 4 &amp;? \\ 0 &amp; 0 &amp; 5 &amp; ? &amp;? \end{matrix} \right]\)</span></p>
+<p>计算每个电影评分的均值：<span class="math inline">\(\mu = \left[ \begin{matrix} 2.5 \\ 2.5 \\ 2 \\ 2.25 \\ 1.25 \end{matrix} \right]\)</span></p>
+<p>则减去均分后：<span class="math inline">\(Y=\left[ \begin{matrix} 2.5 &amp; 2.5 &amp; -2.5 &amp; -2.5 &amp;?\\ 2.5 &amp; ? &amp; ? &amp; -2.5 &amp;? \\ ? &amp; 2 &amp; -2 &amp; ? &amp;? \\ -2.25 &amp; -2.25 &amp; 2.75 &amp; 1.75 &amp;? \\ -1.25 &amp; -1.25 &amp; 3.75 &amp; ? &amp;? \end{matrix} \right]\)</span></p>
+<p>当进行电影评分预测时，步骤如下：</p>
+<p>对于用户<span class="math inline">\(j\)</span>，在电影<span class="math inline">\(i\)</span>上评分预测：</p>
+<p><span class="math inline">\((\theta^{(j)})^T(X^{(i)})+\mu_i\)</span></p>
+<p>对于用户5，则：</p>
+<p><span class="math inline">\(\theta^{(5)} = \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right]\)</span>，<span class="math inline">\(y_{predict}=(\theta^{(j)})^T(X^{(i)})+\mu_i\)</span></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/07/20/Part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" title="Part1-推荐系统">http://www.zephon.ml/2021/07/20/Part1-推荐系统/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/19/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/" rel="prev" title="Part1-异常检测">
+      <i class="fa fa-chevron-left"></i> Part1-异常检测
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/21/Part1-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="next" title="Part1-大规模机器学习">
+      Part1-大规模机器学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">Part1-推荐系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">问题综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E7%9A%84%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">基于内容的推荐算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E8%BF%B0"><span class="nav-number">1.2.1.</span> <span class="nav-text">综述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="nav-number">1.2.2.</span> <span class="nav-text">优化目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.3.</span> <span class="nav-text">优化算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4"><span class="nav-number">1.3.</span> <span class="nav-text">协同过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.3.1.</span> <span class="nav-text">问题动机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E9%80%9A%E7%94%A8%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-number">1.3.2.</span> <span class="nav-text">算法通用与优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">协同过滤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">协同过滤算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="nav-number">1.4.1.</span> <span class="nav-text">协同过滤优化目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E7%AE%97%E6%B3%95-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">协同过滤算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A2%E9%87%8F%E5%8C%96%E4%BD%8E%E8%BD%B6%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3"><span class="nav-number">1.5.</span> <span class="nav-text">矢量化低轶矩阵分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%BE%E7%9B%B8%E5%85%B3%E7%9A%84%E7%94%B5%E5%BD%B1"><span class="nav-number">1.5.1.</span> <span class="nav-text">找相关的电影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82%E5%9D%87%E5%80%BC%E8%A7%84%E8%8C%83%E5%8C%96"><span class="nav-number">1.5.2.</span> <span class="nav-text">实现细节：均值规范化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E8%A7%84%E8%8C%83%E5%8C%96"><span class="nav-number">1.5.3.</span> <span class="nav-text">均值规范化</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="模型量化中的激活函数 文章参考学习 在之前学习的模型量化过程中，对于激活函数的处理只是简单说了一下ReLU函数的量化，这里更加具体的学习一下！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模型量化中的激活函数">
+<meta property="og:url" content="http://www.zephon.ml/2021/12/17/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="模型量化中的激活函数 文章参考学习 在之前学习的模型量化过程中，对于激活函数的处理只是简单说了一下ReLU函数的量化，这里更加具体的学习一下！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-17T03:02:01.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="轻量化模型">
+<meta property="article:tag" content="模型压缩">
+<meta property="article:tag" content="模型量化">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/12/17/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>模型量化中的激活函数 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/12/17/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          模型量化中的激活函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-17 11:02:01" itemprop="dateCreated datePublished" datetime="2021-12-17T11:02:01+08:00">2021-12-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%BB%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">轻量化模型</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%BB%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/" itemprop="url" rel="index"><span itemprop="name">模型压缩</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%BD%BB%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">模型量化</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="模型量化中的激活函数">模型量化中的激活函数</h2>
+<p><a href="%5B神经网络量化入门--激活函数%20(qq.com)%5D(https://mp.weixin.qq.com/s?__biz=Mzg4ODA3MDkyMA==&amp;mid=2247483867&amp;idx=1&amp;sn=c09357d10ceea0d74c0dc69a21d7f4ad&amp;chksm=cf81f7bcf8f67eaab3eac420bf2efcc63503014a9b457e55dfc9e14f17c64df96f1d9d397846&amp;scene=178&amp;cur_album_id=1648871870714200067#rd)">文章参考学习</a></p>
+<p>在之前学习的模型量化过程中，对于激活函数的处理只是简单说了一下ReLU函数的量化，这里更加具体的学习一下！</p>
+<h2 id="量化回顾">量化回顾</h2>
+<p>之前说的量化过程： <span class="math display">\[
+r=S(q-Z) \tag{1}
+\]</span></p>
+<p><span class="math display">\[
+q=round(\frac{r}{S}+Z) \tag{2}
+\]</span></p>
+<p>但是，这里还存在一点小问题，就是对于式<span class="math inline">\((2)\)</span>而言，仅使用<span class="math inline">\(round\)</span>是不够的，还需要使用一个<span class="math inline">\(clip\)</span>操作，来将结果固定到指定范围内，防止溢出，例如对于uint8的量化，则量化的结果q必须要量化到[0,255]，所以进一步公式为： <span class="math display">\[
+q=clip(round(\frac{r}{S}+Z), 0, 255) \tag{3}
+\]</span> 现在，假设激活函数为<span class="math inline">\(f(x)\)</span>，存在浮点实数<span class="math inline">\(r_1\)</span>，则其对应的激活值为 <span class="math display">\[
+r_2=f(r_1) \tag{4}
+\]</span> 把式<span class="math inline">\((1)\)</span>代入式<span class="math inline">\((4)\)</span>得: <span class="math display">\[
+S_2(q_2-Z_2) = f(S_1(q_1-Z_1)) \tag{5}
+\]</span></p>
+<h2 id="relu量化">ReLU量化</h2>
+<p>具体的对于ReLU激活函数进行量化，ReLU原函数是： <span class="math display">\[
+ReLU(x) = \begin{cases} 0 &amp;,x&lt;0 \\ x &amp;, x\ge0 \end{cases} \tag{6}
+\]</span> 使用<span class="math inline">\(r_1,r_2\)</span>替换得： <span class="math display">\[
+r_2 = \begin{cases}0 &amp;, r_1&lt;0 \\r_1 &amp;,r_1\ge0  \end{cases} \tag{7}
+\]</span> 再将式<span class="math inline">\((1)\)</span>代入得： <span class="math display">\[
+S_2(q_2-Z_2) =  \begin{cases}0&amp;, q_1&lt;Z_1 \\S_1(q_1-Z_1)&amp;,q_1\ge Z_1  \end{cases} \tag{8}
+\]</span> 换算得： <span class="math display">\[
+q_2 = \begin{cases}Z_2 &amp;, q_1 &lt; Z_1 \\ \frac{S_1}{S_2}(q_1-Z_1)+Z_2 &amp;, q_1\ge Z_1 \end{cases} \tag{9}
+\]</span> 这里的<span class="math inline">\(\frac{S_1}{S_2}\)</span>是浮点数，所以在实际运算是也需要和之前的<span class="math inline">\(M\)</span>一样通过定点数移位的方式实现。需要注意的是，这里的<span class="math inline">\(Z_2\)</span>表示的是<span class="math inline">\(ReLU\)</span>输出的zero point，而根据式<span class="math inline">\((6)\)</span>可知，<span class="math inline">\(ReLU\)</span>输出的结果是<span class="math inline">\([0, ReLU(input_{max})]\)</span>，而<span class="math inline">\(Z_2\)</span>需要与其中的0对齐，同时<span class="math inline">\(Z_2\)</span>的取值范围又是<span class="math inline">\([0, 255]\)</span>(如果其是uint8类型的话)，这样一来，<strong><span class="math inline">\(Z_2\)</span>就一定为0了</strong>。</p>
+<p>而在具体工程实践过程中，通常并不是完全按照式<span class="math inline">\((9)\)</span>进行的，因为<span class="math inline">\(ReLU\)</span>的物理意义就是将小于零点的数值截断，其余不变。因此，工程上，通常将<span class="math inline">\(ReLU\)</span>前后的scale和zero point保持一致，然后使用如下公式来实现理化： <span class="math display">\[
+q_2 = \begin{cases}Z_1 &amp;, q_1 &lt; Z_1 \\ q_1 &amp;, q_1 \ge Z_1 \end{cases} \tag{10}
+\]</span></p>
+<h2 id="relu整合convolution">ReLU整合Convolution</h2>
+<p>假设一个卷积操作为<span class="math inline">\(r_3 = \sum_i^N r_1^ir_2^i\)</span>，则其量化后的公式为： <span class="math display">\[
+S_3(q_3-Z_3) = S_1S_2\sum_i^N(q_1-Z_1)(q_2-Z_2)\tag{11}
+\]</span> 将<span class="math inline">\(q_3\)</span>代入式<span class="math inline">\((8)\)</span>得： <span class="math display">\[
+S_4(q_4-Z_4) =  \begin{cases}0&amp;, q_3&lt;Z_3 \\S_3(q_3-Z_3)&amp;,q_3\ge Z_3  \end{cases} \tag{12}
+\]</span> 将式<span class="math inline">\((11)\)</span>代入得： <span class="math display">\[
+S_4(q_4-Z_4) =  \begin{cases}0&amp;, q_3&lt;Z_3 \\S_1S_2\sum_i^N(q_1-Z_1)(q_2-Z_2) &amp;,q_3\ge Z_3  \end{cases} \tag{13}
+\]</span> 整合得： <span class="math display">\[
+q_4 = \begin{cases}Z_4&amp;, q_3&lt;Z_3 \\\frac{S_1S_2}{S_4}\sum_i^N(q_1-Z_1)(q_2-Z_2)+Z_4 &amp;,q_3\ge Z_3  \end{cases} \tag{14}
+\]</span> 上述操作clip后则是： <span class="math display">\[
+q_4 = \begin{cases}Z_4&amp;, q_3&lt;Z_3 \\ clip(\frac{S_1S_2}{S_4}\sum_i^N(q_1-Z_1)(q_2-Z_2)+Z_4,0,255) &amp;,q_3\ge Z_3  \end{cases} \tag{15}
+\]</span> 这里由于<span class="math inline">\(ReLU\)</span>的物理原理，<span class="math inline">\(Z_4\)</span>是为0的，而当<span class="math inline">\(q_3&lt;Z_3\)</span>时，代入到式<span class="math inline">\((11)\)</span>可以发现，<span class="math inline">\(\sum_i^N(q_1-Z_1)(q_2-Z_2)&lt;0\)</span>，如果代入到<span class="math inline">\((15)\)</span>中的<span class="math inline">\(q_3 \ge Z_3\)</span>分支中时，可以得到<span class="math inline">\(q_4 = clip(\frac{S_1S_2}{S_4}\sum_i^N(q_1-Z_1)(q_2-Z_2)+Z_4,0,255)=0\)</span>，其中的<span class="math inline">\(\frac{S_1S_2}{S_4}\sum_i^N(q_1-Z_1)(q_2-Z_2)+Z_4=\frac{S_1S_2}{S_4}\times负数+0\)</span>，clip后就是0了</p>
+<p>综上，就可以使用如下式子表示卷积和<span class="math inline">\(ReLU\)</span>整合的结果： <span class="math display">\[
+q_4 = clip(\frac{S_1S_2}{S_4}\sum_i^N(q_1-Z_1)(q_2-Z_2)+Z_4,0,255) \tag{16}
+\]</span> 这个公式的意义相当于：计算出<span class="math inline">\(ReLU\)</span>后<span class="math inline">\(S\)</span>和<span class="math inline">\(Z\)</span>，然后将这个<span class="math inline">\(S\)</span>和<span class="math inline">\(Z\)</span>对应到卷积层的输出，这样一来，<span class="math inline">\(ReLU\)</span>运算就合并到了卷积层了。</p>
+<h2 id="leakyrelu">LeakyReLU</h2>
+<p>首先，<span class="math inline">\(LeakyReLU\)</span>的公式为： <span class="math display">\[
+LeakyReLU(x) = \begin{cases} \alpha x &amp;,x&lt;0 \\ x &amp;, x\ge0 \end{cases} \tag{17}
+\]</span> <span class="math inline">\(\alpha\)</span>为超参数，通常取值范围为<span class="math inline">\([0,1]\)</span></p>
+<p>类比式<span class="math inline">\((6),(7),(8),(9)\)</span>，可以得到： <span class="math display">\[
+r_2 = \begin{cases}\alpha r_1 &amp;,r_1&lt;0 \\ r_1 &amp;, r_1 \ge 0 \end{cases} \tag{18}
+\]</span></p>
+<p><span class="math display">\[
+S_2(q_2-Z_2) = \begin{cases}\alpha S_1(q_1-Z_1) &amp;,q_1&lt;Z_1 \\ S_1(q_1-Z_1) &amp;, q_1 \ge Z_1 \end{cases} \tag{19}
+\]</span></p>
+<p><span class="math display">\[
+q_2 = \begin{cases}\frac{\alpha S_1}{S_2}(q_1-Z_1)+Z_2 &amp;,q_1&lt;Z_1 \\ \frac{S_1}{S_2}(q_1-Z_1)+Z_2 &amp;, q_1 \ge Z_1 \end{cases} \tag{20}
+\]</span></p>
+<p>这里，由于<span class="math inline">\(\alpha\)</span>的存在，<span class="math inline">\(q_2\)</span>是无法用一个式子进行表示的，也就无法整合到卷积操作里了。</p>
+<h2 id="非线性函数">非线性函数</h2>
+<p>对于类<span class="math inline">\(ReLU\)</span>函数来说，其实还都是分段线性的，而遇到非线性的函数如<span class="math inline">\(sigmoid\)</span>、<span class="math inline">\(tanh\)</span>等，又应该如何量化呢？</p>
+<p>这些函数其实是用定点运算来近似浮点的效果，以<em>I-BERT: Integer-only BERT Quantization float</em>为例，它是采用多项式拟合的方式用线性计算来实现其中的非线性计算。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/12/17/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" title="模型量化中的激活函数">http://www.zephon.ml/2021/12/17/模型量化中的激活函数/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B/" rel="tag"><i class="fa fa-tag"></i> 轻量化模型</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/" rel="tag"><i class="fa fa-tag"></i> 模型压缩</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" rel="tag"><i class="fa fa-tag"></i> 模型量化</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/16/%E6%A8%A1%E5%9E%8B%E6%84%9F%E7%9F%A5%E8%AE%AD%E7%BB%83/" rel="prev" title="模型感知训练">
+      <i class="fa fa-chevron-left"></i> 模型感知训练
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E4%B8%AD%E7%9A%84%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">模型量化中的激活函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.</span> <span class="nav-text">量化回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#relu%E9%87%8F%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">ReLU量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#relu%E6%95%B4%E5%90%88convolution"><span class="nav-number">4.</span> <span class="nav-text">ReLU整合Convolution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#leakyrelu"><span class="nav-number">5.</span> <span class="nav-text">LeakyReLU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">非线性函数</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

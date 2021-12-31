@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Part1-多分类和神经网络练习 多分类 1.1 数据读取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-多分类和神经网络练习">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/10/Part1-%E5%A4%9A%E5%88%86%E7%B1%BB%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%83%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Part1-多分类和神经网络练习 多分类 1.1 数据读取">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210710115703019.png">
+<meta property="article:published_time" content="2021-07-10T12:59:33.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210710115703019.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/07/10/Part1-%E5%A4%9A%E5%88%86%E7%B1%BB%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%83%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Part1-多分类和神经网络练习 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/10/Part1-%E5%A4%9A%E5%88%86%E7%B1%BB%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%83%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-多分类和神经网络练习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-10 20:59:33" itemprop="dateCreated datePublished" datetime="2021-07-10T20:59:33+08:00">2021-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="part1-多分类和神经网络练习">Part1-多分类和神经网络练习</h1>
+<h2 id="多分类">多分类</h2>
+<h3 id="数据读取">1.1 数据读取</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.io <span class="keyword">import</span> loadmat</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data = loadmat(<span class="string">&#x27;ex3data1.mat&#x27;</span>) <span class="comment"># 使用scipy.io中的loadmat加载mat数据</span></span><br><span class="line">data</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>{'X': array([[0., 0., 0., ..., 0., 0., 0.],</p>
+<p>​ [0., 0., 0., ..., 0., 0., 0.],</p>
+<p>​ [0., 0., 0., ..., 0., 0., 0.],</p>
+<p>​ ...,</p>
+<p>​ [0., 0., 0., ..., 0., 0., 0.],</p>
+<p>​ [0., 0., 0., ..., 0., 0., 0.],</p>
+<p>​ [0., 0., 0., ..., 0., 0., 0.]]),</p>
+<p>'__globals__': [],</p>
+<p>'__header__': b'MATLAB 5.0 MAT-file, Platform: GLNXA64, Created on: Sun Oct 16 13:09:09 2011',</p>
+<p>'__version__': '1.0',</p>
+<p>'y': array([[10],</p>
+<p>​ [10],</p>
+<p>​ [10],</p>
+<p>​ ...,</p>
+<p>​ [ 9],</p>
+<p>​ [ 9],</p>
+<p>​ [ 9]], dtype=uint8)}</p>
+</blockquote>
+<h3 id="数据可视化">1.2 数据可视化</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X = data[<span class="string">&#x27;X&#x27;</span>]</span><br><span class="line">y = data[<span class="string">&#x27;y&#x27;</span>]</span><br><span class="line">i = <span class="number">1616</span></span><br><span class="line">image = X[i, :]</span><br><span class="line">plt.matshow(image.reshape((<span class="number">20</span>, <span class="number">20</span>)), cmap=<span class="string">&#x27;gray_r&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line">y.flatten()[i]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210710115703019.png" /></p>
+</blockquote>
+<h3 id="向量化逻辑回归">1.3 向量化逻辑回归</h3>
+<h4 id="代价函数">1.3.1 代价函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmiod</span>(<span class="params">z</span>):</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>/(<span class="number">1</span>+np.exp(-z))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">theta, X, y, lr</span>):</span></span><br><span class="line">  a = -y.T@np.log(sigmoid(X@theta.T))</span><br><span class="line">  b = (<span class="number">1</span>-y).T@np.log(<span class="number">1</span>-sigmoid(X@theta.T))</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">float</span>((a-b)/X.shape[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<h4 id="梯度计算">1.3.2 梯度计算</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradient</span>(<span class="params">theta, X, y, lr</span>):</span> <span class="comment"># n*m @ m*1</span></span><br><span class="line">  theta = theta.reshape((<span class="number">1</span>, X.shape[<span class="number">1</span>]))</span><br><span class="line">  <span class="keyword">return</span> (X.T@(sigmoid(X@theta.T)-y)).T/X.shape[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="参数">1.3.3 参数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">one_vs_all</span>(<span class="params">X, y, num_labels, lr</span>):</span></span><br><span class="line">  X = np.insert(X, <span class="number">0</span>, <span class="number">1</span>, axis=<span class="number">1</span>)</span><br><span class="line">  all_theta = np.zeros((num_labels, X.shape[<span class="number">1</span>]))</span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, num_labels+<span class="number">1</span>):</span><br><span class="line">    theta = np.zeros((<span class="number">1</span>, X.shape[<span class="number">1</span>]))</span><br><span class="line">    y_i = np.array([<span class="number">1</span> <span class="keyword">if</span> label==i <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> label <span class="keyword">in</span> y]).reshape(X.shape[<span class="number">0</span>], <span class="number">1</span>)</span><br><span class="line">    fmin = minimize(fun=cost, x0=theta, args=(X, y_i, lr), method=<span class="string">&#x27;TNC&#x27;</span>, jac=gradient)</span><br><span class="line">    all_theta[i-<span class="number">1</span>,:] = fmin.x</span><br><span class="line">  <span class="keyword">return</span> all_theta</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">all_theta = one_vs_all(X, y, <span class="number">10</span>, <span class="number">1</span>)</span><br><span class="line">all_theta</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>array([[-5.00990434e+00, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ 1.30011051e-02, 2.86538705e-07, 0.00000000e+00],</p>
+<p>​ [-5.71350473e+00, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ 6.86412447e-02, -7.09121713e-03, 0.00000000e+00],</p>
+<p>​ [-8.08044687e+00, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ -2.56458615e-04, -1.07383182e-06, 0.00000000e+00],</p>
+<p>​ ...,</p>
+<p>​ [-1.30853787e+01, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ -5.37387945e+00, 6.20602454e-01, 0.00000000e+00],</p>
+<p>​ [-8.81420750e+00, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ -2.68709952e-01, 1.66652812e-02, 0.00000000e+00],</p>
+<p>​ [-6.71877525e+00, 0.00000000e+00, 0.00000000e+00, ...,</p>
+<p>​ 5.14661140e-04, 2.18877575e-05, 0.00000000e+00]])</p>
+</blockquote>
+<h4 id="结果评估">1.3.4 结果评估</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_all</span>(<span class="params">X, all_theta</span>):</span></span><br><span class="line">  X = np.insert(X, <span class="number">0</span>, <span class="number">1</span>, axis=<span class="number">1</span>)</span><br><span class="line">  h = sigmoid(X@all_theta.T)</span><br><span class="line">  h_argmax = np.argmax(h, axis=<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">return</span> h_argmax+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y_pred = predict_all(X, all_theta)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;accuracy：<span class="subst">&#123;np.<span class="built_in">sum</span>(y_pred==y.flatten())/<span class="built_in">len</span>(y_pred)*<span class="number">100</span>&#125;</span>%&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>accuracy：97.42%</p>
+</blockquote>
+<h2 id="神经网络">神经网络</h2>
+<h3 id="前向传播">2.1 前向传播</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载训练好的权重 </span></span><br><span class="line">data = loadmat(<span class="string">&#x27;ex3weights.mat&#x27;</span>)</span><br><span class="line">data</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>{'Theta1':...</p>
+<p>'Theta2':...</p>
+<p>'__globals__': [],</p>
+<p>'__header__': b'MATLAB 5.0 MAT-file, Platform: GLNXA64, Created on: Tue Oct 18 14:57:02 2011',</p>
+<p>'__version__': '1.0'}</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 序列化和反序列化</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">serialize</span>(<span class="params">theta1, theta2</span>):</span></span><br><span class="line">  <span class="keyword">return</span> np.append(theta1.flatten(), theta2.flatten())</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deserialize</span>(<span class="params">params</span>):</span></span><br><span class="line">  theta1 = params[:(input_size+<span class="number">1</span>)*hidden_size].reshape((hidden_size, -<span class="number">1</span>))</span><br><span class="line">  theta2 = params[(input_size+<span class="number">1</span>)*hidden_size:].reshape((out_size, -<span class="number">1</span>))</span><br><span class="line">  <span class="keyword">return</span> theta1, theta2</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">X, params</span>):</span></span><br><span class="line">  theta1, theta2 = deserialize(params)</span><br><span class="line">  a1 = np.insert(X, <span class="number">0</span>, <span class="number">1</span>, axis=<span class="number">1</span>)</span><br><span class="line">  z2 = a1@(theta1.T)</span><br><span class="line">  a2 = sigmoid(z2)</span><br><span class="line">  a2 = np.insert(a2, <span class="number">0</span>, <span class="number">1</span>, axis=<span class="number">1</span>)</span><br><span class="line">  z3 = a2@theta2.T</span><br><span class="line">  h = sigmoid(z3)</span><br><span class="line">  <span class="keyword">return</span> a1, z2, a2, z3, h</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 结果</span></span><br><span class="line">params = serialize(data[<span class="string">&#x27;Theta1&#x27;</span>],data[<span class="string">&#x27;Theta2&#x27;</span>])</span><br><span class="line">_,_,_,_,res = forward(X, params)</span><br><span class="line">y_pred = np.argmax(res, axis=<span class="number">1</span>)+<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;accuracy：<span class="subst">&#123;np.<span class="built_in">sum</span>(y_pred==y.flatten())/<span class="built_in">len</span>(y_pred)*<span class="number">100</span>&#125;</span>%&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>accuracy：97.52%</p>
+</blockquote>
+<h3 id="反向传播">2.2 反向传播</h3>
+<h4 id="代价函数-1">2.2.1 代价函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cost</span>(<span class="params">params, X, Y</span>):</span></span><br><span class="line">  m = X.shape[<span class="number">0</span>]</span><br><span class="line">  a1, z2, a2, z3, h = forward(X, params)</span><br><span class="line">  a = -Y*np.log(h) <span class="comment"># 10*5000 * 5000*10</span></span><br><span class="line">  b = (<span class="number">1</span>-Y)*np.log(<span class="number">1</span>-h)</span><br><span class="line">  <span class="keyword">return</span> (a-b).<span class="built_in">sum</span>()/m</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 正则化代价函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reg_cost</span>(<span class="params">params, X, Y, reg</span>):</span></span><br><span class="line">  r1 = np.<span class="built_in">sum</span>(np.power(theta1[:,<span class="number">1</span>:],<span class="number">2</span>))</span><br><span class="line">  r2 = np.<span class="built_in">sum</span>(np.power(theta2[:,<span class="number">1</span>:],<span class="number">2</span>))</span><br><span class="line">  <span class="keyword">return</span> cost(params, X, Y) + reg*(r1+r2)/(<span class="number">2</span>*X.shape[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<h4 id="sigmoid梯度">2.2.2 Sigmoid梯度</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid_grad</span>(<span class="params">z</span>):</span></span><br><span class="line">  s = sigmoid(z)</span><br><span class="line">  <span class="keyword">return</span> s*(<span class="number">1</span>-s)</span><br></pre></td></tr></table></figure>
+<h4 id="随机初始化">2.2.3 随机初始化</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 确定每层单元数</span></span><br><span class="line"><span class="comment"># 400+1 -&gt; 25+1 -&gt; 10</span></span><br><span class="line">epsilon_init = <span class="number">0.12</span></span><br><span class="line">input_size = <span class="number">400</span></span><br><span class="line">hidden_size = <span class="number">25</span></span><br><span class="line">out_size = <span class="number">10</span></span><br><span class="line">weight_num = (input_size+<span class="number">1</span>)*hidden_size+(hidden_size+<span class="number">1</span>)*out_size</span><br><span class="line">W = np.random.rand(weight_num)*<span class="number">2</span>*epsilon_init - epsilon_init</span><br><span class="line">Y = np.array([[<span class="number">1</span> <span class="keyword">if</span> y[i]==x <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">11</span>)] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(y))])</span><br></pre></td></tr></table></figure>
+<h4 id="反向传播-1">2.2.4 反向传播</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backprop</span>(<span class="params">params, X, Y</span>):</span></span><br><span class="line">  m = X.shape[<span class="number">0</span>]</span><br><span class="line">  a1, z2, a2, z3, h = forward(X, params)</span><br><span class="line">  delta1 = np.zeros(theta1.shape)</span><br><span class="line">  delta2 = np.zeros(theta2.shape)</span><br><span class="line">  J = cost(params, X, Y)</span><br><span class="line"></span><br><span class="line">  d3 = h-Y</span><br><span class="line">  d2 = d3@theta2[:,<span class="number">1</span>:]*sigmoid_grad(z2)</span><br><span class="line">  D2 = (d3.T@a2)/<span class="built_in">len</span>(X)</span><br><span class="line">  D1 = (d2.T@a1)/<span class="built_in">len</span>(X)</span><br><span class="line"></span><br><span class="line">  grad = serialize(D1, D2)</span><br><span class="line">  <span class="keyword">return</span> J, grad</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reg_backprop</span>(<span class="params">params, X, Y, reg</span>):</span></span><br><span class="line">  _,D = backprop(params, X, Y)</span><br><span class="line">  D1,D2 = deserialize(D)</span><br><span class="line">  D1[:, <span class="number">1</span>:]+= (reg*theta1[:,<span class="number">1</span>:])/<span class="built_in">len</span>(X)</span><br><span class="line">  D2[:, <span class="number">1</span>:]+= (reg*theta2[:,<span class="number">1</span>:])/<span class="built_in">len</span>(X)</span><br><span class="line">  J = reg_cost(params, X, Y, reg)</span><br><span class="line">  <span class="keyword">return</span> J,serialize(D1, D2)</span><br></pre></td></tr></table></figure>
+<h4 id="计算参数">2.2.5 计算参数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.optimize <span class="keyword">import</span> minimize</span><br><span class="line">fmin = minimize(fun=backprop, x0=W, args=(X, Y), method=<span class="string">&#x27;TNC&#x27;</span>, jac=<span class="literal">True</span>, options=&#123;<span class="string">&#x27;maxiter&#x27;</span>: <span class="number">250</span>&#125;)</span><br><span class="line">_,_,_,_,h = forward(X, fmin.x)</span><br><span class="line">y_pred = np.argmax(h, axis=<span class="number">1</span>)+<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;accuracy：<span class="subst">&#123;np.<span class="built_in">sum</span>(y_pred==y.flatten())/<span class="built_in">len</span>(y_pred)*<span class="number">100</span>&#125;</span>%&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>accuracy：99.88%</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fmin = minimize(fun=reg_backprop, x0=W, args=(X, Y, <span class="number">1</span>), method=<span class="string">&#x27;TNC&#x27;</span>, jac=<span class="literal">True</span>, options=&#123;<span class="string">&#x27;maxiter&#x27;</span>: <span class="number">250</span>&#125;)</span><br><span class="line">_,_,_,_,h = forward(X, fmin.x)</span><br><span class="line">y_pred = np.argmax(h, axis=<span class="number">1</span>)+<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;accuracy：<span class="subst">&#123;np.<span class="built_in">sum</span>(y_pred==y.flatten())/<span class="built_in">len</span>(y_pred)*<span class="number">100</span>&#125;</span>%&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>accuracy：95.72%</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/07/10/Part1-%E5%A4%9A%E5%88%86%E7%B1%BB%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%83%E4%B9%A0/" title="Part1-多分类和神经网络练习">http://www.zephon.ml/2021/07/10/Part1-多分类和神经网络练习/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/09/Part1-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/" rel="prev" title="Part1-神经网络学习">
+      <i class="fa fa-chevron-left"></i> Part1-神经网络学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/12/Part1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E5%BB%BA%E8%AE%AE/" rel="next" title="Part1-机器学习应用中的建议">
+      Part1-机器学习应用中的建议 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E5%A4%9A%E5%88%86%E7%B1%BB%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%BB%83%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">Part1-多分类和神经网络练习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.</span> <span class="nav-text">多分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 数据读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 数据可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 向量化逻辑回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">1.3.1 代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">1.3.2 梯度计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">1.3.3 参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E8%AF%84%E4%BC%B0"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">1.3.4 结果评估</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">1.2.</span> <span class="nav-text">神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 前向传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 反向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sigmoid%E6%A2%AF%E5%BA%A6"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 Sigmoid梯度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">2.2.3 随机初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD-1"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">2.2.4 反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">2.2.5 计算参数</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

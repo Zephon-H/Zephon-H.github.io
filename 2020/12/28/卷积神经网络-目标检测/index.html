@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 目标定位">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络-目标检测">
+<meta property="og:url" content="http://www.zephon.ml/2020/12/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="卷积神经网络-目标检测 目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。 目标定位">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228123954111.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228124818356.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228133314846.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140303024.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140413919.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140512762.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142154833.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142510296.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143559460.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143859644.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228144404612.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150026755.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150827635.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229100808790.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229101702105.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229102537025.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229103401743.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229104032246.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105105568.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105955274.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110321783.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110512960.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110558587.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110735645.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229142922008.png">
+<meta property="article:published_time" content="2020-12-28T03:30:02.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/12/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>卷积神经网络-目标检测 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/12/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卷积神经网络-目标检测
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-28 11:30:02" itemprop="dateCreated datePublished" datetime="2020-12-28T11:30:02+08:00">2020-12-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="卷积神经网络-目标检测">卷积神经网络-目标检测</h1>
+<p>目标检测是计算机视觉邻域中的一个新兴应用方向，相比前之前，它的性能也是越来越好，在构建目标检测之前，可以先了解一下目标定位。</p>
+<h2 id="目标定位">目标定位</h2>
+<h3 id="什么是目标定位和检测">什么是目标定位和检测</h3>
+<p>之前所学的图片分类问题，主要是给定一张图片，将图片进行分类，如图，给定图片，判定为"Car"类</p>
+<p>而定位分类问题，这意味着，不仅需要用算法判断图片中是不是一辆汽车，还需要在图片中标注出它的位置，如图，使用边框将汽车圈起来</p>
+<p>而目标检测，则对应的图片中可能有多个对象需要检测并确定位置</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228113741768.png" alt="image-20201228113741768" /><figcaption>image-20201228113741768</figcaption>
+</figure>
+<h3 id="位置分类">位置分类</h3>
+<p>图片分类问题之前已经有所了解了，如输入一张图片到多层卷积神经网络，然后会输出一个特征向量，并通过softmax单元来预测图片类型，这就是图片分类的基本流程</p>
+<blockquote>
+<p>如果还想定位图片中的洗车位置，又该怎么做呢？</p>
+</blockquote>
+<p>可以让神经网络多输出几个单元，输出一个边界框，具体地，就是让神经网络再多输出4个数字(bx,by,bh,bw)</p>
+<p>一般情况符号表示：</p>
+<p>图片左上角坐标：(0,0)</p>
+<p>图片右下角坐标：(1,1)</p>
+<p>边框中心坐标：(bx,by)</p>
+<p>边框高度：bh</p>
+<p>边框宽度：bw</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228123954111.png" alt="image-20201228123954111" /><figcaption>image-20201228123954111</figcaption>
+</figure>
+<h3 id="定义目标标签y">定义目标标签y</h3>
+<p>神经网络需要输出的是四个数字和一个分类标签即<span class="math inline">\(b_x,b_y,b_h,b_w,class\ label(1-4)\)</span></p>
+<p><span class="math inline">\(y = \begin{bmatrix} P_c \\ b_x \\ b_y \\ b_h \\ b_w \\ c_1 \\ c_2 \\ c_3 \end{bmatrix} \\ P_c：被检测对象属于某一分类的概率(背景分类除外)，如果P_c为0，则没有被检测对象，其它参数无意义 \\ 如果检测到对象：b_x、b_y、b_w、b_h、c_1、c_2、c_3 \\ c_1,c_2,c_3表现该对应属于1-3中的哪一类\)</span></p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228124818356.png" alt="image-20201228124818356" /><figcaption>image-20201228124818356</figcaption>
+</figure>
+<h3 id="损失函数">损失函数</h3>
+<p><span class="math display">\[
+L(\hat y,y) = x = \begin{cases}  
+(\hat y_1-y_1)^2+(\hat y_2-y_2)^2 + \cdots + (\hat y_8-y_8)^2\ 如果y_1=1 \\
+(\hat y_2-y_1)^2\ 如果y_1=0
+\end{cases}
+\]</span></p>
+<blockquote>
+<p>实际应用中，可以不对<span class="math inline">\(c_1,c_2,c_3\)</span>的softmax激活的输出使用对数似然损失，通常是地边框坐标应用平方误差或类似方法，对<span class="math inline">\(P_c\)</span>应用Logistic Regression</p>
+</blockquote>
+<h2 id="特征点检测landmark-detection">特征点检测(Landmark detection)</h2>
+<p>对于人脸来说，通常可能会将眼角、眼眶、鼻梁、嘴角等作为你们俩检测的特征点；而对于人体姿态检测，则可能会定义一些关键特征点如胸部的中点、左肩、左肘、腰等，然后通过神经网络标人物姿态的关键特征点，再输出这些标注过的特征点，就相当于输出了人物的姿态动作</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228133314846.png" alt="image-20201228133314846" /><figcaption>image-20201228133314846</figcaption>
+</figure>
+<blockquote>
+<p>要明确一点：特征点一的特性必须在不同的图片中保持一致</p>
+</blockquote>
+<h2 id="目标检测">目标检测</h2>
+<blockquote>
+<p>通过卷积网络进行目标检测，使用的是基于滑动窗口的目标检测算法</p>
+</blockquote>
+<h3 id="汽车检测示例">汽车检测示例</h3>
+<p>首先创建一个标签训练集</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140303024.png" alt="image-20201228140303024" /><figcaption>image-20201228140303024</figcaption>
+</figure>
+<h3 id="滑动窗口检测">滑动窗口检测</h3>
+<p>如图，首先通过卷积网络判断图中框内是否有汽车</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140413919.png" alt="image-20201228140413919" /><figcaption>image-20201228140413919</figcaption>
+</figure>
+<p>如果没有，则继续处理第二个图像</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228140512762.png" alt="image-20201228140512762" /><figcaption>image-20201228140512762</figcaption>
+</figure>
+<p>依次重复操作，直到遍历整个图片</p>
+<p>然后再重复上述操作，但将边框大小调大，遍历完成后，再重复，仍然将边框调大，如此，无论汽车在图片什么位置，总会有一个窗口能检测到它</p>
+<blockquote>
+<p>缺点：计算成本太高</p>
+<p>因为在图片中剪切出很多小方块，卷积网络需要一个一个地处理，如果选用上海步幅很大，则显然会减少输入卷积的窗口个数，但粗粒度又可能会影响性能，反之，如果采用小粒度或小步幅，则传递给卷积网络的小窗口又会特别多，这又会造成超高的计算成本，所以在最开始的时候，通常采用更简单的分类器进行目标检测，如简单的线性分类器，而由于每个分类器计算成本都很低，所以滑动窗口目标检测算法表现较好，但卷积网络运行单个分类任务的成本却高得多，并且滑动窗口太慢，除非使用超细粒度或极小步幅，否则无法准确定位图片中的目标。</p>
+</blockquote>
+<h2 id="卷积的滑动窗口实现">卷积的滑动窗口实现</h2>
+<h3 id="将fc层转成卷积层">将FC层转成卷积层</h3>
+<p>如图，假设对象检测算法输入一个14×14×3的图像，使用16个5×5的过滤器后，映射为10×10×16，然后通过2×2的最大池化操作，图像减小到5×5×16，然后添加一个连接400个单元的全连接层，接着再加一个全连接层，最终通过softmax单元输出</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142154833.png" alt="image-20201228142154833" /><figcaption>image-20201228142154833</figcaption>
+</figure>
+<p>将全连接层转换成卷积层：</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228142510296.png" alt="image-20201228142510296" /><figcaption>image-20201228142510296</figcaption>
+</figure>
+<h3 id="通过卷积实现滑动窗口目标检测">通过卷积实现滑动窗口目标检测</h3>
+<p>如图，假设输入是14×14×3，和之前一样，通过卷积网后，输出1×1×4，假设将输入处理为16×16×3，则一系列处理后输出2×2×4，相当于一次计算了四次滑动窗口的值</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143559460.png" alt="image-20201228143559460" /><figcaption>image-20201228143559460</figcaption>
+</figure>
+<p>由于最大池化参数为2，所以相当于以大小为2的步幅在原始图片上应用神经网络</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228143859644.png" alt="image-20201228143859644" /><figcaption>image-20201228143859644</figcaption>
+</figure>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1312.6229">参考文献:OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks</a>)</p>
+<blockquote>
+<p>但这种算法仍存在一个缺点就是边界框的位置可能不够准确</p>
+</blockquote>
+<h2 id="边界框预测">边界框预测</h2>
+<h3 id="输出正确的边框">输出正确的边框</h3>
+<p>在滑动窗口方法中，取出这些离散的位置集合，然后在它们上面运算分类器，如果滑动窗口的大小和边框大小不符合，如图，可能就无法保证边框的正确性，那么如何让这个算法输出更精准的边框呢？</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228144404612.png" alt="image-20201228144404612" /><figcaption>image-20201228144404612</figcaption>
+</figure>
+<h3 id="yolo-算法">YOLO 算法</h3>
+<p>如图，假设输入图像是100×100的，然后在图像上放一个网格，为实现方便，此处用3×3网格，实际上会用更加精细的网格，基本思想是使用图像分类和定位算法，然后逐一应用到9个格子上。</p>
+<p>对于什么都没有格子，<span class="math inline">\(P_c=0\)</span>，则直接跳过，对于有目标的格子，则取目标的中点，然后将目标分配给包含对象中点的格子</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150026755.png" alt="image-20201228150026755" /><figcaption>image-20201228150026755</figcaption>
+</figure>
+<p>对于参数的取值，通常的约定是：</p>
+<p><span class="math inline">\(b_x,b_y\)</span>必须是0~1之间，而<span class="math inline">\(b_h,b_w\)</span>则可能大于1</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1506.02640">参考文献:You Only Look Once: Unified, Real-Time Object Detection</a></p>
+<h2 id="交并比intersection-over-union">交并比(Intersection over union)</h2>
+<blockquote>
+<p>如何判断目标检测算法效果好坏呢？</p>
+</blockquote>
+<h3 id="评估目标位置">评估目标位置</h3>
+<p>在目标检测任务中，我们希望同时能定位对象，于是，引入评估目标检测结果的函数-交并比(IoU)函数</p>
+<p>IoU：计算两个边界框交集和并集之比，如图，<span class="math inline">\(IoU=\frac{黄色阴影面积}{绿色阴影面积}\)</span></p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201228150827635.png" alt="image-20201228150827635" /><figcaption>image-20201228150827635</figcaption>
+</figure>
+<blockquote>
+<p>一般约定 ，在计算机检测任务中，如果IoU大于或等于0.5，则证明检测正确，如果预测框和实际框完善重叠，则IoU=1。</p>
+</blockquote>
+<h2 id="非极大值抑制non-max-suppression">非极大值抑制(non-max suppression)</h2>
+<h3 id="非极大值抑制示例">非极大值抑制示例</h3>
+<p>假设需要在如图上检测行人和汽车，可能会在上面放19×19网格，理论上每辆车只有一个中点，所以理论上应该只有一个格子作出有车的预测，但实践中，当进行目标分类和定位算法时，对于每个格子都运算一次，因此，有的邻近的格子可能会认为中点也在该格子内</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229100808790.png" alt="image-20201229100808790" /><figcaption>image-20201229100808790</figcaption>
+</figure>
+<p>而Non-max suppression就是用来解决这个问题的</p>
+<p>因为需要在361个格子上都运行一次，因此最后可能会对同一对象做出多次检测，而Non-max suppression做的就是清理这些检测结果，这样，每辆车只检测一次</p>
+<p>具体的算法步骤：</p>
+<ol type="1">
+<li>查看检测结果，每个检测结果相关的概率<span class="math inline">\(P_c\)</span>，首先看概率最大的<span class="math inline">\(P_c\)</span>，然后认为该检测是最可靠的检测，如图用高亮标记</li>
+<li>这样之后，Non-max suppression会逐一审视剩下的检测框，所有检测到的和这个最大边界框有高交并比、高度重叠的其它边界框则输出会被抑制，如图用暗色标记</li>
+</ol>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229101702105.png" alt="image-20201229101702105" /><figcaption>image-20201229101702105</figcaption>
+</figure>
+<blockquote>
+<p>non max：只输出概率最大的分类结果，但抑制很接近但不是最大的其它预测结果</p>
+</blockquote>
+<h3 id="非极大值抑制算法">非极大值抑制算法</h3>
+<p>如图，对于每个预测结果格式是<span class="math inline">\(\begin{bmatrix}p_c\\ b_x\\ b_y\\ b_h\\ b_w \end{bmatrix}\)</span>,丢弃所有<span class="math inline">\(p_c \le 0.6\)</span>的结果，对于剩下的所有边框：选择<span class="math inline">\(p_c\)</span>最大边框的作为输出结果，丢弃上一步后剩下的所有<span class="math inline">\(IoU \ge 0.5\)</span>的边框</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229102537025.png" alt="image-20201229102537025" /><figcaption>image-20201229102537025</figcaption>
+</figure>
+<h2 id="anchor-boxes">Anchor Boxes</h2>
+<blockquote>
+<p>前面的知识，都是每个格子只能检测一个对象，如果想一个格子检测出多个对象，则需要Anchor Boxes</p>
+</blockquote>
+<h3 id="重叠目标">重叠目标</h3>
+<p>如图，使用3×3的网格，则行人的中点和汽车的中点几乎在同一个地方，所以对于对应的那个格子，如果y输出和之前一样的向量，将无法输出检测结果，而是必须从两个检测结果中选择一个</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229103401743.png" alt="image-20201229103401743" /><figcaption>image-20201229103401743</figcaption>
+</figure>
+<p>而Anchor box的思路则是：</p>
+<p>预先定义两个不同形状的anchor box，然后将预测结果和这两个anchor box关联起来，一般而言，实际情况下可能会用更多(如5个或更多)的anchor box。</p>
+<p>所以，用的向量对应的是 <span class="math display">\[
+y=\begin{bmatrix} p_c\\ b_x\\ b_y\\b_h\\b_w\\c_1\\c_2\\c_3\\p_c\\b_x\\b_y\\b_h\\b_w\\c_1\\c_2\\c_3 \end{bmatrix}
+\]</span> <img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229104032246.png" alt="image-20201229104032246" /></p>
+<h3 id="anchor-box算法">Anchor box算法</h3>
+<p>预先：</p>
+<ul>
+<li>每个目标处于训练中</li>
+<li>图片被分配到对应的包含目标中点的格子</li>
+</ul>
+<p>如果是两个anchor boxes：</p>
+<p>则对于训练图像中的每个目标被分配到包含目标中点和与目标形状IoU最高的anchor box的格子中，即目标在目标标签中的编码方式为(grid cell,anchor box)</p>
+<h3 id="anchor-box示例">Anchor box示例</h3>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105105568.png" alt="image-20201229105105568" /><figcaption>image-20201229105105568</figcaption>
+</figure>
+<h2 id="综合yolo目标检测算法">综合：Yolo目标检测算法</h2>
+<h3 id="训练集">训练集</h3>
+<p>输入：图片</p>
+<p>输出：shape：3×3(假设图片分成3×3格)×2(anchor box数量)×8(向量维度:5(<span class="math inline">\(p_c\)</span>+边框参数(<span class="math inline">\(b_x,b_y,b_w,b_h\)</span>))+类别种数(<span class="math inline">\(c_1,c_2,c_3\)</span>))，</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229105955274.png" alt="image-20201229105955274" /><figcaption>image-20201229105955274</figcaption>
+</figure>
+<h3 id="做出预测">做出预测</h3>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110321783.png" alt="image-20201229110321783" /><figcaption>image-20201229110321783</figcaption>
+</figure>
+<h3 id="输出non-max-supressed结果">输出non-max supressed结果</h3>
+<ul>
+<li>对于每个格子，会有2个预测边框，其中一个<span class="math inline">\(p_c\)</span>很低</li>
+</ul>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110512960.png" alt="image-20201229110512960" /><figcaption>image-20201229110512960</figcaption>
+</figure>
+<ul>
+<li>丢弃概率低的预测</li>
+</ul>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110558587.png" alt="image-20201229110558587" /><figcaption>image-20201229110558587</figcaption>
+</figure>
+<ul>
+<li>对每个类别 ，单独运算non-max suppresion，生成最终预测结果(如有三种类别：行人、汽车、摩托车，则需要分别对其进行non-max suppression)</li>
+</ul>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229110735645.png" alt="image-20201229110735645" /><figcaption>image-20201229110735645</figcaption>
+</figure>
+<h2 id="候选区域">候选区域</h2>
+<h3 id="region-proposalr-cnn">Region proposal：R-CNN</h3>
+<blockquote>
+<p>R-CNN：Regions with convolutional neural networks，带区域的卷积神经网络</p>
+</blockquote>
+<p>这个算法尝试选出一些在上面运算卷积网络分类器更有意义的区域，所以这里不再针对每个滑动窗口跑检测算法，而是只选择一些窗口，在少数窗口上运行卷积网络分类器，选出候选区域的方法是图像分割算法，</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201229142922008.png" alt="image-20201229142922008" /><figcaption>image-20201229142922008</figcaption>
+</figure>
+<h3 id="更快的算法">更快的算法</h3>
+<p>R-CNN：提出候选区域，然后对每个候选区域跑一次分类器，每个区域输出一个标签和一个边界框</p>
+<p>Fast R-CNN：提出候选区域，使用卷积实现滑动窗口(使用卷积替代循环)，但得到候选区域的聚类步骤仍然非常缓慢</p>
+<p>Faster R-CNN：使用卷积网络获得候选区域</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/12/28/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" title="卷积神经网络-目标检测">http://www.zephon.ml/2020/12/28/卷积神经网络-目标检测/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"><i class="fa fa-tag"></i> 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%AE%9E%E4%BE%8B%E6%8E%A2%E7%A9%B6/" rel="prev" title="卷积神经网络-实例探究">
+      <i class="fa fa-chevron-left"></i> 卷积神经网络-实例探究
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/03/%E6%9C%BA%E5%99%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="next" title="机器/深度学习自学">
+      机器/深度学习自学 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">卷积神经网络-目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%AE%9A%E4%BD%8D"><span class="nav-number">1.1.</span> <span class="nav-text">目标定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9B%AE%E6%A0%87%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%A3%80%E6%B5%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是目标定位和检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.2.</span> <span class="nav-text">位置分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%9B%AE%E6%A0%87%E6%A0%87%E7%AD%BEy"><span class="nav-number">1.1.3.</span> <span class="nav-text">定义目标标签y</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.4.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E7%82%B9%E6%A3%80%E6%B5%8Blandmark-detection"><span class="nav-number">1.2.</span> <span class="nav-text">特征点检测(Landmark detection)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.3.</span> <span class="nav-text">目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%BD%E8%BD%A6%E6%A3%80%E6%B5%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">汽车检测示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E6%A3%80%E6%B5%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">滑动窗口检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%9A%84%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">卷积的滑动窗口实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86fc%E5%B1%82%E8%BD%AC%E6%88%90%E5%8D%B7%E7%A7%AF%E5%B1%82"><span class="nav-number">1.4.1.</span> <span class="nav-text">将FC层转成卷积层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8D%B7%E7%A7%AF%E5%AE%9E%E7%8E%B0%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">通过卷积实现滑动窗口目标检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%95%8C%E6%A1%86%E9%A2%84%E6%B5%8B"><span class="nav-number">1.5.</span> <span class="nav-text">边界框预测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BE%B9%E6%A1%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">输出正确的边框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yolo-%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.2.</span> <span class="nav-text">YOLO 算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E5%B9%B6%E6%AF%94intersection-over-union"><span class="nav-number">1.6.</span> <span class="nav-text">交并比(Intersection over union)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%84%E4%BC%B0%E7%9B%AE%E6%A0%87%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.6.1.</span> <span class="nav-text">评估目标位置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E6%9E%81%E5%A4%A7%E5%80%BC%E6%8A%91%E5%88%B6non-max-suppression"><span class="nav-number">1.7.</span> <span class="nav-text">非极大值抑制(non-max suppression)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%9E%81%E5%A4%A7%E5%80%BC%E6%8A%91%E5%88%B6%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.7.1.</span> <span class="nav-text">非极大值抑制示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%9E%81%E5%A4%A7%E5%80%BC%E6%8A%91%E5%88%B6%E7%AE%97%E6%B3%95"><span class="nav-number">1.7.2.</span> <span class="nav-text">非极大值抑制算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anchor-boxes"><span class="nav-number">1.8.</span> <span class="nav-text">Anchor Boxes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%8F%A0%E7%9B%AE%E6%A0%87"><span class="nav-number">1.8.1.</span> <span class="nav-text">重叠目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anchor-box%E7%AE%97%E6%B3%95"><span class="nav-number">1.8.2.</span> <span class="nav-text">Anchor box算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anchor-box%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.8.3.</span> <span class="nav-text">Anchor box示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88yolo%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="nav-number">1.9.</span> <span class="nav-text">综合：Yolo目标检测算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E9%9B%86"><span class="nav-number">1.9.1.</span> <span class="nav-text">训练集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9A%E5%87%BA%E9%A2%84%E6%B5%8B"><span class="nav-number">1.9.2.</span> <span class="nav-text">做出预测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BAnon-max-supressed%E7%BB%93%E6%9E%9C"><span class="nav-number">1.9.3.</span> <span class="nav-text">输出non-max supressed结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%99%E9%80%89%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.10.</span> <span class="nav-text">候选区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#region-proposalr-cnn"><span class="nav-number">1.10.1.</span> <span class="nav-text">Region proposal：R-CNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%BF%AB%E7%9A%84%E7%AE%97%E6%B3%95"><span class="nav-number">1.10.2.</span> <span class="nav-text">更快的算法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

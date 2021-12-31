@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深度学习-机器学习策略 什么是机器学习策略  因为在训练过程中，如果通常会有很多选择可以深试，但如果做出了错误的选择，就有可能浪费时间向错误的方向前进，所有需要机器学习策略来迅速判断跟哪些想法是靠谱的，或者提出新想法等，进而指引朝向最有可能的方向前进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习-改善训练结果">
+<meta property="og:url" content="http://www.zephon.ml/2020/12/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="深度学习-机器学习策略 什么是机器学习策略  因为在训练过程中，如果通常会有很多选择可以深试，但如果做出了错误的选择，就有可能浪费时间向错误的方向前进，所有需要机器学习策略来迅速判断跟哪些想法是靠谱的，或者提出新想法等，进而指引朝向最有可能的方向前进">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-23T03:37:24.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/12/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深度学习-改善训练结果 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/12/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习-改善训练结果
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-23 11:37:24" itemprop="dateCreated datePublished" datetime="2020-12-23T11:37:24+08:00">2020-12-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="深度学习-机器学习策略">深度学习-机器学习策略</h1>
+<h2 id="什么是机器学习策略">什么是机器学习策略</h2>
+<blockquote>
+<p>因为在训练过程中，如果通常会有很多选择可以深试，但如果做出了错误的选择，就有可能浪费时间向错误的方向前进，所有需要机器学习策略来迅速判断跟哪些想法是靠谱的，或者提出新想法等，进而指引朝向最有可能的方向前进</p>
+</blockquote>
+<h2 id="正交化">正交化</h2>
+<blockquote>
+<p>调整多个互不影响(正交)的参数，进而调整训练效果</p>
+</blockquote>
+<p>机器学习的假设链</p>
+<ol type="1">
+<li>确保系统在训练集上得到的结果不错(否则采取更深的网络、Adam等法处理)</li>
+<li>在验证集上表现不错(否则采取正则化、增大训练集等操作)</li>
+<li>在测试集上表现不错(否则采取增大验证集等操作)</li>
+<li>在实际应用中表示不错(否则回去改变验证集或修改Cost function)</li>
+</ol>
+<h2 id="单个数字评估指标">单个数字评估指标</h2>
+<p>查准率(Precision)和召回率(Recall)</p>
+<p>以猫分类为例：</p>
+<p>查准率是在分类器标记为猫的例子中，有多少真的是猫；</p>
+<p>查全率(召回率)是对于所有真猫的图片，分类器正确识别出了多少百分比</p>
+<blockquote>
+<p>查准率和查全率通常不能同时达到非常高，往往需要折衷</p>
+<p>使用查准率和查全率作为评价指标，通常是很好的，但当两个分类器，一个在查准率上表现好，一个在查全率上表现好时，则无法判断哪个分类器表现更好。</p>
+</blockquote>
+<p>因此，在评估一个分类器时，通常使用一个新的评估指标，可以结合查准率和查全率，那就是F1 score，记查准率为P，查全率为R，则<span class="math inline">\(F_1 = \frac{2}{\frac{1}{P}+\frac{1}{R}}\)</span></p>
+<p>这种单一评价指标可以加速机器学习</p>
+<h2 id="满足和优化指标">满足和优化指标</h2>
+<blockquote>
+<p>优化指标：尽量达到最好</p>
+<p>满足指标：必须足够好，达到之后则不在乎这个指标有多好</p>
+</blockquote>
+<h2 id="训练集验证集测试集划分">训练集、验证集、测试集划分</h2>
+<blockquote>
+<ol type="1">
+<li>验证集、测试集尽量来自同一分布</li>
+<li>选择很重要的数据或能够反映将来会得到的数据作为验证集和测试集</li>
+</ol>
+</blockquote>
+<h2 id="验证集和测试集的大小">验证集和测试集的大小</h2>
+<blockquote>
+<p>过去的划分方式：将所有数据按照7:3分成训练集和测试集或按照6:2:2划分训练集、验证集和测试集</p>
+<p>但在现在的大数据型的数据集中，例如有1,000,000数据，则可以划分98%作为训练集，而只需要1%验证集和1%测试集，因为1,000,000的1%已经是10,000，对于验证集和测试集来说已经足够了</p>
+<p>对于测试集而言：需要让测试集足够大，保证能够以较高置信度的评估系统整体性能，因此，除非需要对最终投产系统有一个很精确的指标，一般来说，测试集不需要上百万个例子</p>
+</blockquote>
+<h2 id="什么时候更改验证集测试集和指标">什么时候更改验证集、测试集和指标</h2>
+<blockquote>
+<p>一个猫分类的例子：</p>
+<p>有两个算法可能将图片中的关于猫的图片分类出来</p>
+<p>算法A错误率：3%；算法B错误率：5%</p>
+<p>但A会将一些不能被用户或公司接受的图片分类到猫类，而B则不会</p>
+<p>所以从单一错误率指标看，可能会选A，但实际上更可能会选B</p>
+<p>即：在训练和验证集的基础上，偏向于A，因为A的错误率更低，但公司和用户更倾向于B，因此，当评估指标无法正确衡量算法之间的优劣排序时，这就意味着应该改变评估指标了，或要改变验证集和测试集。</p>
+<p>其中一个修改评估指标的方法是加一个权重项，当图片是正常图片时，w为1，当图片是无法接受的图片时，w为10或更大，同时要将之前分类器错误率计算中的<span class="math inline">\(\frac{1}{m}\)</span>改为<span class="math inline">\(\frac{1}{\sum_iw^{(i)}}\)</span></p>
+</blockquote>
+<p>为猫图片分类做正交化</p>
+<ol type="1">
+<li>明白如何定义一个指标来衡量想做的事情的表现(设定目标)</li>
+<li>然后可以分开考虑如何改善系统在这个指标上的表现(调试如何精确)</li>
+</ol>
+<blockquote>
+<p>另一个例子：仍然是两个算法A和B，错误率同上，但可能训练和验证集用的图片都是高清图片，实际使用时使用的图片比较模糊，而B在这些模糊图片中表现的更好。</p>
+<p>方针：如果指标在当前验证集或验证和测试集的分布中表现的很好，但在实际应用中真正关注的地方表现不好，则需要修改指标，或验证测试集</p>
+</blockquote>
+<h2 id="和人类表现比较">和人类表现比较</h2>
+<h3 id="为什么是人类">1. 为什么是人类</h3>
+<ol type="1">
+<li>随着深度学习的的进步，机器学习算法的表现突然表现很好了，在许多机器学习的应用邻域已经开始见到一些算法可以威胁到人类的表现了</li>
+<li>当试图让机器做人类能做的事情时，可以设计机器学习系统的工作流程，使工作流程效率更高，因此在这些场合，将机器和人类相比是很自然的</li>
+</ol>
+<blockquote>
+<p>人类在许多任务上表现是很好的，因此，在机器学习中，如果机器表现不如人类时你可以：</p>
+<ol type="1">
+<li>从人类处获取标签数据</li>
+<li>从人工错误分析中获得洞察力</li>
+<li>更好的分析偏差和方差</li>
+</ol>
+</blockquote>
+<h3 id="可避免偏差">2. 可避免偏差</h3>
+<blockquote>
+<p>Eg: 对于猫分类案例中，</p>
+<p>假设人类错误率1%，训练集错误率8%，验证集错误率10%，那么你如果想在训练集上得到更好的结果，从减少偏差和方差的角度来看，这种情况下，一般会把重点放在偏差上，因此需要做的是：训练更大的神经网络或运行更久的训练，深度在训练集上表现更好；</p>
+<p>假设人类错误率是7.5%了,训练集错误率8%，验证集错误率10%，则通常把重点放在方差上，可以尝试正则化</p>
+</blockquote>
+<blockquote>
+<p>将贝叶斯错误率或对贝叶斯错误率的估计和训练错误率之间的差值称为可避免差值</p>
+<p>而训练错误率和开发错误率之间的差值则说明了算法在方差问题上还有多少改善空间</p>
+</blockquote>
+<h3 id="理解人类表现的定义">3. 理解"人类表现"的定义</h3>
+<blockquote>
+<p>人类水平错误率可以作为贝叶斯错误率的代表</p>
+</blockquote>
+<blockquote>
+<p>以医疗图像分类为例：</p>
+<p>假设普通人错误率是3%；普通医生的错误率是1%；专家的错误率是0.7%；经验丰富的医生团队的错误率是0.5%</p>
+<p>那么人类水平定义为多少呢？</p>
+<p>答案是人类水平错误率是想要替代或估计贝叶斯错误率的，那么贝叶斯错误率 &lt;= 0.5%，所以最优错误率必须在0.5%以下，因此将人类水平定义为0.5%</p>
+</blockquote>
+<h3 id="超过人类表现水平">4. 超过人类表现水平</h3>
+<blockquote>
+<p>假设对于一个问题：</p>
+<p>团队讨论的错误率是0.5%；单个人的错误率是1%；训练错误率是0.6%；验证集错误率是0.8%。那么由于可避免偏差的估计=0.6%-0.5%=0.1%；方差=0.8%-0.6%=0.2%，因此相比减少可避免误差而言，减少方差的可能空间更大</p>
+<p>假设对于另一个问题：</p>
+<p>团队讨论的错误率是0.5%，单人错误率是1%；但训练错误率是0.3%，验证错误率是0.4%，这种情况下，验证集错误率都已经超过了人类，因此会导致继续下去时就没有明确的选项和前进方向了</p>
+</blockquote>
+<p>目前机器在以下方面可能已经超过人类的表现了：</p>
+<ul>
+<li>在线广告</li>
+<li>产品推荐</li>
+<li>物流预测</li>
+<li>贷款预测</li>
+</ul>
+<blockquote>
+<p>而以上四个例子都是从结构化数据中学习得来的，而并不是自然感知问题，不是计算机视觉问题或语音识别或自然语言处理任务，人类往往在自然感知问题上表现的更好，但是如今也已经有一些特定的自然感知问题上机器 的表现已经优于人类了。</p>
+</blockquote>
+<h3 id="总结改善模型的表现的方法">总结改善模型的表现的方法</h3>
+<blockquote>
+<p>想要一个监督学习算法达到衫，基本上需要能完成两个事情</p>
+<ol type="1">
+<li>算法对训练集的拟合很好，可以看成可能做到可避免偏差很低</li>
+<li>推广到验证集和测试集上也很好，也就是说方差不是太大</li>
+</ol>
+</blockquote>
+<p>降低可避免偏差和方差：</p>
+<ol type="1">
+<li><p>计算训练错误率和贝叶斯错误率估计值之间的差值(即train error和human error)，从而知道可避免偏差有多大</p>
+<p>减小可避免偏差的措施：</p>
+<ul>
+<li>使用规模更大的模型</li>
+<li>训练更久或使用更好的优化算法(momentum、RMSprop、Adam)</li>
+<li>尝试寻找更好的新的神经网络架构或更好的超参数</li>
+</ul></li>
+<li><p>计算验证错误率和训练错误率之间的差值，从而知道方差问题有多大</p>
+<p>减小方差的措施：</p>
+<ul>
+<li>收集更多的数据</li>
+<li>正则化(L2、Dropout、数据扩增)</li>
+<li>尝试使用不同的神经网络架构或超参数搜索</li>
+</ul></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/12/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5/" title="深度学习-改善训练结果">http://www.zephon.ml/2020/12/23/深度学习-机器学习策略/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/22/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%94%B9%E5%96%84%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%9C/" rel="prev" title="深度学习-改善训练结果">
+      <i class="fa fa-chevron-left"></i> 深度学习-改善训练结果
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/" rel="next" title="深度学习-超参数调试处理">
+      深度学习-超参数调试处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5"><span class="nav-number">1.</span> <span class="nav-text">深度学习-机器学习策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5"><span class="nav-number">1.1.</span> <span class="nav-text">什么是机器学习策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E4%BA%A4%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">正交化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA%E6%95%B0%E5%AD%97%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="nav-number">1.3.</span> <span class="nav-text">单个数字评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%A1%E8%B6%B3%E5%92%8C%E4%BC%98%E5%8C%96%E6%8C%87%E6%A0%87"><span class="nav-number">1.4.</span> <span class="nav-text">满足和优化指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E9%9B%86%E9%AA%8C%E8%AF%81%E9%9B%86%E6%B5%8B%E8%AF%95%E9%9B%86%E5%88%92%E5%88%86"><span class="nav-number">1.5.</span> <span class="nav-text">训练集、验证集、测试集划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E9%9B%86%E5%92%8C%E6%B5%8B%E8%AF%95%E9%9B%86%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">1.6.</span> <span class="nav-text">验证集和测试集的大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E6%9B%B4%E6%94%B9%E9%AA%8C%E8%AF%81%E9%9B%86%E6%B5%8B%E8%AF%95%E9%9B%86%E5%92%8C%E6%8C%87%E6%A0%87"><span class="nav-number">1.7.</span> <span class="nav-text">什么时候更改验证集、测试集和指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C%E4%BA%BA%E7%B1%BB%E8%A1%A8%E7%8E%B0%E6%AF%94%E8%BE%83"><span class="nav-number">1.8.</span> <span class="nav-text">和人类表现比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%BA%E7%B1%BB"><span class="nav-number">1.8.1.</span> <span class="nav-text">1. 为什么是人类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%81%BF%E5%85%8D%E5%81%8F%E5%B7%AE"><span class="nav-number">1.8.2.</span> <span class="nav-text">2. 可避免偏差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E4%BA%BA%E7%B1%BB%E8%A1%A8%E7%8E%B0%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.8.3.</span> <span class="nav-text">3. 理解&quot;人类表现&quot;的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E8%BF%87%E4%BA%BA%E7%B1%BB%E8%A1%A8%E7%8E%B0%E6%B0%B4%E5%B9%B3"><span class="nav-number">1.8.4.</span> <span class="nav-text">4. 超过人类表现水平</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E6%94%B9%E5%96%84%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%A1%A8%E7%8E%B0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.8.5.</span> <span class="nav-text">总结改善模型的表现的方法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+<html class="h-100"> 
+  <audio id="car_audio" autoplay="autoplay" loop="loop" preload="auto" controls="controls" 
+  src="http://broadcast.churchofjesuschrist.org/churchmusic/MP3/1/1/nowords/204.mp3" 
+  >
+</audio>
+<script>
+document.addEventListener('touchstart', function () {
+    function audioAutoPlay() {
+        var audio = document.getElementById('car_audio');
+            audio.play();
+    }
+    audioAutoPlay();
+});
+</script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>小金子的圣诞树!</title>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  </head>
+  <body>
+  <video style="position:fixed;right:0;bottom:0;min-width:100%;min-height:100%;height:auto;width:auto" autoplay></video>
+	<a-scene id="viewport"
+            data-range="60 8 60">
+    <a-entity>
+      <a-animation attribute="rotation"
+                  from="0 0 0" to="0 360 0"
+                  dur="72000" easing="linear"
+                  repeat="indefinite"
+                  >    
+      </a-animation>  
+
+
+<!-- <a-plane id="ground"
+rotation="-90 0 0"
+width="200" height="200"
+material="shader: flat; color: #f0f0f0"
+>
+</a-plane> -->
+
+<!--<a-sky id="sky" color="#040d1a"></a-sky>  -->
+
+    <a-entity id="tree_christmas" scale="4 4 4">
+      <a-animation attribute="rotation"
+                  from="0 360 0" to="0 0 0"
+                  dur="72000" easing="linear"
+                  repeat="indefinite"
+                  >    
+      </a-animation>
+    <a-entity id="tree_xmas_parts"
+    position="0 1 0">
+
+    <a-entity id="xmas_parts1">
+    <a-box material="color:#4cca10" geometry="" position="-0.04 1.374 -0.284" scale="1 0.793 1"></a-box><a-box material="color:#4cca10" position="0.044 0.844 0.53" scale="1 0.43 1"></a-box><a-box material="color:#4cca10" position="-0.876 0.932 -0.275" scale="1.172 0.556 1" geometry=""></a-box><a-box material="color:#4cca10" position="-1.278 0.527 -0.275" scale="1.172 0.556 1"></a-box><a-box material="color:#4cca10" position="1.016 1.023 0" scale="1.063 0.59 1" geometry=""></a-box><a-box material="color:#4cca10" position="0.361 0.361 -0.47" scale="1.561 0.491 1"></a-box><a-box material="color:#4cca10" position="0.085 0.841 -0.977" scale="1.561 0.575 1"></a-box>
+    <a-box id="node1" material="color:#a44523"></a-box>
+    </a-entity>
+
+    <a-entity id="xmas_parts2" position="-0.456 1.709 -0.266" rotation="0 -156.704 0">
+        <a-box material="color:#4cca10" position="-0.216 1.161 -0.359" scale="1 0.618 0.773"></a-box><a-box material="color:#4cca10" position="0.044 0.844 0.53" scale="1 0.43 1"></a-box><a-box material="color:#4cca10" position="-0.876 0.675 -0.275" scale="1.172 0.556 1"></a-box><a-box material="color:#4cca10" position="-1.064 0.527 -0.722" scale="1.172 0.556 1" geometry=""></a-box><a-box material="color:#4cca10" position="-0.031 0.205 -0.686" scale="1.172 0.556 1" rotation="0 -39.99245410013146 0"></a-box><a-box material="color:#4cca10" position="0.697 1.023 -0.137" scale="1.063 0.59 1"></a-box><a-box material="color:#4cca10" position="0.6 0.361 0.6" scale="1.231 0.491 1" rotation="0 -40.90918657234078 0"></a-box><a-box material="color:#4cca10" position="0.761 0.406 -0.435" scale="1.231 0.491 1"></a-box><a-box material="color:#4cca10" position="0.451 -0.396 -0.942" scale="1.231 0.491 1"></a-box><a-box material="color:#4cca10" position="-0.579 1.237 0.567" scale="0.894 0.329 0.573"></a-box>
+        <a-box id="node2" material="color:#a44523" position="-0.181 0 -0.28" rotation="0 -13.349916626548183 0" scale="0.912 1.313 1"></a-box>
+    </a-entity>
+
+        <a-entity id="xmas_parts3" position="-0.456 3.408 -0.345" rotation="0 -172.575 0">
+            <a-box material="color:#4cca10" position="-0.26 1.374 -0.278" scale="0.613 0.631 0.432" geometry=""></a-box><a-box material="color:#4cca10" position="0.223 1.023 -0.532" scale="0.613 0.631 0.432"></a-box><a-box material="color:#4cca10" position="0.319 0.844 0.168" scale="0.656 0.43 0.514" rotation="0 -29.621918008263563 0"></a-box><a-box material="color:#4cca10" position="-0.224 0.932 -0.029" scale="0.761 0.556 0.609" rotation="0 -21.772396214971284 0" geometry=""></a-box><a-box material="color:#4cca10" position="-0.462 0.932 -0.665" scale="0.616 0.456 0.609" rotation="0 -124.15995420484938 0"></a-box><a-box material="color:#4cca10" position="-0.905 0.527 -0.555" scale="0.897 0.556 0.665" geometry=""></a-box><a-box material="color:#4cca10" position="-0.456 0.209 0.013" scale="0.897 0.43 0.665"></a-box><a-box material="color:#4cca10" position="0.382 0.722 -0.373" scale="1.063 0.411 0.719"></a-box><a-box material="color:#4cca10" position="0.775 0.376 -0.34" scale="0.897 0.381 0.517" geometry=""></a-box><a-box material="color:#4cca10" position="0.413 -0.004 0.14" scale="0.73 0.381 0.866" rotation="0 -45.664736271926614 0"></a-box><a-box material="color:#4cca10" position="0.403 0.227 -0.787" scale="0.897 0.381 0.517" rotation="0 31.168904055116787 0"></a-box><a-box material="color:#4cca10" position="-0.319 0.227 -0.881" scale="0.897 0.381 0.517" rotation="0 131.89488443911551 0"></a-box><a-box material="color:#4cca10" position="-0.345 0.841 0.233" scale="0.712 0.329 0.86"></a-box>
+            <a-box id="node3" material="color:#a44523" position="-0.181 -0.062 -0.317" scale="0.596 1.472 0.455"></a-box>
+        </a-entity>
+
+        <a-entity id="xmas_parts4" position="-0.031 4.738 -0.294" rotation="0 90 0" scale="0.808 0.808 0.808">
+            <a-box material="color:#4cca10" position="-0.098 1.374 -0.278" scale="0.613 0.631 0.432"></a-box><a-box material="color:#4cca10" position="0.223 1.023 -0.532" scale="0.613 0.631 0.432"></a-box><a-box material="color:#4cca10" position="0.319 0.844 0.168" scale="0.656 0.43 0.514" rotation="0 -29.621918008263563 0"></a-box><a-box material="color:#4cca10" position="-0.224 0.932 -0.029" scale="0.761 0.556 0.609" rotation="0 -21.772396214971284 0"></a-box><a-box material="color:#4cca10" position="-0.462 0.932 -0.665" scale="0.616 0.456 0.609" rotation="0 -124.15995420484938 0"></a-box><a-box material="color:#4cca10" position="-0.68 0.527 -0.555" scale="0.897 0.556 0.665"></a-box><a-box material="color:#4cca10" position="-0.456 0.209 0.013" scale="0.897 0.43 0.665"></a-box><a-box material="color:#4cca10" position="0.382 0.722 -0.373" scale="1.063 0.411 0.719"></a-box><a-box material="color:#4cca10" position="0.775 0.376 -0.34" scale="0.897 0.381 0.517"></a-box><a-box material="color:#4cca10" position="0.413 -0.004 0.14" scale="0.73 0.381 0.866" rotation="0 -45.664736271926614 0"></a-box><a-box material="color:#4cca10" position="0.403 0.227 -0.787" scale="0.897 0.381 0.517" rotation="0 31.168904055116787 0"></a-box><a-box material="color:#4cca10" position="-0.319 0.227 -0.881" scale="0.897 0.381 0.517" rotation="0 131.89488443911551 0"></a-box><a-box material="color:#4cca10" position="-0.345 0.841 0.233" scale="0.712 0.329 0.86"></a-box>
+                <a-box id="node4" material="color:#a44523" position="-0.181 -0.062 -0.317" scale="0.596 1.472 0.455"></a-box>
+            </a-entity>
+    </a-entity>
+
+    <!-- tree light top -->
+    <a-entity id="tree_light_top">
+        <a-entity position="-0.234 7.48 -0.175" scale="0.378 0.378 0.378" geometry="primitive:octahedron" material="emissive:#c90;color:#fff"></a-entity>
+
+    </a-entity>
+
+    <!-- tree blinks -->
+    <a-entity id="tree_blinks">
+            <a-entity id="tree_blink" position="-1.123 3.604 0.827" light="color:#F00;type:point">
+                <a-animation attribute="light.intensity" from="0.5" to="1.5" dur="2000" delay="0" direction="alternate" repeat="indefinite"></a-animation>
+            </a-entity>
+
+            <a-entity id="tree_blink-2" position="-0.263 5.522 1" light="color:#00f;intensity:3;groundColor:#fff;type:point">
+                <a-animation attribute="light.intensity" from="0.5" to="1.5" dur="2000" delay="200" direction="alternate" repeat="indefinite"></a-animation>
+            </a-entity>
+
+            <a-entity id="tree_blink-3" position="0.846 2.515 0.867" light="intensity:2.083;color:#ff0;groundColor:#fff;type:point">
+                <a-animation attribute="light.intensity" from="0.5" to="1.5" dur="2000" delay="400" direction="alternate" repeat="indefinite"></a-animation>
+            </a-entity>
+
+            <a-entity id="tree_blink-4" position="-0.111 3.017 -2.264" light="intensity:2;color:#ff0;groundColor:#fff;type:point">
+                <a-animation attribute="light.intensity" from="0.5" to="1.5" dur="2000" delay="800" direction="alternate" repeat="indefinite"></a-animation>
+            </a-entity>
+    </a-entity>
+
+    <!-- tree_ornaments -->
+    <a-entity id="tree_ornaments">
+            <a-entity id="tree_ornament" position="-0.188 5.978 0.589" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0ff"></a-entity>
+            <a-entity id="tree_ornament-2" position="-1.046 4.315 0.717" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#ff0"></a-entity>
+            <a-entity id="tree_ornament-3" position="0.248 4.287 0.36" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0f0"></a-entity>
+            <a-entity id="tree_ornament-4" position="0.653 2.871 0.431" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0ff"></a-entity>
+            <a-entity id="tree_ornament-5" position="-0.883 2.612 1.03" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#f00"></a-entity><a-entity id="tree_ornament-6" position="0.783 3.137 -1.083" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0ff"></a-entity><a-entity id="tree_ornament-7" position="0.18 4.207 -1.262" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0f0"></a-entity><a-entity id="tree_ornament-8" position="-0.288 5.45 -0.988" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#f00"></a-entity><a-entity id="tree_ornament-9" position="-0.248 6.548 -0.922" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#ff0"></a-entity><a-entity id="tree_ornament-10" position="-1.07 2.598 -0.81" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#ff0"></a-entity><a-entity id="tree_ornament-11" position="-0.772 2.299 0.13" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#f0f"></a-entity><a-entity id="tree_ornament-12" position="-1.451 5.014 -0.048" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#90f"></a-entity><a-entity id="tree_ornament-13" position="-0.408 5.014 0.335" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#fff"></a-entity><a-entity id="tree_ornament-14" position="0.451 5.298 -0.041" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#0f9"></a-entity><a-entity id="tree_ornament-15" position="0.451 4.006 -0.041" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#ff0"></a-entity><a-entity id="tree_ornament-16" position="0.337 5.199 -0.805" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#f0f"></a-entity><a-entity id="tree_ornament-17" position="-0.317 6.471 0.373" scale="0.1 0.1 0.1" geometry="primitive:sphere" material="color:#fff"></a-entity>
+    </a-entity>
+    </a-entity>
+    <!-- // end of tree_christmas -->
+
+    <a-entity id="snow"
+    geometry="primitive: sphere; radius: 0.4;"
+    material="shader: flat; color: #fff;"
+    position="0 -10 0"
+    ></a-entity>
+
+    <a-entity id="building"
+    geometry="primitive: box; width: 4; height: 8; depth: 4;"
+    material="shader: flat"
+    position="0 -10 0"
+    >
+    </a-entity>
+
+    <a-entity id="camera_container"
+    position="0 12 20" rotation="10 0 0"
+    data-lookat="0 0 0"
+    >
+        <a-camera id="camera_body"
+        far="6000"
+        look-controls-enabled="true"
+        wasd-controls-enabled="false"
+        ></a-camera>
+    </a-entity>
+    </a-entity>
+    </a-scene>
+    <script>
+    const settings = {
+      building: 60,
+      snow: 30
+    };
+    document.addEventListener('DOMContentLoaded', e => {
+      setTimeout(app, 100);
+    });
+
+    const app = () => {
+	  const video = document.querySelector('video');
+	  const constraints = {
+		 video: { facingMode: { exact: "environment" }}
+	  };
+	  navigator.mediaDevices.getUserMedia(constraints).
+	  	then((stream) => {video.srcObject = stream});
+      const viewport = document.getElementById('viewport');
+      const snow = document.getElementById('snow');
+      //const building = document.getElementById('building');
+      //const buildings = Array(settings.building).fill(null).map(() => new Building(building, viewport));
+      const snowGroup = Array(settings.snow).fill(null).map(() => new Snow(snow, viewport));
+      Camera.init();
+      const update = () => {
+        snowGroup.forEach(snow => snow.update());
+        Camera.update();
+        window.requestAnimationFrame(update);
+      }
+      update();
+    };
+    const Utils = {
+      getRandom: (min = 1, max) => {
+        if(max == null) {
+          return Math.random() * min;
+        } else {
+          return Math.random() * (Math.abs(min) + Math.abs(max)) + min;
+        }
+      },
+      getCentralizedValue: (value = 0, length = 1, exclude = 0) => {
+        value = value - length / 2;
+        if(Math.abs(value) < exclude){
+          value += exclude * (value < 0 ? -1 : 1);
+        }
+        return value;
+      },
+      getViewportRange(viewport){
+        let range = '80 12 80';
+        if(viewport != null){
+          range = viewport.getAttribute('data-range') || range;
+        }
+        return new THREE.Vector3(...range.split(' '));
+      },
+      getVectorValueWithRange(range, expand, exclude){
+        const { getRandom: r, getCentralizedValue: c } = Utils;
+        expand = new THREE.Vector3(...expand.split(' '));
+        exclude = new THREE.Vector3(...exclude.split(' '));
+        const getValue = () => {
+          const x = c(r(range.x * expand.x), range.x * (expand.x < 1 ? 1 : expand.x));
+          const z = c(r(range.z * expand.z), range.z * (expand.z < 1 ? 1 : expand.z));
+          const y = 0;
+          return [ x, y, z ];
+        }
+        let value;
+      let count = 0;
+        while(true){
+          value = new THREE.Vector3(...getValue());
+          if((Math.abs(value.x) > exclude.x || Math.abs(value.z) > exclude.z) || count > 10){
+            break;
+          }
+        }
+        return value;
+      }
+    };
+
+    const Camera = {
+      init(){
+        this.container = document.getElementById('camera_container');
+        this.body = document.getElementById('camera_body');
+        this.position = this.container.getAttribute('position');
+        this.positionDefault = { ...this.position };
+        this.rotation = this.container.getAttribute('rotation');
+        this.lookat = this.container.getAttribute('data-lookat') || '0 2 0';
+        this.lookat = new THREE.Vector3(...this.lookat.split(' '));
+        this.theta = 0;
+      },
+      update() {
+        const { position, positionDefault:pdef, rotation, lookat, theta } = this;
+        position.x = Math.sin(theta * Math.PI / 180) * pdef.z;
+        position.y = Math.sin(theta * 4 * Math.PI / 180) + pdef.y;
+        position.z = Math.cos(theta * Math.PI / 180) * pdef.z;
+        rotation.x = Math.atan2(lookat.y, position.y) / Math.PI * 180;
+        rotation.y = theta;
+        this.theta = (theta + 0.1) % 360;
+        this.container.setAttribute('position', position);
+        this.container.setAttribute('rotation', rotation);
+      }
+    };
+
+    class SpawnObject {
+      constructor(original, viewport){
+        this.shape = original.cloneNode();
+        this.viewport = viewport;
+        this.range = Utils.getViewportRange(viewport);
+        this.viewport.appendChild(this.shape);
+        this.shape.setAttribute('shadow', 'receive: false')
+        this.setup();
+      }
+      setup(options = {
+        excludeRange: '0 0 0',
+        expandRange: '1 1 1'
+      }){
+        const { expandRange, excludeRange } = options;
+        this.enabled = true;
+        this.position = Utils.getVectorValueWithRange(this.range, expandRange, excludeRange);
+        this.rotation = new THREE.Vector3(0, 0, 0);
+        this.scale = new THREE.Vector3(1, 1, 1);
+        this.acceleration = new THREE.Vector3(0, 0, 0);
+      }
+      update(){
+        if(!this.enabled){ return; }
+        const velocity = this.acceleration;
+        const position = this.position.add(velocity);
+
+        this.render();
+      }
+      render() {
+        this.shape.setAttribute('position', this.position)
+        this.shape.setAttribute('rotation',this.rotation);
+        this.shape.setAttribute('scale', this.scale)
+      }
+      destroy() {
+        this.enabled = false;
+      }
+    }
+
+    class Building extends SpawnObject {
+      setup(){
+        super.setup({
+          excludeRange: '50 0 50',
+          expandRange: '2 0 2',
+        });
+        const { getRandom: r } = Utils;
+        this.scale = new THREE.Vector3(r(2, 2.8), r(1, 2.4), r(2, 2.8));
+        this.position.y = this.scale.y;
+
+        const { x, y, z } = this.position;
+        let color = Math.round(250 - (Math.abs(z) * 0.8 + Math.abs(x) * 0.8));
+        color = (color <= 64 ? 64 : color).toString(16);
+        this.shape.setAttribute('material', `shader: flat; color: #${color + color + color}`);
+        this.update();
+      }
+    }
+
+    class Snow extends SpawnObject {
+      setup(){
+        super.setup();
+        const { getRandom: r, getCentralizedValue: c } = Utils;
+        const scale = r(0.5, 2);
+        this.status = 'active';
+        this.position.y = r(this.range.y, this.range.y + 4);
+        this.scale = new THREE.Vector3(scale, scale, scale);
+        this.acceleration = new THREE.Vector3(
+          c(r(0.01), 0.01), -r(0.01, 0.02), c(r(0.01), 0.01));
+        this.acceleration.multiply(new THREE.Vector3(10, 8, 10));
+      }
+      update(){
+        super.update();
+        if(this.status !== 'active') { return; }
+        if(this.position.y <= this.scale.y / 2){
+          this.destroy(Math.random() * 1000 + 1000)
+        }
+      }
+      destroy(delay){
+        super.destroy();
+        this.status = 'will_destroy';
+        this.acceleration.multiply(new THREE.Vector3(0.8, 0.25, 0.8));
+        setTimeout(() => {
+          this.setup();
+        }, delay); 
+      }
+    }
+
+var scene = document.querySelector('a-scene');
+var cylinder = document.createElement('a-text');
+cylinder.setAttribute('color', '#FF9500');
+cylinder.setAttribute('value', "Small King");
+cylinder.setAttribute('position', { x: 50, y: 20, z: 30 });
+cylinder.setAttribute('width', '50');
+
+scene.appendChild(cylinder);
+
+var cylinder1 = document.createElement('a-text');
+cylinder1.setAttribute('color', '#FF9500');
+var s = "We have been together for :" + thenceThen("2021-11-19 09:18:00")
+cylinder1.setAttribute('value', s);
+cylinder1.setAttribute('position', { x: -22, y: -5, z: -5 });
+cylinder1.setAttribute('width', '50');
+
+scene.appendChild(cylinder1);
+
+var cylinder2 = document.createElement('a-text');
+cylinder2.setAttribute('color', '#FF9500');
+var s = "We have been together for :" + thenceThen("2021-12-19 16:03:00")
+console.log(s)
+cylinder2.setAttribute('value', s);
+cylinder2.setAttribute('position', { x: -22, y: -8, z: -5 });
+cylinder2.setAttribute('width', '50');
+
+scene.appendChild(cylinder2);
+
+function thenceThen(s){ 
+s = s.replace(/\-/g,"/")
+var date1 = new Date(s); 
+var totalSecs=(new Date()-date1)/1000; 
+var days=Math.floor(totalSecs/3600/24); 
+var hours=Math.floor((totalSecs-days*24*3600)/3600); 
+var mins=Math.floor((totalSecs-days*24*3600-hours*3600)/60); 
+var secs=Math.floor((totalSecs-days*24*3600-hours*3600-mins*60)); 
+if (days != 0 ) { 
+return days+"d,"+hours+"h,"+mins+"m,"+secs+"s"; 
+}else if (hours == 0 && mins == 0) { 
+return secs+"s";
+}else if (hours == 0 && mins != 0) { 
+return mins+"m,"+secs+"s"; 
+}else if (hours != 0) { 
+return hours+"h,"+mins+"m,"+secs+"s"; 
+} 
+}
+    </script>
+            </div>
+            <div class="row">
+              <pre class="rounded">
+                <code id="profile-data" class="json"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="bg-light text-center p-5">
+        <div class="logo"></div>
+      </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="js/auth0-theme.min.js"></script>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.2/auth0-spa-js.production.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script> -->
+  </body>
+</html>

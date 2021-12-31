@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Part1-异常检测 问题动机  例：假设你是一个飞机引擎制造商，当在生产线上生成飞机引擎时，需要进行质量控制测试，而作为这个测试的一部分，测量了飞机引擎的一些特征变量如：\(x_1\):引擎运转时产生的热量；\(x_2\):振动强度。于是就有了一个数据集：\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \}\)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-异常检测">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/19/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Part1-异常检测 问题动机  例：假设你是一个飞机引擎制造商，当在生产线上生成飞机引擎时，需要进行质量控制测试，而作为这个测试的一部分，测量了飞机引擎的一些特征变量如：\(x_1\):引擎运转时产生的热量；\(x_2\):振动强度。于是就有了一个数据集：\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \}\)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719090702538.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719091142320.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719095216839.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719132416712.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719132637958.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719134522352.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719135946636.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719140216692.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719141806227.png">
+<meta property="article:published_time" content="2021-07-19T06:35:21.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719090702538.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/07/19/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Part1-异常检测 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/19/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-异常检测
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-19 14:35:21" itemprop="dateCreated datePublished" datetime="2021-07-19T14:35:21+08:00">2021-07-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="part1-异常检测">Part1-异常检测</h1>
+<h2 id="问题动机">问题动机</h2>
+<blockquote>
+<p>例：假设你是一个飞机引擎制造商，当在生产线上生成飞机引擎时，需要进行质量控制测试，而作为这个测试的一部分，测量了飞机引擎的一些特征变量如：<span class="math inline">\(x_1\)</span>:引擎运转时产生的热量；<span class="math inline">\(x_2\)</span>:振动强度。于是就有了一个数据集：<span class="math inline">\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \}\)</span></p>
+</blockquote>
+<p>如果画图，可能如下：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719090702538.png" /></p>
+<p>这样，异常检测问题可以定义如下：</p>
+<p>假设有一个新的飞机引擎<span class="math inline">\(x_{test}\)</span>被生产出来，而所谓的异常检测问题就是我们希望知道这个新的飞机引擎是否有某种异常。</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719091142320.png" /></p>
+<p>如果更正式的定义异常检测问题，则：</p>
+<p>数据集：<span class="math inline">\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \}\)</span></p>
+<p>则<span class="math inline">\(x_{test}\)</span>是异常的么？</p>
+<p>通常假定这m个样本都是正常的或者说是非异常的，然后我们需要一个算法来确定新的样本数据是否是异常的。</p>
+<p>我们要采用的方法就是给定无标签的训练集，对数据建模得到模型：<span class="math inline">\(p(x)\)</span>，换句话说，我们将对<span class="math inline">\(x\)</span>的概率分布建模，则对于一个新的样本，如果<span class="math inline">\(p(x_{test}) &lt; \epsilon\)</span>，则将其标记为异常，如果<span class="math inline">\(p(x_{test})\ge \epsilon\)</span>，则将其标记为正常</p>
+<blockquote>
+<p>其它异常检测案例：</p>
+<p>欺诈检测：</p>
+<ul>
+<li><span class="math inline">\(x^{(i)}\)</span>：用户<span class="math inline">\(i\)</span>的活动特征</li>
+<li>从数据中构建模型<span class="math inline">\(p(x)\)</span></li>
+<li>通过检查<span class="math inline">\(p(x)&lt;\epsilon\)</span>判断用户是否异常</li>
+</ul>
+</blockquote>
+<h2 id="高斯分布">高斯分布</h2>
+<p>假设<span class="math inline">\(x\in \mathbb R\)</span>，如果<span class="math inline">\(x\)</span>服从均值<span class="math inline">\(\mu\)</span>，方差<span class="math inline">\(\sigma^2\)</span>的高斯分布 ，记作：<span class="math inline">\(x\)</span>~$ N(, ^2) $</p>
+<p><span class="math inline">\(p(x;\mu;\sigma^2)=\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(x-\mu)^2}{2\sigma^2})\)</span></p>
+<h3 id="高斯分布例子">高斯分布例子</h3>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719095216839.png" /></p>
+<h3 id="参数估计">参数估计</h3>
+<p>数据集：<span class="math inline">\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \} x^{(i)} \in \mathbb R\)</span></p>
+<p>参数估计问题就是：假设我们猜测这些样本来自一个高斯分布的总体，假设我们猜测每个样本<span class="math inline">\(x^{(i)}\)</span>服从某个分布，这里猜测服从高斯分布(正态分布)，它由两个参数(<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma^2\)</span>)决定，但并不知道这两个参数的值是多少，参数估计问题就是给定数据集，希望找到能估算出<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma^2\)</span>的值。</p>
+<p>估计<span class="math inline">\(\mu\)</span>的方法：<span class="math inline">\(\mu = \frac{1}{m}\sum_{i=1}^m x^{(i)}\)</span></p>
+<p>估计<span class="math inline">\(\sigma^2\)</span>的方法：<span class="math inline">\(\sigma^2 = \frac{1}{m}\sum_{i=1}^m(x^{(i)}-\mu)^2\)</span></p>
+<h2 id="异常检测算法">异常检测算法</h2>
+<p>训练集：<span class="math inline">\(\{x^{(1)},\cdots,x^{(m)} \}\)</span></p>
+<p>每个样本：<span class="math inline">\(x \in \mathbb R\)</span></p>
+<p><span class="math inline">\(\begin{split} p(x) &amp;= p(x_1;\mu_1,\sigma_1^2)p(x_2;\mu_2,\sigma_2^2)\cdots p(x_n;\mu_n,\sigma_n^2) \\ &amp;=\prod_{j=1}^np(x_j;\mu_j,\sigma^2_j) \end{split}\)</span></p>
+<p>整理：</p>
+<ol type="1">
+<li><p>选择认为在异常检测中有用的特征</p></li>
+<li><p>拟合参数<span class="math inline">\(\mu1,\cdots,\mu_n,\sigma_1^2,\cdots,\sigma_n^2\)</span></p>
+<p><span class="math inline">\(\mu_j=\frac{1}{m}\sum_{i=1}^m x_j^{(i)}\)</span></p>
+<p><span class="math inline">\(\sigma_j^2 = \frac{1}{m} \sum_{i=1}^m(x_j^{(i)}-\mu_j)^2\)</span></p></li>
+<li><p>给定新的样本<span class="math inline">\(x\)</span>，计算<span class="math inline">\(p(x)\)</span>：</p>
+<p><span class="math inline">\(p(x)=\prod_{j=1}^n p(x_j;\mu_j,\sigma_j^2)=\prod_{j=1}^n\frac{1}{\sqrt(2\pi)\sigma_j}\exp(-\frac{(x_j-\mu_j)^2}{2\sigma^2_j})\)</span></p>
+<p>如果<span class="math inline">\(p(x) &lt; \epsilon\)</span>为异常</p></li>
+</ol>
+<h2 id="开发和评估异常检测系统">开发和评估异常检测系统</h2>
+<h3 id="实数评估的重要性">实数评估的重要性</h3>
+<p>当我们为某个应用开发一个学习算法时，需要进行一系列的选择(如选择使用什么特征等)，如果有某种方法通过返回一个实数，来评估我们的算法，那么对这些选择作出决定往往会容易得多。</p>
+<p>假设我们有一些异常的或正常的带标签的数据(如果正常则是<span class="math inline">\(y=0\)</span>，否则<span class="math inline">\(y=1\)</span>)</p>
+<p>训练集：<span class="math inline">\(x^{(1)},x^{(2)},\cdots,x^{(m)}\)</span></p>
+<p>交叉验证集：<span class="math inline">\((x_{cv}^{(1)},y_{cv}^{(1)}),\cdots,(x_{cv}^{m_{cv}},y_{cv}^{(m_{cv})})\)</span></p>
+<p>测试集：<span class="math inline">\((x_{test}^{(1)},y_{test}^{(1)}),\cdots,(x_{test}^{(m_{test})},y_{test}^{(m_{test})})\)</span></p>
+<blockquote>
+<p>例：以飞机引擎为例，假设有10000个正常的引擎，20个异常的引擎</p>
+<p>划分：</p>
+<p>​ 训练集：6000个正常引擎</p>
+<p>​ 交叉验证集：2000个正常引擎(y=0)，10个异常的(y=1)</p>
+<p>​ 测试集：2000个正常引擎(y=0)，10个异常的(y=1)</p>
+</blockquote>
+<h3 id="算法评估">算法评估</h3>
+<ul>
+<li>在训练集<span class="math inline">\(\{x^{(1)},\cdots,x^{(m)}\}\)</span>上拟合模型<span class="math inline">\(p(x)\)</span></li>
+<li>在交叉验证集或测试集上，预测<span class="math inline">\(\left\{ \begin{split} &amp;1，如果p(x) &lt; \epsilon(异常) \\ &amp;0，如果p(x) \ge \epsilon(正常\end{split} \right.\)</span></li>
+<li>可能的评估度量
+<ul>
+<li>真阳性，假阳性，假阴性，真阴性</li>
+<li>查准率/召回率</li>
+<li><span class="math inline">\(F_1\)</span>值</li>
+</ul></li>
+<li>也可以使用交叉验证集来选择参数<span class="math inline">\(\epsilon\)</span>
+<ul>
+<li>选择能使<span class="math inline">\(F_1\)</span>值最大的<span class="math inline">\(\epsilon\)</span></li>
+</ul></li>
+</ul>
+<h2 id="异常检测-vs.-监督学习">异常检测 VS. 监督学习</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">异常检测</th>
+<th style="text-align: center;">监督学习</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">非常少的异常样本，而正常样本很多</td>
+<td style="text-align: center;">非常多的正负样本</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">经常有许多不同类型的异常，则对于算法来说就很难去从小数量的异常样本中去学习异常是什么，尤其是未来可能出现的异常，看起来可能会与已有的截然不同</td>
+<td style="text-align: center;">有足够的异常样本，或是一个已经能识别异常样本的算法，未来出现的异常可能与训练集中的某个异常样本类似</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">如：欺诈检测、制造业、数据中心的机器监视</td>
+<td style="text-align: center;">如：垃圾邮件分类、天气预测、肿瘤分类</td>
+</tr>
+</tbody>
+</table>
+<h2 id="选择要使用的特征">选择要使用的特征</h2>
+<p>如图，如果将对应特征画图，得出的直方图，符合高斯分布，则显然可以将其作为特征进行尝试：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719132416712.png" /></p>
+<p>如果数据画出来，看上去不像一条钟型曲线，通常可以对数据进行一些不同的<strong>特征转换</strong><span class="math inline">\(如z = \log(x)\)</span>，使得它看上去更接近高斯分布，虽然即使不这样做，算法也能运行，但如果这样转换了，那么算法可能可以运行得更好</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719132637958.png" /></p>
+<h3 id="异常检测的误差分析">异常检测的误差分析</h3>
+<p>首先完整地训练一个算法，然后在一组交叉验证集上运行算法，然后找出那些预测错的样本，并观察能否找到一些其它特征来帮助学习算法，让那些在交叉验证集中判断出错的样本表现更好。</p>
+<p>即在异常检测中，我们希望：</p>
+<p><span class="math inline">\(p(x)\)</span>在正常样本的情况下比较大；在异常样本的情况下比较小</p>
+<p>常见问题：</p>
+<p>如果<span class="math inline">\(p(x)\)</span>是可比较的，当样本正常或异常时，<span class="math inline">\(p(x)\)</span>都比较大</p>
+<h3 id="数据中心计算机监控案例">数据中心计算机监控案例</h3>
+<p>通常选择那些既不会特别大，也不会特别小的特征</p>
+<p>以监控数据中心计算机为例：</p>
+<p><span class="math inline">\(x_1:\)</span>计算机内存使用</p>
+<p><span class="math inline">\(x_2\)</span>：可使用硬盘数</p>
+<p><span class="math inline">\(x_3\)</span>：CPU负载</p>
+<p><span class="math inline">\(x_4\)</span>：网络流量</p>
+<p>假设有一台计算机运行到一个死循环卡住了，导致CPU负载升高但网络流量没有升高，在这种情况下，要检测出异常，可以建立一个新特征<span class="math inline">\(x_5 = \frac{x_3}{x_4}\)</span>，这样如果有一台计算机CPU负载高而网络流量正常就会让<span class="math inline">\(x_5\)</span>的值非常大</p>
+<h2 id="多变量高斯分布">多变量高斯分布</h2>
+<blockquote>
+<p>还是以数据中心计算机监控为例：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719134522352.png" /></p>
+<p>如果将这两个特征变量<span class="math inline">\(x_1\)</span>和<span class="math inline">\(x_2\)</span>当做高斯分布来建模，如果用高斯分布来拟合，则结果如图中右部分</p>
+<p>然后，对于测试集中的一个样本，假设其对应的<span class="math inline">\(x_1\approx 0.4,x_2 \approx 1.5\)</span>，从图中左部分的数据分布看，这个测试样本应该是异常的，而在异常检测算法来看，对于<span class="math inline">\(x_1\)</span>和<span class="math inline">\(x_2\)</span>分别代入图中右部分，会发现其对应的纵坐标都相对并不大也不是太小，所以<span class="math inline">\(p(x_1)\)</span>，<span class="math inline">\(p(x_2)\)</span>也会不大不小，因此，这个点看上去并不是属于异常的，所以这时，异常检测算法并不能正确预测。</p>
+</blockquote>
+<p>为了解决上述问题，我们需要使用一种改良的异常检测算法，要用到多元高斯分布</p>
+<h3 id="多元高斯分布多元正态分布">多元高斯分布(多元正态分布)</h3>
+<p><span class="math inline">\(x\in \mathbb R^n\)</span>，不要分别为<span class="math inline">\(p(x_1),p(x_2),\cdots\)</span>分别建模，而是建立一个整体的<span class="math inline">\(p(x)\)</span>模型</p>
+<p>多元高斯分布的参数是：<span class="math inline">\(\mu\in \mathbb R^n,\Sigma \in \mathbb R^{n\times n}(协方差矩阵)\)</span> <span class="math display">\[
+p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{\frac{1}{2}}} \exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)) \\
+(|\Sigma|:\Sigma的行列式)
+\]</span> 例：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719135946636.png" /></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719140216692.png" /></p>
+<h2 id="使用多元高斯分布进行异常检测">使用多元高斯分布进行异常检测</h2>
+<p>参数：<span class="math inline">\(\mu,\Sigma\)</span></p>
+<p><span class="math inline">\(p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{\frac{1}{2}}} \exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu))\)</span></p>
+<p>参数拟合：</p>
+<p>给定训练集：<span class="math inline">\(\{x^{(1)},x^{(2)},\cdots,x^{(m)} \}\)</span></p>
+<p><span class="math inline">\(\mu = \frac{1}{m} \sum_{i=1}^mx^{(i)}\)</span></p>
+<p><span class="math inline">\(\Sigma = \frac{1}{m} \sum_{i=1}^m (x^{(i)}-\mu)(x^{(i)}-\mu)^T\)</span></p>
+<h3 id="多元高斯分布异常检测">多元高斯分布异常检测</h3>
+<ol type="1">
+<li>拟合模型，通过上述<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\Sigma\)</span>的计算公式</li>
+<li>给定一个新的样本<span class="math inline">\(x\)</span>，计算<span class="math inline">\(p(x)\)</span>，如果<span class="math inline">\(p(x) &lt; \epsilon\)</span>，则对应标记为异常</li>
+</ol>
+<h3 id="多元高斯分布模型和原始模型的关系">多元高斯分布模型和原始模型的关系</h3>
+<p>原始模型：<span class="math inline">\(p(x) = p(x_1;\mu_1,\sigma_1^2)\times p(x_2;\mu_2,\sigma_2^2)\times \cdots \times p(x_n;\mu_n,\sigma_n^2)\)</span></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210719141806227.png" /></p>
+<p>如图，其轮廓都轴对称的</p>
+<p>对比多元高斯模型：<span class="math inline">\(p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{\frac{1}{2}}} \exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu))\)</span></p>
+<p>而多元高斯模型则对应的轮框可以是非轴对称的，通过数据证明，其实可以发现原始模型实际上就是某种特殊情形下的多元高斯分布</p>
+<p>这一特殊情形其实就是当多元高斯模型的<span class="math inline">\(\Sigma\)</span>在非对角线上都是0时，即<span class="math inline">\(\Sigma = \left[ \begin{matrix} \sigma_1^2 &amp; 0 &amp; 0&amp; 0 \\ 0 &amp; \sigma_2^2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; \cdots &amp; 0 \\ 0 &amp; 0 &amp; 0&amp; \sigma_n^2 \end{matrix} \right]\)</span></p>
+<h3 id="原始模型和多元高斯模型对比">原始模型和多元高斯模型对比</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">原始模型</th>
+<th style="text-align: center;">多元高斯模型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(p(x) = p(x_1;\mu_1,\sigma_1^2)\times p(x_2;\mu_2,\sigma_2^2)\times \cdots \times p(x_n;\mu_n,\sigma_n^2)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p(x;\mu,\Sigma)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{\frac{1}{2}}} \exp(-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu))\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">当有一些特征<span class="math inline">\(x_1,x_2\)</span>等，想通过异常的组合值来捕捉异常样本，需要创建一个额外的特征</td>
+<td style="text-align: center;">能自动捕捉这种不同特征之间的关系</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">计算成本低(适应巨大规模的特征)</td>
+<td style="text-align: center;">计算成本高</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">当训练样本数少时可以使用</td>
+<td style="text-align: center;">样本数量必须大于特征数量(实际应用中，应该m &gt;&gt; n)，否则<span class="math inline">\(\Sigma\)</span>是不可逆</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注：如果<span class="math inline">\(\Sigma\)</span>是不可逆的，则可能存在以下两种情况：</p>
+<ol type="1">
+<li>没有满足 m &gt; n</li>
+<li>存在冗余特征(特征相同或特征存在线性相关)</li>
+</ol>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/07/19/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/" title="Part1-异常检测">http://www.zephon.ml/2021/07/19/Part1-异常检测/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/18/Part1-Kmeans%E5%92%8CPCA%E7%BB%83%E4%B9%A0/" rel="prev" title="Part1-Kmeans和PCA练习">
+      <i class="fa fa-chevron-left"></i> Part1-Kmeans和PCA练习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/20/Part1-%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" rel="next" title="Part1-推荐系统">
+      Part1-推荐系统 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-number">1.</span> <span class="nav-text">Part1-异常检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">问题动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83"><span class="nav-number">1.2.</span> <span class="nav-text">高斯分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E4%BE%8B%E5%AD%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">高斯分布例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.2.2.</span> <span class="nav-text">参数估计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">异常检测算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E5%92%8C%E8%AF%84%E4%BC%B0%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.4.</span> <span class="nav-text">开发和评估异常检测系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%95%B0%E8%AF%84%E4%BC%B0%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">1.4.1.</span> <span class="nav-text">实数评估的重要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%AF%84%E4%BC%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">算法评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B-vs.-%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.5.</span> <span class="nav-text">异常检测 VS. 监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E8%A6%81%E4%BD%BF%E7%94%A8%E7%9A%84%E7%89%B9%E5%BE%81"><span class="nav-number">1.6.</span> <span class="nav-text">选择要使用的特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%9A%84%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.6.1.</span> <span class="nav-text">异常检测的误差分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9B%91%E6%8E%A7%E6%A1%88%E4%BE%8B"><span class="nav-number">1.6.2.</span> <span class="nav-text">数据中心计算机监控案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%8F%98%E9%87%8F%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83"><span class="nav-number">1.7.</span> <span class="nav-text">多变量高斯分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E5%A4%9A%E5%85%83%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83"><span class="nav-number">1.7.1.</span> <span class="nav-text">多元高斯分布(多元正态分布)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E8%BF%9B%E8%A1%8C%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-number">1.8.</span> <span class="nav-text">使用多元高斯分布进行异常检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-number">1.8.1.</span> <span class="nav-text">多元高斯分布异常检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E6%A8%A1%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.8.2.</span> <span class="nav-text">多元高斯分布模型和原始模型的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B%E5%92%8C%E5%A4%9A%E5%85%83%E9%AB%98%E6%96%AF%E6%A8%A1%E5%9E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">1.8.3.</span> <span class="nav-text">原始模型和多元高斯模型对比</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

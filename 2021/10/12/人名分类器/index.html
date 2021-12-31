@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="人名分类器 关于人名分类问题  以一个人名为输入，使用模型帮助我们判断它最有可能来自哪个国家的人名，这在某些国际化公司的业务中具有重要意义，在用户注册过程中， 会根据用户填写的名字直接给他分配可能的国家或地区选项，以及该国家或地区的国旗，限制手机号码位数等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人名分类器">
+<meta property="og:url" content="http://www.zephon.ml/2021/10/12/%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E5%99%A8/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="人名分类器 关于人名分类问题  以一个人名为输入，使用模型帮助我们判断它最有可能来自哪个国家的人名，这在某些国际化公司的业务中具有重要意义，在用户注册过程中， 会根据用户填写的名字直接给他分配可能的国家或地区选项，以及该国家或地区的国旗，限制手机号码位数等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211012171800024.png">
+<meta property="article:published_time" content="2021-10-12T10:52:21.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="NLP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211012171800024.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/10/12/%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>人名分类器 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/10/12/%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          人名分类器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-12 18:52:21" itemprop="dateCreated datePublished" datetime="2021-10-12T18:52:21+08:00">2021-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NLP/" itemprop="url" rel="index"><span itemprop="name">NLP</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="人名分类器">人名分类器</h1>
+<h2 id="关于人名分类问题">关于人名分类问题</h2>
+<ul>
+<li>以一个人名为输入，使用模型帮助我们判断它最有可能来自哪个国家的人名，这在某些国际化公司的业务中具有重要意义，在用户注册过程中， 会根据用户填写的名字直接给他分配可能的国家或地区选项，以及该国家或地区的国旗，限制手机号码位数等</li>
+</ul>
+<h2 id="人名分类数据">人名分类数据</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://download.pytorch.org/tutorial/data.zip">数据下载地址</a></li>
+</ul>
+<h2 id="实现步骤">实现步骤</h2>
+<ol type="1">
+<li>导入必备工具包</li>
+<li>对data文件中的数据进行处理，满足训练要求</li>
+<li>构建RNN模型(包括传统RNN、LSTM及GRU)</li>
+<li>构建训练函数并进行训练</li>
+<li>构建评估函数并进行预测</li>
+</ol>
+<h3 id="导入必备工具包">导入必备工具包</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从io中导入文件打开方法</span></span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> <span class="built_in">open</span></span><br><span class="line"><span class="comment"># 帮助使用正则表达式子目录的查询</span></span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 用于获得常见字母及字符规范化</span></span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> unicodedata</span><br><span class="line"><span class="comment"># 导入随机工具random</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment"># 导入时间和数学工具包</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="comment"># 导入torch工具</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="comment"># 导入nn准备构建模型</span></span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="comment"># 引入制图工具包</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+<h3 id="对data文件中的数据进行处理满足训练要求">对data文件中的数据进行处理，满足训练要求</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取所有常用字符包括字母和常用标点</span></span><br><span class="line">all_letters = string.ascii_letters + <span class="string">&quot;.,;&quot;</span></span><br><span class="line"><span class="comment"># 获取常用字符数量</span></span><br><span class="line">n_letters = <span class="built_in">len</span>(all_letters)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;n_letter:&quot;</span>, n_letters)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>n_letter: 55</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字符规范化-unicode转Ascii函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unicodeToAscii</span>(<span class="params">s</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>.join(</span><br><span class="line">    	c <span class="keyword">for</span> c <span class="keyword">in</span> unicodedata.normalize(<span class="string">&#x27;NFD&#x27;</span>, s)</span><br><span class="line">        <span class="keyword">if</span> unicodedata.category(c) != <span class="string">&#x27;Mn&#x27;</span></span><br><span class="line">        <span class="keyword">and</span> c <span class="keyword">in</span> all_letters</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试</span></span><br><span class="line">s = <span class="string">&quot;Iñíguez&quot;</span></span><br><span class="line">a = unicodeToAscii(s)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Iniguez</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从从持久化文件中读取的函数</span></span><br><span class="line">data_path = <span class="string">&quot;./data/names/&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_lines</span>(<span class="params">filename</span>):</span></span><br><span class="line">    lines = <span class="built_in">open</span>(filename, encoding=<span class="string">&#x27;utf-8&#x27;</span>).read().strip().split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> [unicodeToAscii(line) <span class="keyword">for</span> line <span class="keyword">in</span> lines]</span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">filename = data_path + <span class="string">&quot;Chinese.txt&quot;</span></span><br><span class="line">lines = read_lines(filename)</span><br><span class="line"><span class="built_in">print</span>(lines[:<span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>['Ang', 'AuYong', 'Bai', 'Ban', 'Bao', 'Bei', 'Bian', 'Bui', 'Cai', 'Cao']</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 构建人名类别列表和人名对应关系字典</span></span><br><span class="line">category_lines = &#123;&#125;</span><br><span class="line">all_categories = []</span><br><span class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> glob.glob(data_path + <span class="string">&quot;*.txt&quot;</span>):</span><br><span class="line">    category = os.path.splitext(os.path.basename(filename))[<span class="number">0</span>]</span><br><span class="line">    all_categories.append(category)</span><br><span class="line">    lines = read_lines(filename)</span><br><span class="line">    category_lines[category] = lines</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看类别总数</span></span><br><span class="line">n_categories = <span class="built_in">len</span>(all_categories)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;n_categories:&quot;</span>, n_categories)</span><br><span class="line"><span class="comment"># 查看一些内容</span></span><br><span class="line"><span class="built_in">print</span>(category_lines[<span class="string">&#x27;Italian&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>n_categories: 18</p>
+<p>['Abandonato', 'Abatangelo', 'Abatantuono', 'Abate', 'Abategiovanni']</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将人名转化对应onehot张量</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">line_to_tensor</span>(<span class="params">line</span>):</span></span><br><span class="line">    tensor = torch.zeros(<span class="built_in">len</span>(line), <span class="number">1</span>, n_letters)</span><br><span class="line">    <span class="keyword">for</span> li, letter <span class="keyword">in</span> <span class="built_in">enumerate</span>(line):</span><br><span class="line">        tensor[li][<span class="number">0</span>][all_letters.find(letter)] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> tensor</span><br><span class="line"></span><br><span class="line">line = <span class="string">&quot;Bai&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;line_tensor:&quot;</span>, line_to_tensor(line))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>line_tensor: tensor([[[0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]], [[1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]], [[0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]]])</p>
+</blockquote>
+<h3 id="构建rnn模型">构建RNN模型</h3>
+<h4 id="构建传统rnn模型">构建传统RNN模型</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用nn.RNN构建完成传统RNN使用类</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RNN</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size, num_layers=<span class="number">1</span></span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;初始化函数中有4个参数, 分别代表RNN输入最后一维尺寸, RNN的隐层最后一维尺寸, RNN层数&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(RNN, self).__init__()       </span><br><span class="line">        <span class="comment"># 将hidden_size与num_layers传入其中</span></span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.num_layers = num_layers  </span><br><span class="line"></span><br><span class="line">        <span class="comment"># 实例化预定义的nn.RNN, 它的三个参数分别是input_size, hidden_size, num_layers</span></span><br><span class="line">        self.rnn = nn.RNN(input_size, hidden_size, num_layers)</span><br><span class="line">        <span class="comment"># 实例化nn.Linear, 这个线性层用于将nn.RNN的输出维度转化为指定的输出维度</span></span><br><span class="line">        self.linear = nn.Linear(hidden_size, output_size)</span><br><span class="line">        <span class="comment"># 实例化nn中预定的Softmax层, 用于从输出层获得类别结果</span></span><br><span class="line">        self.softmax = nn.LogSoftmax(dim=-<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;完成传统RNN中的主要逻辑, 输入参数input代表输入张量, 它的形状是1 x n_letters</span></span><br><span class="line"><span class="string">           hidden代表RNN的隐层张量, 它的形状是self.num_layers x 1 x self.hidden_size&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 因为预定义的nn.RNN要求输入维度一定是三维张量, 因此在这里使用unsqueeze(0)扩展一个维度</span></span><br><span class="line">        <span class="built_in">input</span> = <span class="built_in">input</span>.unsqueeze(<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># 将input和hidden输入到传统RNN的实例化对象中，如果num_layers=1, rr恒等于hn</span></span><br><span class="line">        rr, hn = self.rnn(<span class="built_in">input</span>, hidden)</span><br><span class="line">        <span class="comment"># 将从RNN中获得的结果通过线性变换和softmax返回，同时返回hn作为后续RNN的输入</span></span><br><span class="line">        <span class="keyword">return</span> self.softmax(self.linear(rr)), hn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_hidden</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;初始化隐层张量&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 初始化一个（self.num_layers, 1, self.hidden_size）形状的0张量     </span></span><br><span class="line">        <span class="keyword">return</span> torch.zeros(self.num_layers, <span class="number">1</span>, self.hidden_size)  </span><br></pre></td></tr></table></figure>
+<h4 id="构建lstm模型">构建LSTM模型</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LSTM</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size, num_layers=<span class="number">1</span></span>):</span></span><br><span class="line">        <span class="built_in">super</span>(LSTM, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        </span><br><span class="line">        self.lstm = nn.LSTM(input_size, hidden_size, num_layers)</span><br><span class="line">        self.linear = nn.Linear(hidden_size, output_size)</span><br><span class="line">        self.softmax = nn.LogSoftmax(dim=-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, c</span>):</span></span><br><span class="line">        <span class="built_in">input</span> = <span class="built_in">input</span>.unsqueeze(<span class="number">0</span>)</span><br><span class="line">        rr, (hn, c) = self.lstm(<span class="built_in">input</span>, (hidden, c))</span><br><span class="line">        <span class="keyword">return</span> self.softmax(self.linear(rr)), hn, c</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_hidden_and_c</span>(<span class="params">self</span>):</span></span><br><span class="line">        c = hidden = torch.zeros(self.num_layers, <span class="number">1</span>, self.hidden_size)</span><br><span class="line">        <span class="keyword">return</span> hidden, c</span><br></pre></td></tr></table></figure>
+<h4 id="构建gru模型">构建GRU模型</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GRU</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, input_size, hidden_size, output_size, num_layers=<span class="number">1</span></span>):</span></span><br><span class="line">        <span class="built_in">super</span>(GRU, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line">        self.gru = nn.GRU(input_size, hidden_size, num_layers)</span><br><span class="line">        self.linear = nn.Linear(hidden_size, output_size)</span><br><span class="line">        self.softmax = nn.LogSoftmax(dim=-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden</span>):</span></span><br><span class="line">        <span class="built_in">input</span> = <span class="built_in">input</span>.unsqueeze(<span class="number">0</span>)</span><br><span class="line">        rr, hn = self.gru(<span class="built_in">input</span>, hidden)</span><br><span class="line">        <span class="keyword">return</span> self.softmax(self.linear(rr)), hn</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init_hidden</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> torch.zeros(self.num_layers, <span class="number">1</span>, self.hidden_size)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">input_size = n_letters</span><br><span class="line">n_hidden = <span class="number">128</span> <span class="comment"># 定义隐层最后一维尺寸大小</span></span><br><span class="line">output_size = n_categories</span><br><span class="line"><span class="built_in">input</span> = line_to_tensor(<span class="string">&#x27;B&#x27;</span>).squeeze(<span class="number">0</span>)</span><br><span class="line">hidden = c = torch.zeros(<span class="number">1</span>, <span class="number">1</span>, n_hidden)</span><br><span class="line">rnn = RNN(input_size, n_hidden, output_size)</span><br><span class="line">lstm = LSTM(input_size, n_hidden, output_size)</span><br><span class="line">gru = GRU(input_size, n_hidden, output_size)</span><br><span class="line"></span><br><span class="line">rnn_output, next_hidden = rnn(<span class="built_in">input</span>, hidden)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;rnn:&quot;</span>, rnn_output)</span><br><span class="line"><span class="built_in">print</span>(rnn_output.shape)</span><br><span class="line">lstm_output, next_hidden, c = lstm(<span class="built_in">input</span>, hidden, c)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;lstm:&quot;</span>, lstm_output)</span><br><span class="line"><span class="built_in">print</span>(lstm_output.shape)</span><br><span class="line">gru_output, next_hidden = gru(<span class="built_in">input</span>, hidden)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;gru:&quot;</span>, gru_output)</span><br><span class="line"><span class="built_in">print</span>(gru_output.shape)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>rnn: tensor([[[-2.7586, -2.9267, -2.9233, -2.9483, -2.9034, -2.8620, -3.0104, -2.9470, -2.7736, -2.8324, -2.8893, -2.9148, -2.8490, -2.9128, -3.0092, -2.8207, -2.8846, -2.9011]]], grad_fn=<LogSoftmaxBackward>)</p>
+<p>torch.Size([1, 1, 18])</p>
+<p>lstm: tensor([[[-2.8870, -2.8785, -2.8590, -2.9680, -2.8337, -2.8333, -2.8774, -2.9016, -2.8173, -2.9711, -2.9113, -2.8614, -2.8533, -2.8560, -2.8948, -2.9332, -2.9586, -2.9509]]], grad_fn=<LogSoftmaxBackward>)</p>
+<p>torch.Size([1, 1, 18])</p>
+<p>gru: tensor([[[-2.9899, -2.8605, -2.8580, -2.8376, -2.9263, -2.9115, -2.8091, -2.9688, -2.9039, -2.9790, -2.8622, -2.9508, -2.8404, -2.9036, -2.8456, -2.8766, -2.8663, -2.8602]]], grad_fn=<LogSoftmaxBackward>)</p>
+<p>torch.Size([1, 1, 18])</p>
+</blockquote>
+<h3 id="构建训练函数并进行训练">构建训练函数并进行训练</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">category_from_output</span>(<span class="params">output</span>):</span></span><br><span class="line">    top_n, top_i = output.topk(<span class="number">1</span>)</span><br><span class="line">    category_i = top_i[<span class="number">0</span>].item()</span><br><span class="line">    <span class="keyword">return</span> all_categories[category_i], category_i</span><br><span class="line">x = torch.arange(<span class="number">1.</span>, <span class="number">6.</span>)</span><br><span class="line"><span class="built_in">print</span>(x)</span><br><span class="line"><span class="built_in">print</span>(torch.topk(x, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>tensor([1., 2., 3., 4., 5.])</p>
+<p>torch.return_types.topk( values=tensor([5., 4., 3.]), indices=tensor([4, 3, 2]))</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">output = gru_output</span><br><span class="line">category, category_i = category_from_output(output)</span><br><span class="line"><span class="built_in">print</span>(category, category_i)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Portuguese 15</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 随机产生训练数据</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_train_example</span>():</span></span><br><span class="line">    category = random.choice(all_categories)</span><br><span class="line">    line = random.choice(category_lines[category])</span><br><span class="line">    category_tensor = torch.tensor([all_categories.index(category)], dtype=torch.long)</span><br><span class="line">    line_tensor = line_to_tensor(line)</span><br><span class="line">    <span class="keyword">return</span> category, line, category_tensor, line_tensor</span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    category, line, category_tensor, line_tensor = random_train_example()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;category=&quot;</span>,category,<span class="string">&quot;/ line=&quot;</span>, line, <span class="string">&quot;/category_tensor=&quot;</span>, category_tensor)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>category= Czech / line= Tykal /category_tensor= tensor([5])</p>
+<p>category= Japanese / line= Tsukatani /category_tensor= tensor([9])</p>
+<p>category= Chinese / line= Xin /category_tensor= tensor([0])</p>
+<p>category= Italian / line= Albanesi /category_tensor= tensor([12])</p>
+<p>category= Japanese / line= Fujimaki /category_tensor= tensor([9])</p>
+<p>category= Scottish / line= Black /category_tensor= tensor([14])</p>
+<p>category= French / line= Bernard /category_tensor= tensor([7])</p>
+<p>category= Greek / line= Tselios /category_tensor= tensor([8])</p>
+<p>category= Chinese / line= Chen /category_tensor= tensor([0])</p>
+<p>category= German / line= Hauer /category_tensor= tensor([16])</p>
+</blockquote>
+<h4 id="构建传统rnn训练函数">构建传统RNN训练函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">criterion = nn.NLLLoss()</span><br><span class="line">learning_rate = <span class="number">0.005</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_RNN</span>(<span class="params">category_tensor, line_tensor</span>):</span></span><br><span class="line">    hidden = rnn.init_hidden()</span><br><span class="line">    rnn.zero_grad()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden = rnn(line_tensor[i], hidden)</span><br><span class="line">    </span><br><span class="line">    loss = criterion(output.squeeze(<span class="number">0</span>), category_tensor)</span><br><span class="line">    loss.backward()</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> rnn.parameters():</span><br><span class="line">        p.data.add_(learning_rate, p.grad.data)</span><br><span class="line">       </span><br><span class="line">    <span class="keyword">return</span> output, loss.item()</span><br></pre></td></tr></table></figure>
+<h4 id="构建lstm训练函数">构建LSTM训练函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_LSTM</span>(<span class="params">category_tensor, line_tensor</span>):</span></span><br><span class="line">    hidden, c = lstm.init_hidden_and_c()</span><br><span class="line">    lstm.zero_grad()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden, c = lstm(line_tensor[i], hidden, c)</span><br><span class="line">    loss = criterion(output.squeeze(<span class="number">0</span>), category_tensor)</span><br><span class="line">    loss.backward()</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> lstm.parameters():</span><br><span class="line">        p.data.add_(-learning_rate, p.grad.data)</span><br><span class="line">    <span class="keyword">return</span> output, loss.item()</span><br></pre></td></tr></table></figure>
+<h4 id="构建gru训练函数">构建GRU训练函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_GRU</span>(<span class="params">category_tensor, line_tensor</span>):</span></span><br><span class="line">    hidden = gru.init_hidden()</span><br><span class="line">    gru.zero_grad()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden = gru(line_tensor[i], hidden)</span><br><span class="line">    loss = criterion(output.squeeze(<span class="number">0</span>), category_tensor)</span><br><span class="line">    loss.backward()</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> gru.parameters():</span><br><span class="line">        p.data.add_(-learning_rate, p.grad.data)</span><br><span class="line">    <span class="keyword">return</span> output, loss.item()</span><br></pre></td></tr></table></figure>
+<h4 id="构建时间计算函数">构建时间计算函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">time_since</span>(<span class="params">since</span>):</span></span><br><span class="line">    now = time.time()</span><br><span class="line">    s = now - since</span><br><span class="line">    m = math.floor(s / <span class="number">60</span>)</span><br><span class="line">    s -= m*<span class="number">60</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;%dm %ds&quot;</span> % (m, s)</span><br></pre></td></tr></table></figure>
+<h4 id="构建训练过程的日志打印函数">构建训练过程的日志打印函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">n_iters = <span class="number">1000</span></span><br><span class="line">print_every = <span class="number">50</span></span><br><span class="line">plot_every = <span class="number">10</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">train_type_fn</span>):</span></span><br><span class="line">    all_losses = []</span><br><span class="line">    start = time.time()</span><br><span class="line">    current_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">iter</span> <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n_iters+<span class="number">1</span>):</span><br><span class="line">        category, line, category_tensor, line_tensor = random_train_example()</span><br><span class="line">        output, loss = train_type_fn(category_tensor, line_tensor)</span><br><span class="line">        current_loss += loss</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">iter</span> % print_every == <span class="number">0</span>:</span><br><span class="line">            guess, guess_i = category_from_output(output)</span><br><span class="line">            correct = <span class="string">&#x27;✓&#x27;</span> <span class="keyword">if</span> guess == category <span class="keyword">else</span> <span class="string">&#x27;✗ (%s)&#x27;</span> % category</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;%d %d%% (%s) %.4f %s / %s %s&#x27;</span> % (<span class="built_in">iter</span>, <span class="built_in">iter</span> / n_iters * <span class="number">100</span>, time_since(start), loss, line, guess, correct))</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">iter</span> % plot_every == <span class="number">0</span>:</span><br><span class="line">                all_losses.append(current_loss / plot_every)</span><br><span class="line">                current_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> all_losses, <span class="built_in">int</span>(time.time() - start)</span><br></pre></td></tr></table></figure>
+<h4 id="训练">训练</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 调用train函数, 分别进行RNN, LSTM, GRU模型的训练</span></span><br><span class="line"><span class="comment"># 并返回各自的全部损失, 以及训练耗时用于制图</span></span><br><span class="line">all_losses1, period1 = train(train_RNN)</span><br><span class="line">all_losses2, period2 = train(train_LSTM)</span><br><span class="line">all_losses3, period3 = train(train_GRU)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制损失对比曲线, 训练耗时对比柱张图</span></span><br><span class="line"><span class="comment"># 创建画布0</span></span><br><span class="line">plt.figure(<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 绘制损失对比曲线</span></span><br><span class="line">plt.plot(all_losses1, label=<span class="string">&quot;RNN&quot;</span>)</span><br><span class="line">plt.plot(all_losses2, color=<span class="string">&quot;red&quot;</span>, label=<span class="string">&quot;LSTM&quot;</span>)</span><br><span class="line">plt.plot(all_losses3, color=<span class="string">&quot;orange&quot;</span>, label=<span class="string">&quot;GRU&quot;</span>) </span><br><span class="line">plt.legend(loc=<span class="string">&#x27;upper left&#x27;</span>) </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建画布1</span></span><br><span class="line">plt.figure(<span class="number">1</span>)</span><br><span class="line">x_data=[<span class="string">&quot;RNN&quot;</span>, <span class="string">&quot;LSTM&quot;</span>, <span class="string">&quot;GRU&quot;</span>] </span><br><span class="line">y_data = [period1, period2, period3]</span><br><span class="line"><span class="comment"># 绘制训练耗时对比柱状图</span></span><br><span class="line">plt.bar(<span class="built_in">range</span>(<span class="built_in">len</span>(x_data)), y_data, tick_label=x_data)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>...</p>
+<p>750 75% (0m 2s) 2.8973 Reijnders / Korean ✗ (Dutch)</p>
+<p>800 80% (0m 3s) 2.9324 Huynh / Korean ✗ (Vietnamese)</p>
+<p>850 85% (0m 3s) 2.7586 Suk / Korean ✓</p>
+<p>900 90% (0m 3s) 2.9910 Stanek / Korean ✗ (Polish)</p>
+<p>950 95% (0m 3s) 2.9644 Klimek / Greek ✗ (Polish)</p>
+<p>1000 100% (0m 3s) 2.9666 Le / Korean ✗ (Vietnamese)</p>
+<p>&lt;BarContainer object of 3 artists&gt;</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20211012171800024.png" /></p>
+</blockquote>
+<h4 id="结论">结论</h4>
+<blockquote>
+<p>损失对比曲线分析：</p>
+<ul>
+<li>模型训练的损失降低快慢代表模型收敛程度，由图可知，传统RNN的模型收敛情况最好，然后是GRU，最后是LSTM，这是因为：当处理的文本数据是人名时，它们的长度有限，且长距离字母间基本无特定关联，因此无法发挥改进模型LSTM和GRU的长距离捕捉语义关联优势。所以在之后的模型选用时，要通过对任务的分析以及实验对比，选择最适合的模型。</li>
+</ul>
+<p>训练耗时对比图分析：</p>
+<ul>
+<li>模型训练的耗时长短代表模型的计算复杂度，由图可知，也正如之前理论分析，传统RNN复杂度最低，耗时最少，然后是GRU，最后是LSTM。</li>
+</ul>
+</blockquote>
+<p>结论：模型选用一般就通过实验对比，并非越复杂或越先进的模型越好，而是需要结合自己的特定任务，从对数据的分析和实验结果中获得最佳答案</p>
+<h3 id="构建评估函数并进行预测">构建评估函数并进行预测</h3>
+<h4 id="构建传统rnn评估函数">构建传统RNN评估函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evaluate_RNN</span>(<span class="params">line_tensor</span>):</span></span><br><span class="line">    hidden = rnn.init_hidden()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden = rnn(line_tensor[i], hidden)</span><br><span class="line">    <span class="keyword">return</span> output.squeeze(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="构建lstm评估函数">构建LSTM评估函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evaluate_LSTM</span>(<span class="params">line_tensor</span>):</span></span><br><span class="line">    hidden, c = lstm.init_hidden_and_c()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden, c = lstm(line_tensor[i], hidden, c)</span><br><span class="line">    <span class="keyword">return</span> output.squeeze(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="构建gru评估函数">构建GRU评估函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">evaluate_GRU</span>(<span class="params">line_tensor</span>):</span></span><br><span class="line">    hidden = gru.init_hidden()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(line_tensor.size()[<span class="number">0</span>]):</span><br><span class="line">        output, hidden = gru(line_tensor[i], hidden)</span><br><span class="line">	<span class="keyword">return</span> output.squeeze(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="测试">测试</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">line = <span class="string">&quot;Bai&quot;</span></span><br><span class="line">line_tensor = line_to_tensor(line)</span><br><span class="line">rnn_output = evaluate_RNN(line_tensor)</span><br><span class="line">lstm_output = evaluate_LSTM(line_tensor)</span><br><span class="line">gru_output = evaluate_GRU(line_tensor)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;rnn_output:&quot;</span>, rnn_output)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;lstm_output:&quot;</span>, lstm_output)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;gru_output:&quot;</span>, gru_output)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>rnn_output: tensor([[-5965.0801, 0.0000, -5944.7900, -5938.4595, -5962.0166, -5947.8330, -5934.5571, -5944.6787, -5954.0552, -5939.5146, -5950.5410, -5955.7983, -5929.8423, -5952.1704, -5936.9551, -5948.0830, -5970.2207, -5947.5967]], grad_fn=<SqueezeBackward1>)</p>
+<p>lstm_output: tensor([[-2.8458, -2.9780, -2.8754, -2.9936, -2.8406, -2.9247, -3.0767, -2.8284, -2.9451, -2.8750, -2.8369, -2.7955, -2.8501, -2.8687, -2.9414, -2.8326, -2.8425, -2.9191]], grad_fn=<SqueezeBackward1>)</p>
+<p>gru_output: tensor([[-2.9983, -2.6126, -2.9359, -2.9278, -2.8107, -3.0219, -3.0625, -2.9407, -3.0557, -2.8054, -2.6451, -2.9002, -2.7039, -2.7317, -3.1449, -2.9193, -2.9134, -3.1068]], grad_fn=<SqueezeBackward1>)</p>
+</blockquote>
+<h4 id="构建预测函数">构建预测函数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">input_line, evaluate, n_predictions=<span class="number">3</span></span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&gt; %s&quot;</span> % input_line)</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        output = evaluate(line_to_tensor(input_line))</span><br><span class="line">        topv, topi = output.topk(n_predictions, <span class="number">1</span>, <span class="literal">True</span>)</span><br><span class="line">        predictions = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_predictions):</span><br><span class="line">            value = topv[<span class="number">0</span>][i].item()</span><br><span class="line">            category_index = topi[<span class="number">0</span>][i].item()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;(%.2f) %s&quot;</span> % (value, all_categories[category_index]))</span><br><span class="line">            predictions.append([value, all_categories[category_index]])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 调用</span></span><br><span class="line"><span class="keyword">for</span> evaluate_fn <span class="keyword">in</span> [evaluate_RNN, evaluate_LSTM, evaluate_GRU]:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;-&quot;</span>*<span class="number">18</span>)</span><br><span class="line">    predict(<span class="string">&quot;Dovesky&quot;</span>, evaluate_fn)</span><br><span class="line">    predict(<span class="string">&quot;Jackson&quot;</span>, evaluate_fn)</span><br><span class="line">    predict(<span class="string">&quot;Satoshi&quot;</span>, evaluate_fn)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<hr />
+<p>&gt; Dovesky</p>
+<p>(0.00) Italian</p>
+<p>(-5929.84) Czech</p>
+<p>(-5934.56) Irish</p>
+<p>&gt; Jackson</p>
+<p>(0.00) Italian</p>
+<p>(-5929.84) Czech</p>
+<p>(-5934.56) Irish</p>
+<p>&gt; Satoshi</p>
+<p>(0.00) Italian</p>
+<p>(-5929.84) Czech</p>
+<p>(-5934.56) Irish</p>
+<hr />
+<p>&gt; Dovesky</p>
+<p>(-2.80) English</p>
+<p>(-2.81) Portuguese</p>
+<p>(-2.82) Arabic</p>
+<p>&gt; Jackson</p>
+<p>(-2.80) Portuguese</p>
+<p>(-2.82) English</p>
+<p>(-2.82) Arabic</p>
+<p>&gt; Satoshi</p>
+<p>(-2.80) Arabic</p>
+<p>(-2.82) English</p>
+<p>(-2.82) Portuguese</p>
+<hr />
+<p>&gt; Dovesky</p>
+<p>(-2.62) Czech</p>
+<p>(-2.67) Polish</p>
+<p>(-2.69) Greek</p>
+<p>&gt; Jackson</p>
+<p>(-2.74) Scottish</p>
+<p>(-2.75) English</p>
+<p>(-2.77) Russian</p>
+<p>&gt; Satoshi</p>
+<p>(-2.61) Greek</p>
+<p>(-2.64) Italian</p>
+<p>(-2.70) Czech</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/10/12/%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E5%99%A8/" title="人名分类器">http://www.zephon.ml/2021/10/12/人名分类器/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/NLP/" rel="tag"><i class="fa fa-tag"></i> NLP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/10/GRU%E6%A8%A1%E5%9E%8B/" rel="prev" title="GRU模型">
+      <i class="fa fa-chevron-left"></i> GRU模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/15/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" rel="next" title="量化与后训练量化">
+      量化与后训练量化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">人名分类器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">关于人名分类问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%BA%E5%90%8D%E5%88%86%E7%B1%BB%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">人名分类数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.3.</span> <span class="nav-text">实现步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5%E5%BF%85%E5%A4%87%E5%B7%A5%E5%85%B7%E5%8C%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">导入必备工具包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9data%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86%E6%BB%A1%E8%B6%B3%E8%AE%AD%E7%BB%83%E8%A6%81%E6%B1%82"><span class="nav-number">1.3.2.</span> <span class="nav-text">对data文件中的数据进行处理，满足训练要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BArnn%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">构建RNN模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%BC%A0%E7%BB%9Frnn%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">构建传统RNN模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAlstm%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">构建LSTM模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAgru%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">构建GRU模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0%E5%B9%B6%E8%BF%9B%E8%A1%8C%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.4.</span> <span class="nav-text">构建训练函数并进行训练</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%BC%A0%E7%BB%9Frnn%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">构建传统RNN训练函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAlstm%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">构建LSTM训练函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAgru%E8%AE%AD%E7%BB%83%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">构建GRU训练函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%97%B6%E9%97%B4%E8%AE%A1%E7%AE%97%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.4.</span> <span class="nav-text">构建时间计算函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E7%9A%84%E6%97%A5%E5%BF%97%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.4.5.</span> <span class="nav-text">构建训练过程的日志打印函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.4.6.</span> <span class="nav-text">训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">1.3.4.7.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%AF%84%E4%BC%B0%E5%87%BD%E6%95%B0%E5%B9%B6%E8%BF%9B%E8%A1%8C%E9%A2%84%E6%B5%8B"><span class="nav-number">1.3.5.</span> <span class="nav-text">构建评估函数并进行预测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%BC%A0%E7%BB%9Frnn%E8%AF%84%E4%BC%B0%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">构建传统RNN评估函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAlstm%E8%AF%84%E4%BC%B0%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">构建LSTM评估函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAgru%E8%AF%84%E4%BC%B0%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.5.3.</span> <span class="nav-text">构建GRU评估函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">1.3.5.4.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%A2%84%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.5.5.</span> <span class="nav-text">构建预测函数</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

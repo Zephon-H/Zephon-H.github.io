@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SpringBoot-Web开发 1、使用SpringBoot  创建SpringBoot应用，选中需要的模块 SpringBoot已经默认将这些场景配置好了，只需要在配置文件中指定少量配置就可以运行 自己编写业务代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot-Web开发">
+<meta property="og:url" content="http://www.zephon.ml/2020/02/18/SpringBoot-Web%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="SpringBoot-Web开发 1、使用SpringBoot  创建SpringBoot应用，选中需要的模块 SpringBoot已经默认将这些场景配置好了，只需要在配置文件中指定少量配置就可以运行 自己编写业务代码">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-18T08:46:11.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/02/18/SpringBoot-Web%E5%BC%80%E5%8F%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringBoot-Web开发 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/02/18/SpringBoot-Web%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringBoot-Web开发
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-18 16:46:11" itemprop="dateCreated datePublished" datetime="2020-02-18T16:46:11+08:00">2020-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="springboot-web开发">SpringBoot-Web开发</h1>
+<h2 id="使用springboot">1、使用SpringBoot</h2>
+<ol type="1">
+<li>创建SpringBoot应用，选中需要的模块</li>
+<li>SpringBoot已经默认将这些场景配置好了，只需要在配置文件中指定少量配置就可以运行</li>
+<li>自己编写业务代码</li>
+</ol>
+<h2 id="springboot对静态资源的映射规则">2、SpringBoot对静态资源的映射规则</h2>
+<ol type="1">
+<li><p>所有/webjars/**，都去classpath::/META-INF/resources/webjars/找资源</p>
+<p>webjars：以jar包的方式引入静态资源</p>
+<p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--        引入jquery-webjar</span></span><br><span class="line"><span class="comment">	在访问时，只需要写webjars下面的资源名称即可</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.webjars<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jquery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.4.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p></li>
+<li><p>"/**"，访问当前项目的任何资源(静态资源文件夹)</p>
+<blockquote>
+<p>"classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/static/", "classpath:/public/" "/"：当前项目的根路径</p>
+</blockquote>
+<p>即：</p>
+<blockquote>
+<p>src-&gt;main-&gt;resources-&gt;public/resources/static</p>
+<p>访问路径：localhost:8080/xxx</p>
+</blockquote></li>
+<li><p>欢迎页；静态资源文件夹下的所有index.html页面，被"/**"映射</p>
+<p>localhost:8080/找到index页面</p></li>
+<li><p>所有的**/favicon.ico都是在静态资源文件夹下找</p></li>
+</ol>
+<h2 id="模板引擎">3、模板引擎</h2>
+<p>JSP、Velocity、Freemarker、Thymeleaf</p>
+<p>SpringBoot推荐Thymeleaf：语法更简单，功能更强大</p>
+<h3 id="thymeleaf使用">Thymeleaf使用</h3>
+<ol type="1">
+<li><p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>只需要把HTML页面放在classpath:/templates/，thymeleaf就能自动渲染</p></li>
+<li><p>引入<code>&lt;html xmlns:th="http://www.thymeleaf.org"&gt;</code></p></li>
+</ol>
+<h3 id="thymeleaf语法">Thymeleaf语法</h3>
+<ol type="1">
+<li><p>th:text：改变当前元素里面的文本内容</p>
+<p>th:任意html属性；来替换原生属性的值</p>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 27%" />
+<col style="width: 37%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Order</th>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Attributes</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">Fragment inclusion</td>
+<td style="text-align: left;"><code>th:insert</code> <code>th:replace</code></td>
+<td>片断包含：jsp:include</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">Fragment iteration</td>
+<td style="text-align: left;"><code>th:each</code></td>
+<td>遍历:c:forEach</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">Conditional evaluation</td>
+<td style="text-align: left;"><code>th:if</code> <code>th:unless</code> <code>th:switch</code> <code>th:case</code></td>
+<td>条件判断c:if</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">Local variable definition</td>
+<td style="text-align: left;"><code>th:object</code> <code>th:with</code></td>
+<td>声明变量：c:set</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">General attribute modification</td>
+<td style="text-align: left;"><code>th:attr</code> <code>th:attrprepend</code> <code>th:attrappend</code></td>
+<td>任意属性修改，支持前后追加</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Specific attribute modification</td>
+<td style="text-align: left;"><code>th:value</code> <code>th:href</code> <code>th:src</code> <code>...</code></td>
+<td>修改指定属性默认值</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">Text (tag body modification)</td>
+<td style="text-align: left;"><code>th:text</code> <code>th:utext</code></td>
+<td>修改标签体内容，utext不转义特殊字符</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">Fragment specification</td>
+<td style="text-align: left;"><code>th:fragment</code></td>
+<td>声明片断</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">Fragment removal</td>
+<td style="text-align: left;"><code>th:remove</code></td>
+<td>移除片断</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>表达式</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Simple</span> <span class="string">expressions: (表达式语法)</span></span><br><span class="line">    <span class="attr">Variable</span> <span class="string">Expressions: $&#123;...&#125;：获取变量值：OGNL</span></span><br><span class="line">    							<span class="attr">1）、获取对象属性、调用方法</span></span><br><span class="line">    							<span class="attr">2）、使用内置的基本对象</span></span><br><span class="line"><span class="comment">    										#ctx: the context object.</span></span><br><span class="line"><span class="comment">                                            #vars: the context variables.</span></span><br><span class="line"><span class="comment">                                            #locale: the context locale.</span></span><br><span class="line"><span class="comment">                                            #request: (only in Web Contexts) the HttpServletRequest object.</span></span><br><span class="line"><span class="comment">                                            #response: (only in Web Contexts) the HttpServletResponse object.</span></span><br><span class="line"><span class="comment">                                            #session: (only in Web Contexts) the HttpSession object.</span></span><br><span class="line"><span class="comment">                                            #servletContext: (only in Web Contexts) the ServletContext object.</span></span><br><span class="line">                               <span class="attr">3）、内置的一些工具对象：</span></span><br><span class="line"><span class="comment">                               #execInfo: information about the template being processed.</span></span><br><span class="line"><span class="comment">                                #messages: methods for obtaining externalized messages inside variables expressions, in the same way as they would be obtained using #&#123;…&#125; syntax.</span></span><br><span class="line"><span class="comment">                                #uris: methods for escaping parts of URLs/URIs</span></span><br><span class="line"><span class="comment">                                #conversions: methods for executing the configured conversion service (if any).</span></span><br><span class="line"><span class="comment">                                #dates: methods for java.util.Date objects: formatting, component extraction, etc.</span></span><br><span class="line"><span class="comment">                                #calendars: analogous to #dates, but for java.util.Calendar objects.</span></span><br><span class="line"><span class="comment">                                #numbers: methods for formatting numeric objects.</span></span><br><span class="line"><span class="comment">                                #strings: methods for String objects: contains, startsWith, prepending/appending, etc.</span></span><br><span class="line"><span class="comment">                                #objects: methods for objects in general.</span></span><br><span class="line"><span class="comment">                                #bools: methods for boolean evaluation.</span></span><br><span class="line"><span class="comment">                                #arrays: methods for arrays.</span></span><br><span class="line"><span class="comment">                                #lists: methods for lists.</span></span><br><span class="line"><span class="comment">                                #sets: methods for sets.</span></span><br><span class="line"><span class="comment">                                #maps: methods for maps.</span></span><br><span class="line"><span class="comment">                                #aggregates: methods for creating aggregates on arrays or collections.</span></span><br><span class="line"><span class="comment">                                #ids: methods for dealing with id attributes that might be repeated (for example, as a result of an iteration).</span></span><br><span class="line">    <span class="attr">Selection</span> <span class="string">Variable Expressions: *&#123;...&#125;：选择表达式：和$&#123;&#125;在功能上是一样的</span></span><br><span class="line">    		<span class="meta">补充：配合th</span>:<span class="string">object=&quot;$&#123;&#125;使用</span></span><br><span class="line">    <span class="attr">Message</span> <span class="string">Expressions: #&#123;...&#125;：获取国际化内容</span></span><br><span class="line">    <span class="attr">Link</span> <span class="string">URL Expressions: @&#123;...&#125;：定义URL</span></span><br><span class="line">    		<span class="meta">@&#123;/order/process(execId</span>=<span class="string">$&#123;execId&#125;;execType=&#x27;FAST&#x27;)&#125;</span></span><br><span class="line">    <span class="attr">Fragment</span> <span class="string">Expressions: ~&#123;...&#125;：片断引用表达式</span></span><br><span class="line">    </span><br><span class="line"><span class="attr">Literals（字面量）</span></span><br><span class="line">    <span class="attr">Text</span> <span class="string">literals: &#x27;one text&#x27;, &#x27;Another one!&#x27;,…</span></span><br><span class="line">    <span class="attr">Number</span> <span class="string">literals: 0, 34, 3.0, 12.3,…</span></span><br><span class="line">    <span class="attr">Boolean</span> <span class="string">literals: true, false</span></span><br><span class="line">    <span class="attr">Null</span> <span class="string">literal: null</span></span><br><span class="line">    <span class="attr">Literal</span> <span class="string">tokens: one, sometext, main,…</span></span><br><span class="line">    </span><br><span class="line"><span class="attr">Text</span> <span class="string">operations:（文本操作）</span></span><br><span class="line">    <span class="attr">String</span> <span class="string">concatenation: +</span></span><br><span class="line">    <span class="attr">Literal</span> <span class="string">substitutions: |The name is $&#123;name&#125;|</span></span><br><span class="line">    </span><br><span class="line"> <span class="attr">Arithmetic</span> <span class="string">operations:（数学运算）</span></span><br><span class="line">    <span class="attr">Binary</span> <span class="string">operators: +, -, *, /, %</span></span><br><span class="line">    <span class="attr">Minus</span> <span class="string">sign (unary operator): -</span></span><br><span class="line">    </span><br><span class="line"> <span class="attr">Boolean</span> <span class="string">operations:（布尔运算）</span></span><br><span class="line">    <span class="attr">Binary</span> <span class="string">operators: and, or</span></span><br><span class="line">    <span class="attr">Boolean</span> <span class="string">negation (unary operator): !, not</span></span><br><span class="line">    </span><br><span class="line"><span class="attr">Comparisons</span> <span class="string">and equality:（比较运算）</span></span><br><span class="line">    <span class="attr">Comparators</span>: <span class="string">&gt;, &lt;, &gt;=, &lt;= (gt, lt, ge, le)</span></span><br><span class="line">    <span class="attr">Equality</span> <span class="string">operators: ==, != (eq, ne)</span></span><br><span class="line">    </span><br><span class="line"><span class="attr">Conditional</span> <span class="string">operators:（条件运算）</span></span><br><span class="line">    <span class="meta">If-then</span>: <span class="string">(if) ? (then)</span></span><br><span class="line">    <span class="meta">If-then-else</span>: <span class="string">(if) ? (then) : (else)</span></span><br><span class="line">    <span class="attr">Default</span>: <span class="string">(value) ?: (defaultvalue)</span></span><br><span class="line"><span class="attr">Special</span> <span class="string">tokens:（特殊）</span></span><br><span class="line">    <span class="meta">No-Operation</span>: <span class="string">_</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="restfulcrud">4、RestfulCRUD</h2>
+<ol type="1">
+<li><p>默认访问首页</p></li>
+<li><p>国际化</p>
+<p>步骤：</p>
+<ol type="1">
+<li><p>编写国际化配置文件，抽取页面需要显示的国际化消息</p></li>
+<li><p>SpringBoot自动配置好了管理国际化资源文件的组件</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.messages.basename</span>=<span class="string">i18n.login</span></span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#123;login.username&#125;</span><br></pre></td></tr></table></figure>
+<p>效果：根据浏览器语言设置的信息切换国际化</p>
+<p>原理：国际化Locale（区域信息对象）；LocaleResolver（获取区域信息对象）,默认就是根据请求头带来的区域信息获取Locale进行国际化</p></li>
+<li><p>点击链接切换国际化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLocaleResolver</span> <span class="keyword">implements</span> <span class="title">LocaleResolver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Locale <span class="title">resolveLocale</span><span class="params">(HttpServletRequest httpServletRequest)</span> </span>&#123;</span><br><span class="line">        String l = httpServletRequest.getParameter(<span class="string">&quot;l&quot;</span>);</span><br><span class="line">        Locale locale = Locale.getDefault();</span><br><span class="line">        <span class="keyword">if</span>(!StringUtils.isEmpty(l))&#123;</span><br><span class="line">            String[] s = l.split(<span class="string">&quot;_&quot;</span>);</span><br><span class="line">            locale = <span class="keyword">new</span> Locale(s[<span class="number">0</span>], s[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> locale;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocale</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Locale locale)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> LocaleResolver <span class="title">localeResolver</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyLocaleResolver();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol></li>
+<li><p>登录</p>
+<p>开发期间模板引擎页面修改后要实时生效</p>
+<ul>
+<li><p>禁用模板引擎的缓存</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 禁用缓存</span></span><br><span class="line"><span class="meta">spring.thymeleaf.cache</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure></li>
+<li><p>页面修改后，ctrl+f9，重新编译</p></li>
+<li><p>登录错误消息的显示</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;color: red&quot;</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;msg&#125;&quot;</span> <span class="attr">th:if</span>=<span class="string">&quot;$&#123;not #strings.isEmpty(msg)&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul></li>
+<li><p>拦截器进行登录检查</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 注册拦截器</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> LoginHandlerInterceptor()).addPathPatterns(<span class="string">&quot;/**&quot;</span>)</span><br><span class="line">                .excludePathPatterns(<span class="string">&quot;/index.html&quot;</span>,<span class="string">&quot;/&quot;</span>,<span class="string">&quot;/user/login&quot;</span>,<span class="string">&quot;/webjars/**&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>CRUD-员工列表</p>
+<ol type="1">
+<li><p>RestfulCRUD：CRUD满足Rest风格</p>
+<p>URI：/资源名称/资源标识 HTTP请求方式区分对资源CRUD操作</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>普通CRUD(uri来区分操作)</th>
+<th>RestfulCRUD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>查询</td>
+<td>getEmp</td>
+<td>emp---GET</td>
+</tr>
+<tr class="even">
+<td>添加</td>
+<td>addEmp?xxx</td>
+<td>emp---POST</td>
+</tr>
+<tr class="odd">
+<td>修改</td>
+<td>updateEmp?id=xxx&amp;xxx=xx</td>
+<td>emp/{id}---PUT</td>
+</tr>
+<tr class="even">
+<td>删除</td>
+<td>deleteEmp?id=xx</td>
+<td>emp/{id}---DELETE</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>请求架构</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>请求URI</th>
+<th>请求方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>查询所有员工</td>
+<td>emps</td>
+<td>GET</td>
+</tr>
+<tr class="even">
+<td>查询某个员工</td>
+<td>emp/{id}</td>
+<td>GET</td>
+</tr>
+<tr class="odd">
+<td>来到添加页面</td>
+<td>emp</td>
+<td>GET</td>
+</tr>
+<tr class="even">
+<td>添加员工</td>
+<td>emp</td>
+<td>POST</td>
+</tr>
+<tr class="odd">
+<td>来到修改页面(查出员工进行信息回显)</td>
+<td>emp/{id}</td>
+<td>GET</td>
+</tr>
+<tr class="even">
+<td>修改员工</td>
+<td>emp</td>
+<td>PUT</td>
+</tr>
+<tr class="odd">
+<td>删除员工</td>
+<td>emp/{id}</td>
+<td>DELETE</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>员工列表</p>
+<ul>
+<li><p>thymeleaf公共页面元素抽取</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 1、抽取公共片断--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:fragment</span>=<span class="string">&quot;copy&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 2、引入公共片断 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:insert</span>=<span class="string">&quot;~footer::copy&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">~&#123;templatename::selector&#125;：模板名：选择器</span><br><span class="line">~&#123;templatename::fragmentname&#125;：模板名：片断名</span><br><span class="line"></span><br><span class="line">默认效果：</span><br><span class="line">insert的公共片段在div标签中</span><br><span class="line">如果使用th:insert等属性进行引入，可以不定~&#123;&#125;</span><br><span class="line">行内写法可以加上：[[~&#123;&#125;]];[(~&#123;&#125;)]</span><br></pre></td></tr></table></figure>
+<p>三种引入公共片断的th属性：</p>
+<blockquote>
+<p>th:insert：将公共片断整个插入到声明引入的元素</p>
+<p>th:replace：将声明引入的元素替换为公共片断</p>
+<p>th:include：将被引入的片断的内容包含进这个标签中</p>
+</blockquote>
+<p>引入片断的时候传入参数：</p></li>
+</ul></li>
+<li></li>
+</ol></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/02/18/SpringBoot-Web%E5%BC%80%E5%8F%91/" title="SpringBoot-Web开发">http://www.zephon.ml/2020/02/18/SpringBoot-Web开发/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/17/SpringBoot-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" rel="prev" title="SpringBoot-配置文件">
+      <i class="fa fa-chevron-left"></i> SpringBoot-配置文件
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/19/SpringBoot-%E6%97%A5%E5%BF%97/" rel="next" title="SpringBoot-日志">
+      SpringBoot-日志 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#springboot-web%E5%BC%80%E5%8F%91"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot-Web开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8springboot"><span class="nav-number">1.1.</span> <span class="nav-text">1、使用SpringBoot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#springboot%E5%AF%B9%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E7%9A%84%E6%98%A0%E5%B0%84%E8%A7%84%E5%88%99"><span class="nav-number">1.2.</span> <span class="nav-text">2、SpringBoot对静态资源的映射规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E"><span class="nav-number">1.3.</span> <span class="nav-text">3、模板引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#thymeleaf%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">Thymeleaf使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thymeleaf%E8%AF%AD%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">Thymeleaf语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restfulcrud"><span class="nav-number">1.4.</span> <span class="nav-text">4、RestfulCRUD</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

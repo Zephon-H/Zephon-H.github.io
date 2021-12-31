@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Part1-分类问题(细)  这一部分学习自李宏毅老师的机器学习深度学习相关课程  对于分类这件事，我们需要找的是一个函数，输入为x，输出是这个输入x对应的属于哪个类别class n，即：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-分类问题(细)">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/07/Part1-%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98(%E7%BB%86)/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Part1-分类问题(细)  这一部分学习自李宏毅老师的机器学习深度学习相关课程  对于分类这件事，我们需要找的是一个函数，输入为x，输出是这个输入x对应的属于哪个类别class n，即：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706194806573.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706195401513.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706211829411.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707095513882.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707094834100.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707095140023.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707101028977.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707150109855.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707165441776.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707165618329.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707171835492.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172230666.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172323522.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172947600.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707173324521.png">
+<meta property="article:published_time" content="2021-07-07T09:35:32.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706194806573.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/07/07/Part1-%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98(%E7%BB%86)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Part1-分类问题(细) | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/07/Part1-%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98(%E7%BB%86)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-分类问题(细)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-07 17:35:32" itemprop="dateCreated datePublished" datetime="2021-07-07T17:35:32+08:00">2021-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="part1-分类问题细">Part1-分类问题(细)</h1>
+<blockquote>
+<p>这一部分学习自李宏毅老师的机器学习深度学习相关课程</p>
+</blockquote>
+<p>对于分类这件事，我们需要找的是一个函数，输入为x，输出是这个输入x对应的属于哪个类别class n，即：</p>
+<p><span class="math inline">\(x \rightarrow function \rightarrow Class\ n\)</span></p>
+<p>例：</p>
+<blockquote>
+<p>对于宝可梦游戏而言，输入的是精灵的特征(如总的战斗力、生命值、攻击值、防御值、特殊攻击值、特征防御值、速度等)，输出的是精灵对应的属性类别，如<span class="math inline">\(f(皮卡丘)=雷\)</span></p>
+</blockquote>
+<p>训练集：<span class="math inline">\((x^{(1)},\hat y^{(1)}),(x^{(2)},\hat y^{(2)}),\cdots,(x^{(m)},\hat y^{(m)})\)</span> (为与吴恩达老师教学保持一致，将目标有所修改)</p>
+<h2 id="二分类">二分类</h2>
+<h3 id="使用线性回归">使用线性回归</h3>
+<p>对于训练数据：Class 1意味着目标值是1，Class 2意味着目标值是-1</p>
+<p>预测时：采用线性回归方式，输出大于0，则类别接近于Class 1，输出小于0，则类别接近于Class 2</p>
+<p>这样会出现如图所示的问题：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706194806573.png" /></p>
+<p>如图，蓝色表示Class 1,红色表示Class 2，则<span class="math inline">\(b+w_1x_1+w_2x_2=0\)</span>是绿色线，表示两类的分界线，分界线上部表示回归输出小于0，下部表示输出大于0；但是可能会有这种情况：比如，Class 1的分布是右图的情况，这样的话，为了满足右下角的蓝色点在方程中的值接近1，则最终求出的分界线会是紫色这条线，这样分类结果就会有问题了。</p>
+<p>此外，对于线性回归用于多分类问题而言，如果将Class 1对应于1，Class 2对应于2，Class 3对应于3等，则会存在以下问题：因为当这样做时，就默认是假设Class 3和Class 2是比较接近的，它们有某种关系，Class 2和Class 1是比较近的，它们有某种关系，但如果实际上这种关系不存在，这样将它作为一个线性回归问题来处理就没有办法得到一个好的结果。</p>
+<h3 id="理想做法">理想做法</h3>
+<blockquote>
+<p>模型：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706195401513.png" /></p>
+<p>损失函数(Loss function)：<span class="math inline">\(L(f)=\sum_m \delta(f(x^{(m)}\ne \hat y^{(m)}))\)</span>（预测结果错误的次数）</p>
+<p>但是，这样的模型和损失函数，并不能微分，也就不能梯度下降，但可以使用感知机(Perceptron)或支持向量机(SVM)来解决，但这里不用。</p>
+</blockquote>
+<h2 id="概率模型">概率模型</h2>
+<p>如图</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210706211829411.png" /></p>
+<p>则</p>
+<p>一个蓝球，从<span class="math inline">\(B_1\)</span>中抽出来的概率：<span class="math inline">\(P(B_1|Blue)=\frac{P(Blue|B_1)P(B_1)}{P(Blue|B_1)P(B_1)+P(Blue|B_2)P(B_2)}\)</span></p>
+<p>对应的，如果将盒子换成类别则：</p>
+<p>给定一个x，则它从对应类别抽出来的概率：</p>
+<p><span class="math inline">\(P(C_1|x)=\frac{P(x|C_1)P(C_1)}{P(x|C_1)P(C_1)+P(x|C_2)P(C_2)}\)</span></p>
+<p>要计算<span class="math inline">\(P(C_1|x)\)</span>，就必须知道<span class="math inline">\(P(C_1)、P(x|C_1)、P(C_2)、P(x|C_2)\)</span></p>
+<blockquote>
+<p>这一整套想法，叫做生成模型(Generative Model)，因为根据这些，可以计算任一x产生的概率，<span class="math inline">\(P(x)=P(x|C_1)P(C_1)+P(x|C_2)P(C_2)\)</span></p>
+</blockquote>
+<h3 id="先验概率">先验概率</h3>
+<p>以宝可梦为例，数据集中79只水系，61只一般系，则：</p>
+<p><span class="math inline">\(P(C_1)=\frac{79}{79+61}=0.56\)</span></p>
+<p><span class="math inline">\(P(C_2)=\frac{61}{79+61}==0.44\)</span></p>
+<p>从类别中挑选出某一只的概率：</p>
+<p><span class="math inline">\(P(x|C_1)=？\)</span></p>
+<p>假设只考虑防御力和特殊防御力两个特征，则79只水系的分布情况大概如图所示：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707095513882.png" /></p>
+<p>那么，对于一只没有在79只宝可梦中的水系新宝可梦，则对应求出的概率难道就是0？</p>
+<p>所以，需要想办法从这些已经有的宝可梦估测，如果从所有水系宝可梦中选一个，则对应的是这个新宝可梦的概率。</p>
+<p><strong>解决</strong>：</p>
+<p>可以想象为，这79只宝可梦，只是水系中的一小部分，即它们的防御力和特殊防御力是从一个高斯分布中抽样出来的，而从这个高斯分布中，抽取到新宝可梦对应防御力和特殊防御力对应点的概率并不为0。</p>
+<p>高斯分布(正态分布)：</p>
+<p><span class="math inline">\(f_{\mu,\Sigma}(x) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}exp\{-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\}\)</span></p>
+<p>高斯分布可以看作：一个输入为向量<span class="math inline">\(x\)</span>，输出为<span class="math inline">\(x\)</span>从这一分布中被抽取出来的概率(实际是概率密度)的函数，这个函数则是由<strong>均值(期望)<span class="math inline">\(\mu\)</span></strong>和<strong>方差<span class="math inline">\(\Sigma\)</span></strong>决定</p>
+<p>接下来，我们需要做的就是根据上述79个样本，来估计出<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\Sigma\)</span></p>
+<p>方法：<strong>极大似然估计(Maximum Likelihood)</strong></p>
+<p>可以想象成，这79个点，其实可以从任何一个高斯分布中被抽取出来，因为从一个高斯分布中可以抽取出空间上的任意一点，只是有的地方概率高，有的地方概率低。</p>
+<p>但是，虽然说每个高斯分布都可以抽取出这79个样本，但它们抽取这79个样本的可能性并不一样。</p>
+<p>对于一个高斯分布：</p>
+<p><span class="math inline">\(Likelihood=从高斯分布中抽取到x^{(1)},x^{(2)},\cdots,x^{(79)}的概率\)</span></p>
+<p>即：<span class="math inline">\(L(\mu,\Sigma)\)</span>（此处<span class="math inline">\(L\)</span>表示Likelihood，而非Loss）</p>
+<p>由于这79个点是独立从高斯分布中抽取出来的，所以：</p>
+<p><span class="math inline">\(L(\mu,\Sigma)=f_{\mu,\Sigma}(x^{(1)})f_{\mu,\Sigma}(x^{(2)})\cdots f_(\mu,\Sigma)(x^{79})\)</span></p>
+<p>然后我们需要就是对应<span class="math inline">\(L(\mu,\Sigma)\)</span>最大时的<span class="math inline">\(\mu^*\)</span>和<span class="math inline">\(\Sigma^*\)</span>，即：</p>
+<p><span class="math inline">\(\mu^*,\Sigma^*=arg\ \max_{\mu,\Sigma}L(\mu,\Sigma)\)</span></p>
+<p>求解：</p>
+<p><span class="math inline">\(\mu^*=\frac{1}{79}\sum_{n=1}^{79}x^{(n)}\)</span></p>
+<p><span class="math inline">\(\Sigma^*=\frac{1}{79}\sum_{n=1}^{79}(x^{(n)}-\mu^*)(x^{(n)}-\mu^*)^T\)</span></p>
+<p>代入到具体数值，可以计算出：</p>
+<p><span class="math inline">\(\mu^1=\left[ \begin{matrix} 75.0 \\ 71.3 \end{matrix} \right] \ \Sigma^1=\left[ \begin{matrix} 874 &amp; 327 \\ 327 &amp; 929 \end{matrix} \right]\)</span></p>
+<p>同理，求出一般系对应的：</p>
+<p><span class="math inline">\(\mu^2=\left[ \begin{matrix} 55.6 \\ 59.8 \end{matrix} \right] \ \Sigma^2=\left[ \begin{matrix} 847&amp; 422 \\ 422&amp; 685\end{matrix} \right]\)</span></p>
+<p>### 开始分类</p>
+<p><span class="math inline">\(P(C_1|x)=\frac{P(x|C_1)P(C_1)}{P(x|C_1)P(C_1)+P(x|C_2)P(C_2)}\)</span></p>
+<p>将上述计算代入后，如果<span class="math inline">\(P(C_1|x)&gt;0.5\)</span>，则x属于Class 1</p>
+<p>至此，就得到了一个模型来解决这个分类问题。</p>
+<h3 id="模型改良">模型改良</h3>
+<p>上述得出：</p>
+<p><span class="math inline">\(\mu^1=\left[ \begin{matrix} 75.0 \\ 71.3 \end{matrix} \right] \ \Sigma^1=\left[ \begin{matrix} 874 &amp; 327 \\ 327 &amp; 929 \end{matrix} \right]\)</span></p>
+<p><span class="math inline">\(\mu^2=\left[ \begin{matrix} 55.6 \\ 59.8 \end{matrix} \right] \ \Sigma^2=\left[ \begin{matrix} 847&amp; 422 \\ 422&amp; 685\end{matrix} \right]\)</span></p>
+<p>其实这在实际中是比较少见的，实际中，通常不会给第一个高斯分布都有自己的<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\Sigma\)</span>，比较常见的做法是<strong>不同的类别可以共用同一个$$</strong>，这样就可以减少参数量，由此：</p>
+<p><span class="math inline">\(L(\mu^1,\mu^2,\Sigma)=f_{\mu^1,\Sigma}(x^{(1)})f_{\mu^1,\Sigma}(x^{(2)})\cdots f_{\mu^1,\Sigma}(x^{(79)}) \times f_{\mu^2,\Sigma}(x^{(80)})f_{\mu^2,\Sigma}(x^{(81)})\cdots f_{\mu^2,\Sigma}(x^{(140)})\)</span></p>
+<p><span class="math inline">\(\Sigma = \frac{79}{140}\Sigma^1+\frac{61}{140}\Sigma^2\)</span></p>
+<p>如图，当<span class="math inline">\(\Sigma\)</span>取一样时，分界线就是一条线性的：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707094834100.png" /></p>
+<blockquote>
+<p>总结：三步：</p>
+<p>函数模型：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707095140023.png" /></p>
+<p>函数好坏：使用<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\Sigma\)</span>进行极大似然估计</p>
+</blockquote>
+<blockquote>
+<p>为什么使用高斯分布呢？</p>
+<p>没有原因，也可以使用别的，只是高斯分布使用比较多而已。</p>
+</blockquote>
+<p>另外一种常见的假设：</p>
+<p>假设<span class="math inline">\(P(x|C_1)\)</span>中的<span class="math inline">\(x=\left[\begin{matrix} x_1 \\ x_2 \\ \cdots \\ x_k \\ \cdots \\ x_K \end{matrix} \right]\)</span>,其中<span class="math inline">\(x_k\)</span>表示对应的第k个特征</p>
+<p>假设每个维度从概率模型中产生出来的概率是独立的，则</p>
+<p><span class="math inline">\(P(x|C_1)=P(x_1|C_1)P(x_2|C_1)\cdots P(x_k|C_1)\cdots\)</span></p>
+<p>可以说第一个概率<span class="math inline">\(P(x_k|C_1)\)</span>分别都是一维的高斯分布(1-D Gaussian)，这样就可以更加减少参数量。</p>
+<p>以上这种假设处理方法也叫做<strong>朴素贝叶斯(Naive Bayes Classifier)</strong></p>
+<h3 id="后验概率分析">后验概率分析</h3>
+<p><span class="math inline">\(\begin{split} P(C_1|x) &amp;= \frac{P(x|C_1)P(C_1)}{P(x|C_1)P(C_1)+P(x|C_2)P(C_2)}\\ &amp;=\frac{1}{1+\frac{P(x|C_2)P(C_2)}{P(x|C_1)P(C_1)}}\end{split}\)</span></p>
+<p>假设：<span class="math inline">\(z=\ln\frac{P(x|C_1)P(C_1)}{P(x|C_2)P(C_2)}\)</span></p>
+<p>则：</p>
+<p><span class="math inline">\(P(C_1|x)=\frac{1}{1+exp(-z)}=\sigma(z)\)</span></p>
+<p>这个函数<span class="math inline">\(\sigma(z)\)</span>就叫做激活函数，对应的曲线图如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707101028977.png" /></p>
+<p>具体计算z：(<em>数学警告</em>)</p>
+<p><span class="math inline">\(\begin{split} z&amp;=\ln\frac{P(x|C_1)P(C_1)}{P(x|C_2)P(C_2)}\\ &amp;= \ln\frac{P(x|C_1)}{P(x|C_2)}+\ln\frac{P(C_1)}{P(C_2)}\end{split}\)</span></p>
+<p>使用<span class="math inline">\(N_1\)</span>表示Class 1在训练数据中出现的次数，<span class="math inline">\(N_2\)</span>表示Class 2在训练数据中出现的次数则</p>
+<p><span class="math inline">\(\frac{P(C_1)}{P(C_2)}=\frac{\frac{N_1}{N_1+N_2}}{\frac{N_2}{N_1+N_2}}=\frac{N_1}{N_2}\)</span></p>
+<p><span class="math inline">\(P(x|C_1)= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma^1|^{1/2}}exp\{-\frac{1}{2}(x-\mu^1)^T(\Sigma^1)^{-1}(x-\mu^1)\)</span></p>
+<p><span class="math inline">\(P(x|C_2)= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma^2|^{1/2}}exp\{-\frac{1}{2}(x-\mu^2)^T(\Sigma^2)^{-1}(x-\mu^2)\)</span></p>
+<p><span class="math inline">\(\begin{split} \ln\frac{P(x|C_1)}{P(x|C_2)} &amp;=\ln\frac{\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma^1|^{1/2}}exp\{-\frac{1}{2}(x-\mu^1)^T(\Sigma^1)^{-1}(x-\mu^1)}{\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma^2|^{1/2}}exp\{-\frac{1}{2}(x-\mu^2)^T(\Sigma^2)^{-1}(x-\mu^2)} \\ &amp;=\ln\frac{|\Sigma^2|^{1/2}}{|\Sigma^1|^{1/2}}exp\{-\frac{1}{2}[(x-\mu^1)^T(\Sigma^1)^{-1}(x-\mu^1) \\ &amp;-(x-\mu^2)^T(\Sigma^2)^{-1}(x-\mu^2)] \} \\ &amp;=\ln\frac{|\Sigma^2|^{1/2}}{|\Sigma^1|^{1/2}}-\frac{1}{2}[(x-\mu^1)^T(\Sigma^1)^{-1}(x-\mu^1) \\ &amp;-(x-\mu^2)^T(\Sigma^2)^{-1}(x-\mu^2)] \end{split}\)</span></p>
+<p><span class="math inline">\(\begin{split} &amp;(x-\mu^1)^T(\Sigma^1)^{-1}(x-\mu^1) \\ &amp;=x^T(\Sigma^1)^{-1}x - x^T(\Sigma^1)^{-1}\mu^1-(\mu^1)^T(\Sigma^1)^{-1}x+(\mu^1)^T(\Sigma^1)^{-1}\mu^1 \\ &amp;= x^T(\Sigma^1)^{-1}x - 2(\mu^1)^T(\Sigma^1)^{-1}x+(\mu^1)^T(\Sigma^1)^{-1}\mu^1 \end{split}\)</span></p>
+<p><span class="math inline">\(\begin{split} &amp;(x-\mu^2)^T(\Sigma^2)^{-1}(x-\mu^2) \\ &amp;=x^T(\Sigma^2)^{-1}x - x^T(\Sigma^2)^{-1}\mu^2-(\mu^2)^T(\Sigma^2)^{-1}x+(\mu^2)^T(\Sigma^2)^{-1}\mu^2 \\ &amp;= x^T(\Sigma^2)^{-1}x - 2(\mu^2)^T(\Sigma^2)^{-1}x+(\mu^2)^T(\Sigma^2)^{-1}\mu^2 \end{split}\)</span></p>
+<p><span class="math inline">\(\Rightarrow \begin{split} z &amp;=\ln\frac{|\Sigma^2|^{1/2}}{|\Sigma^1|^{1/2}} - \frac{1}{2}x^T(\Sigma^1)^{-1}x+(\mu^1)^T(\Sigma^1)^{-1}x-\frac{1}{2}(\mu^1)^T(\Sigma^1)^{-1}\mu^1 \\ &amp;+\frac{1}{2}x^T(\Sigma^2)^{-1}x-(\mu^2)^T(\Sigma^2)^{-1}x+\frac{1}{2}(\mu^2)^T(\Sigma^2)^{-1}\mu^2+\ln\frac{N_1}{N_2} \end{split}\)</span></p>
+<p>因为<span class="math inline">\(\Sigma\)</span>共用的，所以<span class="math inline">\(\Sigma_1=\Sigma_2=\Sigma\)</span>，所以简化后：</p>
+<p><span class="math inline">\(z = (\mu^1-\mu^2)^T\Sigma^{-1}x-\frac{1}{2}(\mu^1)^T(\Sigma^1)^{-1}\mu^1+\frac{1}{2}(\mu^2)^T(\Sigma^2)^{-1}\mu^2+\ln\frac{N_1}{N_2}\)</span></p>
+<p>假设：<span class="math inline">\(w^T=(\mu^1-\mu^2)^T\Sigma^{-1}\)</span> ；<span class="math inline">\(b=-\frac{1}{2}(\mu^1)^T(\Sigma^1)^{-1}\mu^1+\frac{1}{2}(\mu^2)^T(\Sigma^2)^{-1}\mu^2+\ln\frac{N_1}{N_2}\)</span></p>
+<p>则<span class="math inline">\(z=w^Tx+b\)</span></p>
+<p><span class="math inline">\(P(C_1|x)=\sigma(wx+b)\)</span></p>
+<p>这也就是为什么，我们前面将<span class="math inline">\(\Sigma_1\)</span>和<span class="math inline">\(\Sigma_2\)</span>共用时，分界线成为了一条线性的</p>
+<h2 id="逻辑回归">逻辑回归</h2>
+<blockquote>
+<p>函数：<span class="math inline">\(f_{w,b}(x)=P_{w,b}(C_1|x)\)</span></p>
+<p><span class="math inline">\(P_{w,b}(C_1|x)=\sigma(z) \\ z=wx+b=\sum_iw_ix_i+b\)</span></p>
+</blockquote>
+<p>如果使用图像的方式来表示，就是如图所示：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707150109855.png" /></p>
+<h3 id="损失函数">损失函数</h3>
+<blockquote>
+<p>训练数据：</p>
+<p><span class="math inline">\(\begin{matrix} x^{(1)} &amp; x^{(2)} &amp; x^{(3)} &amp; \cdots &amp; x^{(m)} \\ C_1 &amp; C_1 &amp; C_2 &amp; \cdots &amp; C_1 \\ \hat y^{(1)}=1 &amp; y^{(2)}=1 &amp; y^{(3)}=0 &amp; \cdots &amp; y^{(m)}=1\end{matrix}\)</span></p>
+</blockquote>
+<p><span class="math inline">\(L(w,b)=f_{w,b}(x^{(1)})f_{w,b}(x^{(2)})(1-f_{w,b}(x^{(3)}))\cdots f_{w,b}(x^{(m)})\)</span></p>
+<p>最好的<span class="math inline">\(w^*,b^*\)</span>就是当<span class="math inline">\(L(w,b)\)</span>最大时对应的<span class="math inline">\(w,b\)</span>，即：</p>
+<p><span class="math inline">\(w^*,b^*=\arg \max_{(w,b)} L(w,b) \Leftrightarrow w^*,b^*=\arg \min_{(w,b)}-\ln L(w,b)\)</span></p>
+<p><span class="math inline">\(-\ln L(w,b)=-\ln f_{w,b}(x^{(1)})-\ln f_{w,b}(x^{(2)})-\ln (1-f_{w,b}(x^{(3)})) \cdots\)</span></p>
+<p>而<span class="math inline">\(-\ln f_{w,b}(x^{(i)})=-[\hat y^{(i)}\ln f(x^{(i)})+(1-\hat y^{(i)})\ln (1-f(x^{(i)}))]\)</span></p>
+<p>所以：</p>
+<p><span class="math inline">\(-\ln L(w,b)=\sum_i -[\hat y^{(i)}\ln f(x^{(i)})+(1-\hat y^{(i)})\ln (1-f(x^{(i)}))]\)</span></p>
+<p><span class="math inline">\(-[\hat y^{(i)}\ln f(x^{(i)})+(1-\hat y^{(i)})\ln (1-f(x^{(i)}))]\)</span>:两个伯努利分布之间的<strong>交叉熵</strong></p>
+<blockquote>
+<p>交叉熵：</p>
+<p>对于分布p：<span class="math inline">\(p(x=1)=\hat y^{(m)};p(x=0)=1-\hat y^{(m)}\)</span></p>
+<p>q：<span class="math inline">\(q(x=1)=f(x^{(m)});q(x=0)=1-f(x^{(m)})\)</span></p>
+<p>二者的交叉熵：<span class="math inline">\(H(p,q)=-\sum_xp(x)\ln(q(x))\)</span></p>
+</blockquote>
+<blockquote>
+<p>为什么使用交叉熵，而不使用线性回归中的均方误差？</p>
+<p>如果使用均方误差，则在计算<span class="math inline">\(\frac{\part L}{\part w_i}时\)</span>：</p>
+<p>对于真实值 <span class="math inline">\(\hat y^{(m)}=1\)</span>时</p>
+<p>如果<span class="math inline">\(f_{w,b}(x^{(m)})=1\)</span>（接近真实值），则<span class="math inline">\(\frac{\part L}{\part w_i}=0\)</span>;</p>
+<p>如果<span class="math inline">\(f_{w,b}(x^{(m)})=0\)</span>（远离真实值），则<span class="math inline">\(\frac{\part L}{\part w_i}=0\)</span>;</p>
+<p>对于真实值<span class="math inline">\(\hat{y}^{(m)}=0\)</span>时，同理</p>
+<p>对于交叉熵而言，距离目标越远，则对应下降越快，距离目标越近，则下降越慢</p>
+<p>而对于均方误差，距离目标远时，下降也很慢</p>
+</blockquote>
+<h3 id="梯度下降">梯度下降</h3>
+<p><span class="math inline">\(\frac{\part \ln f_{w,b}(x)}{\part w_i}=\frac{\part \ln f_{w,b}(x)}{\part z}\frac{\part z}{\part w_i}\)</span></p>
+<p><span class="math inline">\(f_{w,b}(x)=\sigma(z)=\frac{1}{1+exp(-z)} \; z=wx+b=\sum_i w_ix_i + b\)</span></p>
+<p><span class="math inline">\(\Rightarrow\)</span></p>
+<p><span class="math inline">\(\frac{\part\ln f_{w,b}(x)}{\part z}=\frac{\part\ln \sigma(z)}{\part z}=\frac{1}{\sigma(z)}\frac{\part \sigma(z)}{\part z} = \frac{1}{\sigma(z)}\sigma(z)(1-\sigma(z))=1-\sigma(z)\)</span>；<span class="math inline">\(\frac{\part z}{\part w_i}=x_i\)</span></p>
+<p>同理：</p>
+<p><span class="math inline">\(\frac{\part \ln (1-f_{w,b}(x))}{\part w_i}=\frac{\part \ln (1-f_{w,b}(x))}{\part z}\frac{\part z}{\part w_i}\)</span></p>
+<p><span class="math inline">\(\frac{\part \ln (1-f_{w,b}(x))}{\part z}=-\frac{1}{1-\sigma(z)}\frac{\part\sigma(z)}{\part z}=-\frac{1}{1-\sigma(z)}\sigma(z)(1-\sigma(z))=\sigma(z)\)</span></p>
+<p>所以：</p>
+<p><span class="math inline">\(\frac{-\part \ln L(w,b)}{\part w_i} = \sum_m-[\hat y^{(m)}\frac{\part \ln f_{w,b}(x^{(m)})}{\part w_i}+(1-\hat y^{(m)})\frac{\ln (1-f_{w,b}(x^{(m)}))}{\part w_i} \\ = \sum_m -[\hat y^{(m)}(1-f_{w,b}(x^{(m)}))x_i^{(m)}-(1-\hat y^{(m)})f_{w,b}(x^{(m)})x_i^{(m)}] \\ =\sum_m-[\hat y^{(m)}-\hat y^{(m)}f_{w,b}(x^{(m)})-f_{w,b}(x^{(m)})+\hat y^{(m)}f_{w,b}(x^{(m)})]x_i^{(m)} \]\\ =\sum_m-(\hat y^{(m)}-f_{w,b}(x^{(m)}))x_i^{(m)}\)</span></p>
+<p><span class="math inline">\(w_i \leftarrow w_i - \eta \Sigma_n -(\hat y^{(m)}-f_{w,b}(x^{(m)}))x_i^{(m)}\)</span></p>
+<h3 id="逻辑回归-vs.-线性回归">逻辑回归 VS. 线性回归：</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Logistic Regression</th>
+<th>Linear Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(f_{w,b}(x)=\sigma(\sum_iw_ix_i+b)\)</span><br />输出：[0,1]</td>
+<td><span class="math inline">\(f_{w,b}(x)=\sum_iw_ix_i+b\)</span><br />输出：任意值</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L(f)=\sum_mC(f(x^{(m)}),\hat y^{(m)})\)</span><br /><span class="math inline">\(\hat y^{(m)}:类别1:1；类别2:0\)</span></td>
+<td><span class="math inline">\(L(f)=\frac{1}{2}\sum_m(f(x^{(m)})-\hat y^{(m)})^2\)</span><br />$y^{(m)}：一个真实值 $</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(w_i \leftarrow w_i - \eta \Sigma_n -(\hat y^{(m)}-f_{w,b}(x^{(m)}))x_i^{(m)}\)</span></td>
+<td><span class="math inline">\(w_i \leftarrow w_i - \eta \Sigma_n -(\hat y^{(m)}-f_{w,b}(x^{(m)}))x_i^{(m)}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>交叉熵：<span class="math inline">\(C(f(x^{(m)}),\hat y^{(m)}) =-[\hat y^{(m)}\ln f(x^{(m)})+(1-\hat y^{(m)})\ln (1-f(x^{(m)}))]\)</span></p>
+<h2 id="判别模型-vs.-生成模型">判别模型 VS. 生成模型</h2>
+<p>对于函数<span class="math inline">\(P(C_1|x)=\sigma(wx+b)\)</span></p>
+<p>在判别模型中，我们直接求得<span class="math inline">\(w,b\)</span></p>
+<p>在生成模型中，我们求出<span class="math inline">\(\mu^1,\mu^2,\Sigma^{-1}\)</span>，然后<span class="math inline">\(w^T=(\mu^1-\mu^2)^T\Sigma^{-1}；b=-\frac{1}{2}(\mu^1)^T(\Sigma^1)^{-1}\mu^1+\frac{1}{2}(\mu^2)^T(\Sigma^2)^{-1}\mu^2+\ln \frac{N_1}{N_2}\)</span></p>
+<blockquote>
+<p>问：两种模型中求得的<span class="math inline">\(w\)</span>和<span class="math inline">\(b\)</span>是一样的吗？</p>
+<p>答：不是，因为分布不同，前者对于分布没有进行假设，而后者是假设的高斯分布，并且最终得到的结果中，判别模型的结果相对更好一些。</p>
+</blockquote>
+<p>例：训练数据如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707165441776.png" /></p>
+<p>那么，如图的测试数据是属于哪一类呢？</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707165618329.png" /></p>
+<p>我们可能都会认为是取自Class 1，而如果使用朴素贝叶斯方法去求呢？</p>
+<p>首先，使用朴素贝叶斯则需要假设所有的特征产生的概率互相独立，即<span class="math inline">\(P(x|C_i)=P(x_1|C_i)P(x_2|C_i)\)</span></p>
+<p>则：</p>
+<p><span class="math inline">\(P(C_1)=\frac{1}{13}\)</span> <span class="math inline">\(P(x_1=1|C_1)=1\)</span> <span class="math inline">\(P(x_2=1|C_1)=1\)</span></p>
+<p><span class="math inline">\(P(C_2)=\frac{12}{13}\)</span> <span class="math inline">\(P(x_1=1|C_2)=\frac{1}{3}\)</span> <span class="math inline">\(P(x_2=1|C_2)=\frac{1}{3}\)</span></p>
+<p>给定上述测试数据后，则可计算其来自Class 1的概率</p>
+<p><span class="math inline">\(P(C_1|x)=\frac{P(x|C_1)P(C_1)}{P(x|C_1)P(C_1)+P(x|C_2)P(C_2)}=\frac{1\times 1 \times \frac{1}{13}}{1 \times 1 \times \frac{1}{13}+\frac{1}{3}\times \frac{1}{3}\times \frac{12}{13}} \approx 0.43 &lt; 0.5\)</span></p>
+<p>所以，计算结果是该数据来自Class 2</p>
+<p>这就是因为，生成模型在计算时，进行了一些假设， 这个假设中，可能就有一些与测试数据一样的数据取自Class 1</p>
+<blockquote>
+<p>生成模型的优点：</p>
+<ul>
+<li>由于对数据分布进行了假设，因此只需要更少的数据量</li>
+<li>由于对数据分布进行了假设，因此其对噪音时有更好的鲁棒性</li>
+<li>先验概率和类条件概率分布可以由不同的源来进行估计</li>
+</ul>
+</blockquote>
+<h2 id="多分类">多分类</h2>
+<blockquote>
+<p><span class="math inline">\(C_1:w^1,b_1 \ \ z_1=w^1x+b_1\)</span></p>
+<p><span class="math inline">\(C_2:w^2,b_2 \ \ z_2=w^2x+b_2\)</span></p>
+<p><span class="math inline">\(C_2:w^2,b_2 \ \ z_2=w^2x+b_2\)</span></p>
+<p><span class="math inline">\(1&gt;y_i&gt;0\)</span></p>
+<p><span class="math inline">\(\sum_i y_i=1\)</span></p>
+</blockquote>
+<p><span class="math inline">\(y_i=P(C_i|x)\)</span></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707171835492.png" /></p>
+<h2 id="逻辑回归的限制">逻辑回归的限制</h2>
+<p>例：</p>
+<p>对于如图所示的输入：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172230666.png" /></p>
+<p>则<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172323522.png" /></p>
+<p>使用一条直接，无论怎么画，都无法实现正确的分类</p>
+<p>这也就是线性模型无法解决<strong>异或问题</strong></p>
+<p>解决方法：</p>
+<p><strong>特征变换</strong></p>
+<p>如图，对于原始数据，通过改变数据的值为对应的点到原点的距离，来实现特征的变换</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707172947600.png" /></p>
+<blockquote>
+<p>然而，这样同样有一个问题，找到这样一种特征变换方式并不总是这么容易</p>
+</blockquote>
+<p>由此，我们可以采用<strong>将多个逻辑回归模型级联</strong>的方法解决问题</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210707173324521.png" /></p>
+<p>这样，也就引出了<strong>神经网络</strong></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/07/07/Part1-%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98(%E7%BB%86)/" title="Part1-分类问题(细)">http://www.zephon.ml/2021/07/07/Part1-分类问题(细)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/06/Part1-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" rel="prev" title="Part1-逻辑回归">
+      <i class="fa fa-chevron-left"></i> Part1-逻辑回归
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/08/Part1-%E6%AD%A3%E5%88%99%E5%8C%96/" rel="next" title="Part1-正则化">
+      Part1-正则化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98%E7%BB%86"><span class="nav-number">1.</span> <span class="nav-text">Part1-分类问题(细)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.</span> <span class="nav-text">二分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用线性回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E6%83%B3%E5%81%9A%E6%B3%95"><span class="nav-number">1.1.2.</span> <span class="nav-text">理想做法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">概率模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87"><span class="nav-number">1.2.1.</span> <span class="nav-text">先验概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%94%B9%E8%89%AF"><span class="nav-number">1.2.2.</span> <span class="nav-text">模型改良</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E9%AA%8C%E6%A6%82%E7%8E%87%E5%88%86%E6%9E%90"><span class="nav-number">1.2.3.</span> <span class="nav-text">后验概率分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">1.3.</span> <span class="nav-text">逻辑回归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">1.3.2.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92-vs.-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="nav-number">1.3.3.</span> <span class="nav-text">逻辑回归 VS. 线性回归：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E5%88%AB%E6%A8%A1%E5%9E%8B-vs.-%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">判别模型 VS. 生成模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.</span> <span class="nav-text">多分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.6.</span> <span class="nav-text">逻辑回归的限制</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

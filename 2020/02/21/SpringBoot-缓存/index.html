@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SpringBoot-缓存 几个重要概念&amp;缓存注解    专业术语 解释     Cache 缓存接口，定义缓存操作，实现有RedisCache、EhCacheCache、ConcurrentMapCache等   CacheManager 缓存管理器，管理各种缓存(Cache)组件   @Cacheable 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存   @CacheEvi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot-缓存">
+<meta property="og:url" content="http://www.zephon.ml/2020/02/21/SpringBoot-%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="SpringBoot-缓存 几个重要概念&amp;缓存注解    专业术语 解释     Cache 缓存接口，定义缓存操作，实现有RedisCache、EhCacheCache、ConcurrentMapCache等   CacheManager 缓存管理器，管理各种缓存(Cache)组件   @Cacheable 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存   @CacheEvi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-21T08:32:15.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/02/21/SpringBoot-%E7%BC%93%E5%AD%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringBoot-缓存 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/02/21/SpringBoot-%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringBoot-缓存
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-21 16:32:15" itemprop="dateCreated datePublished" datetime="2020-02-21T16:32:15+08:00">2020-02-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="springboot-缓存">SpringBoot-缓存</h1>
+<h2 id="几个重要概念缓存注解">几个重要概念&amp;缓存注解</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">专业术语</th>
+<th style="text-align: left;">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Cache</td>
+<td style="text-align: left;">缓存接口，定义缓存操作，实现有RedisCache、EhCacheCache、ConcurrentMapCache等</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CacheManager</td>
+<td style="text-align: left;">缓存管理器，管理各种缓存(Cache)组件</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="Cacheable">@Cacheable</span></td>
+<td style="text-align: left;">主要针对方法配置，能够根据方法的请求参数对其结果进行缓存</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="CacheEvict">@CacheEvict</span></td>
+<td style="text-align: left;">清空缓存</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="citation" data-cites="CachePut">@CachePut</span></td>
+<td style="text-align: left;">更新缓存，保证方法被调用，又希望结果被缓存</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="citation" data-cites="EnableCaching">@EnableCaching</span></td>
+<td style="text-align: left;">开启基于注解的缓存</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">keyGenerator</td>
+<td style="text-align: left;">缓存数据时key生成策略</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">serialize</td>
+<td style="text-align: left;">缓存数据时value序列化策略</td>
+</tr>
+</tbody>
+</table>
+<h2 id="缓存使用">缓存使用</h2>
+<h3 id="启动文件配置">1、启动文件配置</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> zephon</span></span><br><span class="line"><span class="comment"> * 一、搭建基本环境</span></span><br><span class="line"><span class="comment"> * 1. 导入数据文件，创建表</span></span><br><span class="line"><span class="comment"> * 2. 创建javabean封装数据</span></span><br><span class="line"><span class="comment"> * 3. 整合mybatis操作数据库</span></span><br><span class="line"><span class="comment"> *      1.配置数据源信息</span></span><br><span class="line"><span class="comment"> *      2.使用注解版mybatis</span></span><br><span class="line"><span class="comment"> *          1）使用<span class="doctag">@Mapperscan</span>指定mapper接口所在的包</span></span><br><span class="line"><span class="comment"> * 二、快速使用缓存</span></span><br><span class="line"><span class="comment"> *      步骤：</span></span><br><span class="line"><span class="comment"> *          1.开启基于注解的缓存</span></span><br><span class="line"><span class="comment"> *          2.瓢缓存注解即可</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// 使用@EnableCaching开启缓存</span></span><br><span class="line"><span class="meta">@EnableCaching</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;com.zephon.mapper&quot;)</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Springboot01CacheApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Springboot01CacheApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="service配置">2、service配置</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @CacheConfig： 定义公共缓存配置</span></span><br><span class="line"><span class="comment">//@CacheConfig(cacheNames = &quot;user&quot;)</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将方法运行结果进行缓存</span></span><br><span class="line"><span class="comment">     * 以后再要相同的数据，直接从缓存从获取，不用调用方法</span></span><br><span class="line"><span class="comment">     * CacheManager管理多个Cache组件，对缓存的真正CRUD操作在Cache组件中，</span></span><br><span class="line"><span class="comment">     * 每一个缓存组件有自己唯一的名字</span></span><br><span class="line"><span class="comment">     * 几个属性：</span></span><br><span class="line"><span class="comment">     * cacheNames/value：指定缓存组件的名字</span></span><br><span class="line"><span class="comment">     * key：缓存数据时使用的key,值可以使用SpEL表达式</span></span><br><span class="line"><span class="comment">     * keyGenerator：key生成器，可以自己指定key的生成器的组件的id</span></span><br><span class="line"><span class="comment">     * key和keyGenerator二选一使用</span></span><br><span class="line"><span class="comment">     * cacheManager：指定缓存管理器</span></span><br><span class="line"><span class="comment">     * condition：指定符合条件的情况下缓存</span></span><br><span class="line"><span class="comment">     * unless：否定缓存;当unless指定的条件为true，方法返回值就不会缓存,可以获取结果进行判断</span></span><br><span class="line"><span class="comment">     * sync：是否使用异步模式</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="comment">//@Cacheable(cacheNames = &quot;user&quot;,condition = &quot;#id&gt;0&quot;,unless = &quot;#result==null&quot;)</span></span><br><span class="line">    <span class="comment">//@Cacheable(cacheNames = &quot;user&quot;,key = &quot;#root.methodName+&#x27;[&#x27;+#id+&#x27;]&#x27;&quot;)</span></span><br><span class="line"><span class="comment">//    @Cacheable(cacheNames = &quot;user&quot;,keyGenerator = &quot;myKeyGenerator&quot;)</span></span><br><span class="line">    <span class="meta">@Cacheable(cacheNames = &quot;user&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;查询&quot;</span> + id + <span class="string">&quot;员工&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userMapper.getUserById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@CachePut</span>：既调用方法，又更新缓存数据,同步更新缓存 修改了数据库的某个数据，同时更新缓存</span></span><br><span class="line"><span class="comment">     * 运行时机：</span></span><br><span class="line"><span class="comment">     * 1、先调用目标方法</span></span><br><span class="line"><span class="comment">     * 2、将目标方法的结果缓存</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 测试步骤：</span></span><br><span class="line"><span class="comment">     * 1. 查询1号用户，查到的结果会放到缓存中：</span></span><br><span class="line"><span class="comment">     * key:1 value:username:原值</span></span><br><span class="line"><span class="comment">     * 2. 以后查询还是之前的结果</span></span><br><span class="line"><span class="comment">     * 3. 更新1号员工：[username:新值]</span></span><br><span class="line"><span class="comment">     * 将方法的返回值放进缓存</span></span><br><span class="line"><span class="comment">     * key:传入的user对象，值:返回的user对象</span></span><br><span class="line"><span class="comment">     * 4. 查询1号用户</span></span><br><span class="line"><span class="comment">     * 应该是更新后的用户</span></span><br><span class="line"><span class="comment">     * key=&quot;#user.id&quot;:使用传入参数的员工的id</span></span><br><span class="line"><span class="comment">     * key=&quot;#result.id&quot;：使用返回后的id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Cacheable</span>的key是不能使用result的 为什么是没更新前的？[1号员工没有在缓存中更新]</span></span><br><span class="line"><span class="comment">     * 解决:使用对应的key</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="comment">//    @CachePut(value = &quot;user&quot;)</span></span><br><span class="line">    <span class="meta">@CachePut(value = &quot;user&quot;, key = &quot;#result.id&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">update</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;更新&quot;</span> + user.getId() + <span class="string">&quot;员工&quot;</span>);</span><br><span class="line">        userMapper.updateUser(user);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@CacheEvict</span>：缓存清除 key:指定要清除的数据</span></span><br><span class="line"><span class="comment">     * allEntries = true:指定清除缓存中所有数据</span></span><br><span class="line"><span class="comment">     * beforeInvocation = true,默认是false：缓存的清除是否在方法之前执行</span></span><br><span class="line"><span class="comment">     * 默认代表在方法执行之后执行，如果出现异常缓存就不清除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@CacheEvict(value = &quot;user&quot;, key = &quot;#id&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUser</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;删除&quot;</span> + id);</span><br><span class="line"><span class="comment">//        userMapper.deleteUser(id);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// @Caching：定义复杂缓存规则</span></span><br><span class="line">    <span class="meta">@Caching(</span></span><br><span class="line"><span class="meta">            cacheable = &#123;</span></span><br><span class="line"><span class="meta">                    @Cacheable(value=&quot;user&quot;,key = &quot;#username&quot;)</span></span><br><span class="line"><span class="meta">            &#125;,</span></span><br><span class="line"><span class="meta">            put = &#123;</span></span><br><span class="line"><span class="meta">                    // 意思是通过用户名查询出对应的用户后，</span></span><br><span class="line"><span class="meta">                    // 会在缓存中放入另一组将id作为key的值</span></span><br><span class="line"><span class="meta">                    // 再根据id查询时就会直接从缓存中取值</span></span><br><span class="line"><span class="meta">                    @CachePut(value = &quot;user&quot;,key = &quot;#result.id&quot;),</span></span><br><span class="line"><span class="meta">                    //@CachePut(value = &quot;user&quot;,key=&quot;#result.password&quot;)</span></span><br><span class="line"><span class="meta">            &#125;</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUserByUsername</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userMapper.getUserByUsername(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中可以自己写keyGenerator，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyCacheConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean(&quot;myKeyGenerator&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> KeyGenerator <span class="title">keyGenerator</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> KeyGenerator()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Object <span class="title">generate</span><span class="params">(Object target, Method method, Object... params)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> method.getName()+<span class="string">&quot;[&quot;</span>+ Arrays.asList(params).toString()+<span class="string">&quot;]&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>缓存注解中使用的SpEL表达式</p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 16%" />
+<col style="width: 54%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>名字</th>
+<th>位置</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>methodName</td>
+<td>root object</td>
+<td>当前被调用的方法名</td>
+<td>#root.methodName</td>
+</tr>
+<tr class="even">
+<td>method</td>
+<td>root object</td>
+<td>当前被调用的方法</td>
+<td>#root.method.name</td>
+</tr>
+<tr class="odd">
+<td>target</td>
+<td>root object</td>
+<td>当前被调用的目标对象</td>
+<td>#root.target</td>
+</tr>
+<tr class="even">
+<td>targetClass</td>
+<td>root object</td>
+<td>当前被调用的目标对象类</td>
+<td>#root.targetClass</td>
+</tr>
+<tr class="odd">
+<td>args</td>
+<td>root object</td>
+<td>当前被调用的方法的参数列表</td>
+<td>#root.args[0]</td>
+</tr>
+<tr class="even">
+<td>caches</td>
+<td>root object</td>
+<td>当前被调用使用的缓存列表</td>
+<td>#root.caches[0].name</td>
+</tr>
+<tr class="odd">
+<td>argument name</td>
+<td>evaluation context</td>
+<td>方法参数名字，可以直接 #参数名，也可以使用 #p0或#a0的形式，0代表参数的索引</td>
+<td>#iban、#a0、#p0</td>
+</tr>
+<tr class="even">
+<td>result</td>
+<td>evaluation context</td>
+<td>方法执行后的返回值(仅当方法执行之后的判断有效，如'unless'，'cache put'的表达式'cache evict'的表达式beforeInvocation=false)</td>
+<td>#result</td>
+</tr>
+</tbody>
+</table>
+<h2 id="整合redis作为缓存">整合redis作为缓存</h2>
+<ol type="1">
+<li><p>使用docker安装redis</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker run --name myredis -d -p 6379:6379 redis</span><br></pre></td></tr></table></figure></li>
+<li><p>引入redis的starter</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>配置redis</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.redis.host</span>=<span class="string">127.0.0.1</span></span><br></pre></td></tr></table></figure></li>
+<li><p>如果是对象，则javabean需要实现Serializable，同时可自定义配置规则</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyRedisConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> RedisTemplate&lt;Object, User&gt; <span class="title">userRedisTemplate</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            RedisConnectionFactory redisConnectionFactory)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> UnknownHostException</span>&#123;</span><br><span class="line">        RedisTemplate&lt;Object,User&gt; template = <span class="keyword">new</span> RedisTemplate&lt;&gt;();</span><br><span class="line">        template.setConnectionFactory(redisConnectionFactory);</span><br><span class="line">        Jackson2JsonRedisSerializer&lt;User&gt; ser = <span class="keyword">new</span> Jackson2JsonRedisSerializer&lt;User&gt;(User.class);</span><br><span class="line">        template.setDefaultSerializer(ser);</span><br><span class="line">        <span class="keyword">return</span> template;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CacheManager <span class="title">cacheManager</span><span class="params">(RedisConnectionFactory redisConnectionFactory)</span> </span>&#123;</span><br><span class="line">        Jackson2JsonRedisSerializer&lt;User&gt; jackson2JsonRedisSerializer = <span class="keyword">new</span> Jackson2JsonRedisSerializer&lt;&gt;(User.class);</span><br><span class="line">        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()</span><br><span class="line">                .entryTtl(Duration.ofSeconds(<span class="number">100</span>))  <span class="comment">// 设置缓存有效期100s</span></span><br><span class="line">                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));</span><br><span class="line">        <span class="keyword">return</span> RedisCacheManager</span><br><span class="line">                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))</span><br><span class="line">                .cacheDefaults(redisCacheConfiguration).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自定义template使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.将数据以json方式保存</span></span><br><span class="line">            <span class="comment">// 1. 自己将对象转json</span></span><br><span class="line">            <span class="comment">// 2. redisTemplate默认的序列化规则</span></span><br><span class="line">        userRedisTemplate.opsForValue().set(<span class="string">&quot;user&quot;</span>,userMapper.getUserById(<span class="number">1</span>));</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/02/21/SpringBoot-%E7%BC%93%E5%AD%98/" title="SpringBoot-缓存">http://www.zephon.ml/2020/02/21/SpringBoot-缓存/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/20/SpringBoot-%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/" rel="prev" title="SpringBoot-数据访问">
+      <i class="fa fa-chevron-left"></i> SpringBoot-数据访问
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/22/SpringBoot-%E4%BB%BB%E5%8A%A1/" rel="next" title="SpringBoot-任务">
+      SpringBoot-任务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#springboot-%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">SpringBoot-缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5%E7%BC%93%E5%AD%98%E6%B3%A8%E8%A7%A3"><span class="nav-number">1.1.</span> <span class="nav-text">几个重要概念&amp;缓存注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">缓存使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">1、启动文件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#service%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">2、service配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E5%90%88redis%E4%BD%9C%E4%B8%BA%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.</span> <span class="nav-text">整合redis作为缓存</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

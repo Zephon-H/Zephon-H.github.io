@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Part1-应用实例：照片OCR 问题描述和管道(pipeline) 照片OCR全称是照片光学字符识别(Photo Optical Character Recognition)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-应用实例：照片OCR">
+<meta property="og:url" content="http://www.zephon.ml/2021/07/22/Part1-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%85%A7%E7%89%87OCR/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="Part1-应用实例：照片OCR 问题描述和管道(pipeline) 照片OCR全称是照片光学字符识别(Photo Optical Character Recognition)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721180353871.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721181416315.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215322186.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215539119.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215736342.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215624598.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215751980.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215924183.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721220033161.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721220310736.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721221452133.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721221622920.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721222329823.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722125321288.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722125748617.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722130247953.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722130429682.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722132919652.png">
+<meta property="article:published_time" content="2021-07-22T05:51:25.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.003Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="机器&#x2F;深度学习自学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721180353871.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2021/07/22/Part1-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%85%A7%E7%89%87OCR/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Part1-应用实例：照片OCR | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2021/07/22/Part1-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%85%A7%E7%89%87OCR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-应用实例：照片OCR
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-22 13:51:25" itemprop="dateCreated datePublished" datetime="2021-07-22T13:51:25+08:00">2021-07-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">机器/深度学习自学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="part1-应用实例照片ocr">Part1-应用实例：照片OCR</h1>
+<h2 id="问题描述和管道pipeline">问题描述和管道(pipeline)</h2>
+<p>照片OCR全称是照片光学字符识别(Photo Optical Character Recognition)</p>
+<p>它有如下几个步骤：</p>
+<ol type="1">
+<li>给定某张图片，将图像扫描一遍</li>
+<li>找出照片中的文字信息</li>
+<li>重点关注这些文字区域，并对区域中的文字进行识别</li>
+<li>将这些文字内容显示并记录下来</li>
+</ol>
+<p>照片OCR管道：</p>
+<ol type="1">
+<li>文字检测(Text detection)</li>
+<li>字符分割(Character segmentation)</li>
+<li>字符分类(Character recognition)</li>
+</ol>
+<p>像这样一个系统，我们将它称为<strong>机器学习流水线(machine learning pipeline)</strong></p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721180353871.png" /></p>
+<h2 id="滑动窗口">滑动窗口</h2>
+<p>OCR pipeline的第一步是文字检测，文字检测在计算机视觉中是一个比较难的问题，因为根据找到的文字区域，它们对应的矩形具有不同的长宽比例，所以为了说明如何在图片中检测它们，首先从一个简单的例子开始，即行人检测，之后我们再将做行人检测的思路应用到文字识别中去。</p>
+<p>如图，在行人检测中，有一张类似这样的图片，我们要找出图片的各个行人，这个问题比文字检测简单的地方在于要识别的东西具有相似的长宽比，仅用一个固定长宽比的矩形就可以了。</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721181416315.png" /></p>
+<h3 id="行人检测监督学习">行人检测监督学习</h3>
+<p>如将比例标准定为<span class="math inline">\(82\times 36\)</span>，当然也可以选择其它的相近的数字</p>
+<p>我们要做的是从数据集中收集一些正样本和负样本如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215322186.png" /></p>
+<h3 id="滑动窗口-1">滑动窗口</h3>
+<p>现在，假设我们得到一张新图，我们尝试在图片中找到一个行人，我们首先在图片中选取一个矩形块如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215539119.png" /></p>
+<p>将这个图块传递给分类器，来检测图块中是否有行人，这里，分类器得到的结果应该是<span class="math inline">\(y=0\)</span>，接下来，将这个绿色矩形稍微移动一点，如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215736342.png" /></p>
+<p>然后，再将这个图块传递给分类器判断是否有行人，之后再移动绿色矩形框，以此类推</p>
+<p>这个绿色矩形每次移动的距离是一个参数，一般称为步长，有时也被称为滑动参数，如果一次移动一个像素，则步长就为1，一般步长为1时表现最好，但计算成本较高，通常将步长设为4像素或8像素或更大的数是比较常见的。</p>
+<p>目前，这个矩形是一个很小的矩形，且它只会检测某个特定大小的行人，接下来，我们需要使用更大的矩形，再如上所述在整个图片上进行滑动，然后将每个图块调整到<span class="math inline">\(82\times 36\)</span>的大小，然后输入到分类器中。</p>
+<p>最后还可以使用更大的矩形，再如上进行操作。</p>
+<p>最后得到如图结果：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215624598.png" /></p>
+<h3 id="文字检测">文字检测</h3>
+<p>与行人检测类似，拿出一系列包含正样本和负样本的训练集，如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215751980.png" /></p>
+<p>训练完成后，将其应用在新的测试集的图片上，假设在如图所示的图片上，使用一个固定比例的滑动窗口进行滑动，然后进行分类</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721215924183.png" /></p>
+<p>结果如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721220033161.png" /></p>
+<p>其中白色区域，表示文本检测系统发现了文本</p>
+<p>然后更近一步，将这些分类器的输出应用到放大算子(expansion operator)上，它所做的是获取每个白色方块，然后将白色区域扩大，结果如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721220310736.png" /></p>
+<p>其实就是对于原图每个像素判断其一定范围内是否存在白色的像素，如果存在，那么就在新图中将整个范围内的像素都变成白色。</p>
+<p>可以用一个简单方法来排除那些比例奇怪的矩形，因为我们知道文本周围的框宽度应该远大于高度，所以如果我们忽略瘦高的矩形，然后在宽高比例正常的白色方块周围画上矩形，就会得到还不错的结果。</p>
+<h3 id="字符分割">字符分割</h3>
+<p>给定如图所示的图片，如何分割出图像中的单个字符?</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721221452133.png" /></p>
+<p>我们要做的就是再次使用监督学习算法用一些正样本和一些负样本，观察这些样本，判断图块是是否存在文字分割的地方</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721221622920.png" /></p>
+<p>然后和文字检测一样，使用滑动窗口在需要分割的图像上进行滑动，将每个图块输入到分类器中，然后进行分割。</p>
+<h2 id="获取大量数据人工数据合成">获取大量数据：人工数据合成</h2>
+<h3 id="字符识别">字符识别</h3>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210721222329823.png" /></p>
+<h3 id="人工合成数据">人工合成数据</h3>
+<p>假设我们收集到了一个大的标签数据集如图所示：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722125321288.png" /></p>
+<p>我们如何才能得到一个更大的训练集呢？</p>
+<p>现代计算机通常有一个庞大的字体库，如果有文字处理软件或通过网络下载，还能获得更多的字体，因此，如果想要更多的训练样本，一个方法是用不同的字符生成字符，然后将其置于任意不同的背景，得到人造数据集</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722125748617.png" /></p>
+<h3 id="通过引入失真合成数据">通过引入失真合成数据</h3>
+<p>我们使用一个真实的样本，然后生成其它数据来扩充训练集。</p>
+<p>如图，一个真实图像，我们在上面覆盖了网格线，只是为了便于说明。</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722130247953.png" /></p>
+<p>接下来要做的就是对这张图进行人工拉伸或者说人工扭曲，这样就可以将该样本变成16个新的样本如图：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722130429682.png" /></p>
+<p>采用这种办法，就可以将一个小的标签训练集扩充为一个更大的训练集。</p>
+<h3 id="通过引入失真合成数据语音识别">通过引入失真合成数据：语音识别</h3>
+<p>对于语音识别而言，假设有一些音频片段，然后想从中学习来识别语音片段中出现的单词，假定有一个带标签的训练样本，它是某个人说的一些词，我们想尝试使用一个学习算法来识别那个人说的单词，那么，我们该如何扩充数据集呢？</p>
+<p>我们能做的就是：引入额外的语音失真到数据集中。如：加入背景音(蜂鸣噪音、道路上的噪音、机器噪音等)</p>
+<blockquote>
+<p>注：在引入失真合成数据时，如果试图自己完成，则引入的失真应该具有代表性，这些噪音或扭曲是有可能出现在测试集中的，所以对于字符识别例子来说，我们引入的扭曲实际上是合理的。</p>
+<p>如果只是随机的无意义的噪音加入到数据中，并没有什么帮助，如对于之前的图片A，将每个像素随机加入一些高斯噪音，即改变每个像素的亮度，如果只是随机的加入一些高斯噪音到每个像素中，就只是完全没有意义的噪音，因此除非觉得有可能在测试集中看到这种像素级的噪音，否则这种纯随机的无意义的噪音可能是无用的。</p>
+</blockquote>
+<h3 id="对于获取更多数据的讨论">对于获取更多数据的讨论</h3>
+<ol type="1">
+<li>在使用许多时间想办法生成人工训练样本之前，通常最好先确保分类器偏差较低，这样的话，更多的训练数据都会真正起作用，标签的做法是绘制一个学习曲线来确保有一个低偏差、高方差的分类器。而如果分类器偏差较高，则可以尝试持续增加分类器的特征数量或增加神经网络隐藏单元的数量，直到偏差降低，然后再花精力到生成大量的人工训练集上</li>
+<li>在研究机器学习问题时，经常需要问如何获得我们当前拥有的数据的十倍的数据量，需要花费多少时间去实现？问题的答案通常是其实没有那么困难，可能最多花上几天的工作，就可以获取现有的十倍数据，并且通常如果能得到当前数据的十位数据，就可以使算法运行得更好
+<ul>
+<li>人工合成数据</li>
+<li>自己收集数据或添加标签</li>
+<li>“众包”（群众外包(Crowd Source))</li>
+</ul></li>
+</ol>
+<h2 id="上限分析流水线的下一步工作">上限分析：流水线的下一步工作</h2>
+<h3 id="根据每个组件进行误差分析上限分析">根据每个组件进行误差分析(上限分析)</h3>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20210722132919652.png" /></p>
+<p>应该如何分配资源呢？哪一部分最值得我们投入精力去做或投入时间去心善效果？这便是上限分析要做的事，和其它机器学习系统的开发过程一样，为了决定如何开发这个系统，一个有效的方法是对学习系统使用一个数值评价量度。</p>
+<p>假如我们使用字符准确度作为这个量度，给定一个测试样本，那么这个数值就表示我们地测试图像中的文本识别正确的比例，或者也可以选择其它评价量度值。最终可能得到整个系统目前的准确率为72%。</p>
+<p>上限分析：</p>
+<p>首先，我们关注这个机器学习工作流中的第一个模块：文本检测。然后遍历每个测试集样本，人为地告诉算法每个测试样本中文本的位置，换句话说，我们就是要仿真出如果是100%正确地检测出图片中的文本信息，应该是什么样的？</p>
+<p>然后，我们继续运行完成接下来的模块，再用和之前一样的评价量度的指标进行评估，得到整个系统的总的准确率如89%</p>
+<p>然后，进入到下一阶段，这时，我们不仅使用正确的文本检测结果，还同时使用标准的字符分割结果，再如上所述进行，最终得到系统准确率如90%</p>
+<p>同理，使用正确的三个模块的输出结果，这样以后，理所当然得到100%准确率</p>
+<p>然后，我们就知道了对每个模块进行改善后它们各自的上升空间是多大，根据上述过程，对文字样本改善上升空间为17%，对于文本分割上升空间为1%，对于字符检测上升空间为10%</p>
+<p>然后根据各自的上升空间衡量需要先做什么或在哪一部分花费更多时间。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2021/07/22/Part1-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%85%A7%E7%89%87OCR/" title="Part1-应用实例：照片OCR">http://www.zephon.ml/2021/07/22/Part1-应用实例：照片OCR/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 机器/深度学习自学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/21/Part1-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="prev" title="Part1-大规模机器学习">
+      <i class="fa fa-chevron-left"></i> Part1-大规模机器学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/23/Part1-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E5%92%8C%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%BB%83%E4%B9%A0/" rel="next" title="Part1-异常检测和推荐系统练习">
+      Part1-异常检测和推荐系统练习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#part1-%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B%E7%85%A7%E7%89%87ocr"><span class="nav-number">1.</span> <span class="nav-text">Part1-应用实例：照片OCR</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%E5%92%8C%E7%AE%A1%E9%81%93pipeline"><span class="nav-number">1.1.</span> <span class="nav-text">问题描述和管道(pipeline)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text">滑动窗口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E4%BA%BA%E6%A3%80%E6%B5%8B%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.2.1.</span> <span class="nav-text">行人检测监督学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E5%AD%97%E6%A3%80%E6%B5%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">文字检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E5%88%86%E5%89%B2"><span class="nav-number">1.2.4.</span> <span class="nav-text">字符分割</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%A4%A7%E9%87%8F%E6%95%B0%E6%8D%AE%E4%BA%BA%E5%B7%A5%E6%95%B0%E6%8D%AE%E5%90%88%E6%88%90"><span class="nav-number">1.3.</span> <span class="nav-text">获取大量数据：人工数据合成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E8%AF%86%E5%88%AB"><span class="nav-number">1.3.1.</span> <span class="nav-text">字符识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%BA%E5%B7%A5%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.2.</span> <span class="nav-text">人工合成数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%BC%95%E5%85%A5%E5%A4%B1%E7%9C%9F%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.3.</span> <span class="nav-text">通过引入失真合成数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%BC%95%E5%85%A5%E5%A4%B1%E7%9C%9F%E5%90%88%E6%88%90%E6%95%B0%E6%8D%AE%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB"><span class="nav-number">1.3.4.</span> <span class="nav-text">通过引入失真合成数据：语音识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E8%8E%B7%E5%8F%96%E6%9B%B4%E5%A4%9A%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AE%A8%E8%AE%BA"><span class="nav-number">1.3.5.</span> <span class="nav-text">对于获取更多数据的讨论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E9%99%90%E5%88%86%E6%9E%90%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">上限分析：流水线的下一步工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%AF%8F%E4%B8%AA%E7%BB%84%E4%BB%B6%E8%BF%9B%E8%A1%8C%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90%E4%B8%8A%E9%99%90%E5%88%86%E6%9E%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">根据每个组件进行误差分析(上限分析)</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

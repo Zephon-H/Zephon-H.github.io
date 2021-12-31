@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="卷积神经网络-基础 计算机视觉 计算机视觉问题：图片分类、目标检测、图片风格迁移">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络-基础">
+<meta property="og:url" content="http://www.zephon.ml/2020/12/25/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="卷积神经网络-基础 计算机视觉 计算机视觉问题：图片分类、目标检测、图片风格迁移">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225230911493.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225231127552.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225232243785.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225232801410.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233145414.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233801912.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233914828.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225234015307.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226102853468.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226105848237.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226110638537.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226152031740.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226155934667.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226195203508.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226200142414.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226202312020.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226202918400.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226210647458.png">
+<meta property="article:published_time" content="2020-12-25T07:28:56.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.007Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="计算机视觉">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225230911493.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/12/25/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>卷积神经网络-基础 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/12/25/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卷积神经网络-基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-25 15:28:56" itemprop="dateCreated datePublished" datetime="2020-12-25T15:28:56+08:00">2020-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index"><span itemprop="name">计算机视觉</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="卷积神经网络-基础">卷积神经网络-基础</h1>
+<h2 id="计算机视觉">计算机视觉</h2>
+<p>计算机视觉问题：图片分类、目标检测、图片风格迁移</p>
+<p>在较大图片上的深度学习：</p>
+<p>假设图片是64 × 64的，则RGB三通道后，结果就是64×64×3=12288，如果图片更大如1000×1000，则1000 × 1000 × 3 = 300万</p>
+<p>而如果要输入300万的数据量，则意味着特征向量x的维度高达300万，所以在第一个隐藏层中，或许有1000个隐藏单元，而所有的权值组成的矩阵<span class="math inline">\(W^{[1]}\)</span>，如果使用了标准的全连接网络，则这个矩阵的大小就是(1000,300万)，而这意味着矩阵<span class="math inline">\(W^{[1]}\)</span>会有30亿个参数，在参数如此大量的情况下，难以获取足够的数据来防止神经网络发生过拟合，同时巨大的内存需求也会让人无法接受。</p>
+<p>但是对于计算机视觉应用来说，我们一定不想它只能处理小图片，因此，需要进行卷积运算。</p>
+<h2 id="边缘检测案例卷积运算如何进行的">边缘检测案例(卷积运算如何进行的)</h2>
+<blockquote>
+<p>对于一张图片的边缘检测，我们可能会想到对它进行垂直边缘检测和水平边缘检测，但如何在图像中检测这些边缘呢？</p>
+</blockquote>
+<p>Eg：如图是一个6 × 6的灰度图像(也就是说它是6 × 6 × 1，而不是6 × 6 × 3)</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225230911493.png" alt="image-20201225230911493" /><figcaption>image-20201225230911493</figcaption>
+</figure>
+<p>为了检测图像中的<strong>垂直边缘</strong>，可以构造一个3 × 3的矩阵，这样一个矩阵通常在卷积神经网络的术语中称为<strong>过滤器</strong>(在论文中有时会称为<strong>核</strong>)，这个矩阵如下图</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225231127552.png" alt="image-20201225231127552" /><figcaption>image-20201225231127552</figcaption>
+</figure>
+<p>然后对这个6 × 6的图像进行<strong>卷积运算</strong>(用"*")表示，卷积得到一个4 × 4的矩阵，如图，计算步骤，以左上角第一个数为例，将3 × 3矩阵与6 × 6矩阵的左上角取3 × 3的矩阵对位相乘再想加，得到的结果即4 × 4矩阵左上方第一个数的值</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225232243785.png" alt="image-20201225232243785" /><figcaption>image-20201225232243785</figcaption>
+</figure>
+<p>如果用python来实现，则会使用conv_forwoard()函数进行卷积运算，如果是在tensorflow，则是tf.nn.conv2d，如果是keras，则是Conv2D，基本上所有的编程框架，都会有一些函数来实现卷积运算</p>
+<blockquote>
+<p>注：这种操作有时被称为互相关而不是卷积，因为严格意义上的数学中定义的卷积中在做元素乘积求和之前，还需要先将过滤器沿水平和垂直轴翻转，但按机器学习的惯例，通常不需要进行这个翻转操作</p>
+</blockquote>
+<blockquote>
+<p>为什么这个可以做垂直边缘检测呢？</p>
+</blockquote>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225232801410.png" alt="image-20201225232801410" /><figcaption>image-20201225232801410</figcaption>
+</figure>
+<blockquote>
+<p>中间3 × 3的矩阵意味着左边亮的部分中间不需要考虑，右边是暗的部分</p>
+</blockquote>
+<h2 id="更多的边缘检测">更多的边缘检测</h2>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233145414.png" alt="image-20201225233145414" /><figcaption>image-20201225233145414</figcaption>
+</figure>
+<p>还是上述的例子，将6 × 6矩阵稍作变动，就会发现结果的30都变成了-30，表明这是由暗向亮过渡，而不是由亮向暗过渡，因此，这个过滤器确实可以<code>区分两种明暗变化的区别</code></p>
+<p>同样的，水平边缘检测的过滤器如下图</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233801912.png" alt="image-20201225233801912" /><figcaption>image-20201225233801912</figcaption>
+</figure>
+<p>还有一些其它的过滤器图，如</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225233914828.png" alt="image-20201225233914828" /><figcaption>image-20201225233914828</figcaption>
+</figure>
+<p>它的优点在于：增加了中间一行元素的权重，这使得结果的鲁棒性会更高一些</p>
+<p>再如：</p>
+<p><img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201225234015307.png" /></p>
+<p>实际上这也是一种垂直边缘检测，如果道将其翻转90度，就能得到对应的水平边缘检测</p>
+<p>随着深度学习的发展，当想要真正检测出复杂图像的边缘时，不一定要使用固定的某九个数字，可以将矩阵中的9个数字当成9个参数<span class="math inline">\(w_1 \sim w_9\)</span>，然后使用反向传播，相比之前那些简单的过滤器，它可以检测出45°或70°甚至任意角度的边缘</p>
+<h2 id="填充padding">填充(Padding)</h2>
+<blockquote>
+<p>为了构建深度神经网络，需要学会使用的一个基本的卷积操作就是padding</p>
+</blockquote>
+<p>之前的内容中可能看到，用一个3 × 3的过滤器卷积一个6 × 6的图像，会得到一个4 × 4的矩阵输出，那是因为用一个3 × 3的过滤器在一个6 × 6的矩阵中只可能有4 × 4种可能位置</p>
+<p>背后的数学解释是：如果有一个n × n图像，用一个f × f的过滤器做卷积，则会输出一个(n-f+1) × (n-f+1) 维矩阵</p>
+<blockquote>
+<p>这样的话会有两个缺点：</p>
+<ol type="1">
+<li>每次卷积操作，都会让图像缩小</li>
+<li>角落边的像素只会被一个输出所使用，而中间的像素点，就会有许多3 × 3的矩阵与之重叠，就会被多个输出所使用；即角落或边缘区的像素点在输出中采样少，相当于会丢掉图像边缘位置；</li>
+</ol>
+</blockquote>
+<p>为了解决这两个缺点：</p>
+<ol type="1">
+<li>缩小输出</li>
+<li>在卷积操作之前，填充图像(pad)，填充后，输入图像变成了8 × 8图像，输出变成了6 × 6矩阵，设p是填充的数量，则此案例中p=1(因为在周围都填充了一个像素点)，输出也就变成了(n+2p-f+1) × (n+2p-f+1)</li>
+</ol>
+<p>Valid卷积和Same卷积：</p>
+<p>Valid卷积：不填充，n × n * f × f -&gt; n-f+1 × n-f+1</p>
+<p>Same卷积：填充后输出大小和输入大小一样，则<span class="math inline">\(n+2p-f+1=n \Rightarrow p=\frac{f-1}{2}\)</span>，</p>
+<blockquote>
+<p><span class="math inline">\(f\)</span>通常是奇数的原因：</p>
+<ol type="1">
+<li>如果f是一个偶数，那么就只能使用一些不对称填充，只有f是奇数时，same卷积都会有自然的填充</li>
+<li>当有一个奇数维过滤器时，它就有一个中心点，有时在计算机视觉中，有一个中心像素点会更方便，便于指出过滤器的位置</li>
+</ol>
+</blockquote>
+<h2 id="卷积步长strided-convolutions">卷积步长(Strided Convolutions)</h2>
+<blockquote>
+<p>卷积步长就是过滤器在输入图像上每次移动的步数，如图是步长为2的情况</p>
+</blockquote>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226102853468.png" alt="image-20201226102853468" /><figcaption>image-20201226102853468</figcaption>
+</figure>
+<p>新的卷积公式 <span class="math display">\[
+n×n \ *\ f×f \rightarrow \lfloor\frac{n+2p-f}{s}+1\rfloor × \lfloor\frac{n+2p-f}{s}+1\rfloor\\
+padding：p；stride：s ；如果商不是一个整数，则向下取整(\lfloor \rfloor：向下取整符号)
+\]</span></p>
+<h2 id="三维卷积">三维卷积</h2>
+<p>假设需要卷积一个RGB图像，则6×6的图像对应的就是6×6×3，为了检测边缘，对应的需要和一个3×3×3的过滤器卷积，三个数通常对应的高、宽、通道数(RGB对应三通道)，输入图像和过滤器通道数必须相同，如图</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226105848237.png" alt="image-20201226105848237" /><figcaption>image-20201226105848237</figcaption>
+</figure>
+<p>对应的计算，和二维类似，也是将3×3×3=27个数相乘再想加得到结果</p>
+<p>而如果为了检测红色的边缘，则可以将三个通道中的R通道置为二维边缘检测对应的过滤器，G和B则全置0，同样的，如果将三个通道全置为二维边缘检测对应的过滤器，则可以检测任意颜色通道的边缘</p>
+<p>多过滤器情况，如下图：</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226110638537.png" alt="image-20201226110638537" /><figcaption>image-20201226110638537</figcaption>
+</figure>
+<blockquote>
+<p>总结：</p>
+<p><span class="math inline">\(n×n×n_c\ *\ f×f×n_c \rightarrow n-f+1 × n-f+1 × n_c&#39;(n_c&#39;:过滤器数量)\)</span></p>
+</blockquote>
+<h2 id="单层卷积网络">单层卷积网络</h2>
+<p>如图，将输入图像和两个过滤器卷积，最终 各自形成一个卷积神经网络层，然后增加偏差，然后应用非线性函数如ReLU，输出一个4×4矩阵</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226152031740.png" alt="image-20201226152031740" /><figcaption>image-20201226152031740</figcaption>
+</figure>
+<blockquote>
+<p>卷积层符号总结：</p>
+<p>如果第l层是卷积层，则：</p>
+<p><span class="math inline">\(f^{[l]}\)</span>：表示过滤器大小</p>
+<p><span class="math inline">\(p^{[l]}\)</span>：填充数量</p>
+<p><span class="math inline">\(s^{[l]}\)</span>：步幅</p>
+<p><span class="math inline">\(n_c^{[l]}\)</span>：过滤器的数量</p>
+<p>输入：<span class="math inline">\(n_H^{[l-1]}×n_W×n_c^{[l-1]}\)</span></p>
+<p>输出：<span class="math inline">\(n_H^{[l]}×n_W^{[l]}×n_c^{[l]}\)</span></p>
+<p><span class="math inline">\(n_H^{[l]} = \lfloor \frac{n_H^{[l-1]+2p^{[l]-f^{[l]}}}}{s^{[l]}} + 1 \rfloor\)</span></p>
+<p><span class="math inline">\(n_W^{[l]} = \lfloor \frac{n_W^{[l-1]+2p^{[l]-f^{[l]}}}}{s^{[l]}} + 1 \rfloor\)</span></p>
+<p>每个过滤器shape:<span class="math inline">\(f^{[l]}×f^{[l]}×n_c^{[l-1]}\)</span></p>
+<p>激活函数：<span class="math inline">\(a^{[l]} \rightarrow n_H^{[l]}×n_W^{[l]}×n_c^{[l]}\)</span></p>
+<p>在mini-batch向量化后：<span class="math inline">\(A^{[l]} \rightarrow m×n_H^{[l]}×n_W^{[l]}×n_c^{[l]}\)</span></p>
+<p>权重：<span class="math inline">\(f^{[l]}×f^{[l]}×n_c^{[l-1]}×n_c^{[l]}\)</span></p>
+<p>偏差：<span class="math inline">\(n_c^{[l]} - (1,1,1,n_c^{[l]})\)</span></p>
+</blockquote>
+<h2 id="简单卷积网络示例">简单卷积网络示例</h2>
+<blockquote>
+<p>假设有一张图片，想做图片分类或图片识别，将这张图片定义为x，然后判断图片中是否有猫。</p>
+</blockquote>
+<p>针对这个例子，以一张较小的图片为例，如39×39×3，如下图</p>
+<p><span class="math inline">\(n_H^{[0]}=n_W^{[0]}=39,n_c^{[0]}=3\)</span></p>
+<p>假设第一层用一个3×3过滤器提取特征，即<span class="math inline">\(f^{[1]}=3,s^{[1]}=1,p^{[1]}=0\)</span>，如果有10个过滤器，则神经网络下一层为37×37×10</p>
+<p><span class="math inline">\(n_H^{[1]}=n_W^{[1]}=37,n_c^{[1]}=10\)</span></p>
+<p>假设再用一个5×5过滤器，即<span class="math inline">\(f^{[2]}=5,s^{[2]}=2,p^{[2]}=0\)</span>，如果有20个过滤器，则神经网络下一层为17×17×20</p>
+<p><span class="math inline">\(n_H^{[2]}=n_W^{[2]}=17,n_c^{[2]}=20\)</span></p>
+<p>假设再用一个5×5过滤器，即<span class="math inline">\(f^{[2]},s^{[2]}=2,p^{[2]}=0\)</span>，如果有40个过滤器，则神经网络下一层为7×7×40，计算出来就是1960个特征，然后对该卷积层进行处理，可以将其展开成1960个单元，输出一个向量，然后Logistic Regression 或 Softmax Regression，输出预测值<span class="math inline">\(\hat y\)</span></p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226155934667.png" alt="image-20201226155934667" /><figcaption>image-20201226155934667</figcaption>
+</figure>
+<p>一个典型的卷积网络通常有三类层：</p>
+<ul>
+<li>卷积层，常用Conv标注</li>
+<li>池化层，常用POOL标注</li>
+<li>全连接层，常用FC表示</li>
+</ul>
+<h2 id="池化层pooling-layers">池化层(Pooling layers)</h2>
+<p>池化层：最大池化(Max pooling)</p>
+<p>如图，对于一个4×4的矩阵，执行最大池化的输出是一个2×2矩阵，将4×4矩阵进行类似卷积的操作，只是将相乘再想加的步骤换成取最大值</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226195203508.png" alt="image-20201226195203508" /><figcaption>image-20201226195203508</figcaption>
+</figure>
+<p>相当于2×2的过滤器，步幅为2，即超参数f=2,s=2</p>
+<p>最大化运算的实际作用就是：如果在过滤器中提取到某个特征，则保留其最大值，如果没有提取到这个特征，则最大值也还是很小</p>
+<p>同理，如果有多个通道，则分别对每个通道单独进行上述操作，得到多通道结果</p>
+<p>平均池化(不太常用)：</p>
+<p>和最大池化类似，但选择的不最大值，而是平均值，如图</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226200142414.png" alt="image-20201226200142414" /><figcaption>image-20201226200142414</figcaption>
+</figure>
+<blockquote>
+<p>池化总结：</p>
+<p>超参数：</p>
+<p><span class="math inline">\(f\)</span>：过滤器大小</p>
+<p><span class="math inline">\(s\)</span>：步幅大小</p>
+<p>少数情况下，会有：</p>
+<p>p：填充</p>
+<p>输入维度：<span class="math inline">\(n_H×n_W×n_c\)</span></p>
+<p>输出维度：<span class="math inline">\(\lfloor \frac{n_H-f}{s}+1 \rfloor × \lfloor\frac{n_W-f}{s}+1\rfloor×n_c\)</span></p>
+<p>池化过程中没有需要学习的参数，所以反向传播没有参数适用于最大池化</p>
+</blockquote>
+<h2 id="卷积神经网络示例">卷积神经网络示例</h2>
+<blockquote>
+<p>假设，有一张32×32×3的输入图片，需要进行手写数字识别</p>
+</blockquote>
+<p>假设第一层使用过滤器5×5，步幅为1，无填充，过滤器个数是6，则输出维度为28×28×6(后面增加偏差、应用非线性函数等文字省略)，将输出的这层记为Conv1</p>
+<p>然后构建一个池化层，选用最大池化，参数f=2,s=2(padding=0省略)，则输出维度14×14×6，将该输出标记为POOL1</p>
+<blockquote>
+<p>卷积通常有两种分类，这与层的划分存在一致性</p>
+<p>一类卷积是：一个卷积层和一个池化层一起作为一层；</p>
+<p>另一类卷积是：将卷积层作为一层，而池化层单独作为一层</p>
+<p>人们在计算神经网络层数时，通常只统计具有权重和参数的层，由于池化层没有权重和参数，只有一些超级参数，因此，这里将Conv1和POOL1作为一个卷积，并标记为Layer1</p>
+</blockquote>
+<p>同理后续步骤如图：</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226202312020.png" alt="image-20201226202312020" /><figcaption>image-20201226202312020</figcaption>
+</figure>
+<p>最终展开后得到400个单元的输出，然后用这400个单元构建下一层，下一层含有120个单元，也是第一个全连接层，标记为FC3，因为这120个单元和之前400个单元紧密连接(即400个单元与120个单元中的每一个相连接)，很像之前的单神经网络，是标准的神经网络，所以称为<strong>全连接层</strong>。对应的有一个120×400的权重矩阵<span class="math inline">\(W^{[3]}\)</span>和一个偏差参数</p>
+<p>然后再添加一个84个单元的全连接层，称为FC4，最后用这84个单元的输出填充softmax单元，对于手写数字识别而言，softmax就会有10个输出</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226202918400.png" alt="image-20201226202918400" /><figcaption>image-20201226202918400</figcaption>
+</figure>
+<blockquote>
+<p>需要注意的是：</p>
+<ol type="1">
+<li>超参数尽量不要自己随意设置，而是先参考文献中效果较好的数值</li>
+<li>随着神经网络深度的加深，会发现<span class="math inline">\(n_H\)</span>和<span class="math inline">\(n_W\)</span>通常都会减少，而<span class="math inline">\(n_c\)</span>会增加</li>
+<li>在神经网络中另一种常见的模式是：一个或多个卷积层后加一个池化层，然后一个或多个卷积层后面再跟一个池化层，然后是几个全连接层，最后是一个softmax</li>
+</ol>
+</blockquote>
+<p>网络中不同层的激活值形状和大小</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>激活值形状(shape)</th>
+<th>激活值大小(size)</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>输入层</td>
+<td>(32,32,3)</td>
+<td>3,072</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>CONV1(f=5,s=1)</td>
+<td>(28,28,8)</td>
+<td>6,272</td>
+<td>208</td>
+</tr>
+<tr class="odd">
+<td>POOL1</td>
+<td>(14,14,8)</td>
+<td>1,568</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>CONV2(f=5,s=1)</td>
+<td>(10,10,6)</td>
+<td>1,600</td>
+<td>416</td>
+</tr>
+<tr class="odd">
+<td>FC3</td>
+<td>(120,1)</td>
+<td>120</td>
+<td>48,001</td>
+</tr>
+<tr class="even">
+<td>FC4</td>
+<td>(84,1)</td>
+<td>84</td>
+<td>10,081</td>
+</tr>
+<tr class="odd">
+<td>Softmax</td>
+<td>(10,1)</td>
+<td>10</td>
+<td>841</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意：</p>
+<ol type="1">
+<li>输入层和池化层-最大池化层没有参数</li>
+<li>卷积层的参数相对较少</li>
+<li>随着神经网络加深，激活值会逐渐变小，如果激活值下降太快，也会影响网络性能</li>
+</ol>
+</blockquote>
+<h2 id="为什么使用卷积神经网络">为什么使用卷积神经网络？</h2>
+<p>和只用全连接层相比，卷积层的优势：</p>
+<ol type="1">
+<li>参数共享：一个特征检测(如垂直边缘检测)，对于图像的一部分适用，那么它也可能适用于图片的其它区域</li>
+<li>稀疏连接：在每一层，每个输出值只依赖于少量的输入，如输出的左上角的值只依赖于输入左上角部分的单元格</li>
+</ol>
+<p>如对于一张32×32×3(=3072)的图，通过f=5的6个过滤器卷积后，结果是28×28×6=4704</p>
+<p>而如果构建一个普通神经网络，则如果一层含有3072个单元，下一层有4704个单元，以全连接形式连接，计算权重矩阵，则这个权重矩阵维度为3072×4704约等于1400万，所以需要训练的参数会很多，并且随着图片大小的增大，这个权重矩阵还会更大，</p>
+<p>而对于卷积方式的参数数量，则只需要5×5+1(1个偏差参数)=26×6=156个参数</p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201226210647458.png" alt="image-20201226210647458" /><figcaption>image-20201226210647458</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/12/25/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80/" title="卷积神经网络-基础">http://www.zephon.ml/2020/12/25/卷积神经网络-基础/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" rel="tag"><i class="fa fa-tag"></i> 计算机视觉</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/" rel="prev" title="深度学习-误差分析">
+      <i class="fa fa-chevron-left"></i> 深度学习-误差分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/26/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%AE%9E%E4%BE%8B%E6%8E%A2%E7%A9%B6/" rel="next" title="卷积神经网络-实例探究">
+      卷积神经网络-实例探究 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">卷积神经网络-基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89"><span class="nav-number">1.1.</span> <span class="nav-text">计算机视觉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E6%A1%88%E4%BE%8B%E5%8D%B7%E7%A7%AF%E8%BF%90%E7%AE%97%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E7%9A%84"><span class="nav-number">1.2.</span> <span class="nav-text">边缘检测案例(卷积运算如何进行的)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B"><span class="nav-number">1.3.</span> <span class="nav-text">更多的边缘检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A1%AB%E5%85%85padding"><span class="nav-number">1.4.</span> <span class="nav-text">填充(Padding)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E6%AD%A5%E9%95%BFstrided-convolutions"><span class="nav-number">1.5.</span> <span class="nav-text">卷积步长(Strided Convolutions)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E5%8D%B7%E7%A7%AF"><span class="nav-number">1.6.</span> <span class="nav-text">三维卷积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%B1%82%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C"><span class="nav-number">1.7.</span> <span class="nav-text">单层卷积网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.8.</span> <span class="nav-text">简单卷积网络示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%A0%E5%8C%96%E5%B1%82pooling-layers"><span class="nav-number">1.9.</span> <span class="nav-text">池化层(Pooling layers)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.10.</span> <span class="nav-text">卷积神经网络示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">1.11.</span> <span class="nav-text">为什么使用卷积神经网络？</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

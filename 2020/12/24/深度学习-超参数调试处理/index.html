@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.zephon.ml","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="深度学习-超参数调试处理 超参数选择 学习率\(\alpha\)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习-超参数调试处理">
+<meta property="og:url" content="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="Zephon Blog">
+<meta property="og:description" content="深度学习-超参数调试处理 超参数选择 学习率\(\alpha\)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201221143511249.png">
+<meta property="og:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201221144146555.png">
+<meta property="article:published_time" content="2020-12-24T01:31:21.000Z">
+<meta property="article:modified_time" content="2021-12-31T17:09:29.011Z">
+<meta property="article:author" content="Zephon">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201221143511249.png">
+
+<link rel="canonical" href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深度学习-超参数调试处理 | Zephon Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?697784f78fd83128cc519aedf69e3017";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/Zephon-H" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zephon Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-download">
+
+    <a href="/download/" rel="section"><i class="fa fa-download fa-fw"></i>下载</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="Zephon">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zephon Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习-超参数调试处理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-24 09:31:21" itemprop="dateCreated datePublished" datetime="2020-12-24T09:31:21+08:00">2020-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-01 01:09:29" itemprop="dateModified" datetime="2022-01-01T01:09:29+08:00">2022-01-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="深度学习-超参数调试处理">深度学习-超参数调试处理</h1>
+<h2 id="超参数选择">超参数选择</h2>
+<p><strong>学习率<span class="math inline">\(\alpha\)</span></strong></p>
+<p><u>momentum中的<span class="math inline">\(\beta\)</span></u></p>
+<p>Adam中的<span class="math inline">\(\beta_1,\beta_2,\epsilon\)</span></p>
+<p>层数#layers</p>
+<p><u>不同层隐藏单元数量#hidden units</u></p>
+<p>学习率衰减率</p>
+<p><u>mini-batch size</u></p>
+<blockquote>
+<p>随机取值：调试时，随机取值，而不是网格取值</p>
+<p>精确搜索：采用由粗糙到精细的策略，发现一块区域中的点对应的超参数取得的效果较好，则可以放大该区域，然后在其中更密集地取值</p>
+</blockquote>
+<h2 id="为超参数选择合适的范围">为超参数选择合适的范围</h2>
+<blockquote>
+<p>假设认为<span class="math inline">\(\alpha\)</span>=0.0001，...，1</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">r = -<span class="number">4</span>*np.random.rand()<span class="comment"># [-4,0]</span></span><br><span class="line">lr = <span class="number">10</span> ** r <span class="comment"># [10^-4,1]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>假设认为<span class="math inline">\(\beta\)</span>=0.9，...，0.999，则</p>
+<p>1-<span class="math inline">\(\beta\)</span>=0.1，...，0.001</p>
+<p><span class="math inline">\(r \in [-3,-1]\)</span></p>
+<p><span class="math inline">\(1-\beta=10^r\)</span></p>
+<p><span class="math inline">\(\beta = 1-10^r\)</span></p>
+</blockquote>
+<h2 id="batch-normalization">Batch Normalization</h2>
+<blockquote>
+<p>Batch归一化会使参数搜索问题变得很容易，使神经网络对超参数的选择更加稳定</p>
+</blockquote>
+<p>和Logistic Regression中归一化输入X一样，在深度神经网络中</p>
+<p>对任意隐藏层而言，可以通过对<span class="math inline">\(z^{[l]}\)</span>归一化，加快训练 <span class="math display">\[
+已知一些中间值，假设有一些隐藏单元值：z^{(1)},\cdots,z^{(m)} (省略了[l])\\
+\mu = \frac{1}{m}\sum_i z^{(i)} \\
+\sigma^2 = \frac{1}{m} \sum_i(z_i-\mu)^2 \\
+z^{(i)}_{norm} = \frac{z^{(i)}-\mu}{\sqrt{\sigma^2+\epsilon}} \\
+\tilde z^{(i)} = \gamma z^{(i)}_{norm}+\beta(\gamma,\beta是学习参数)从而：\\
+如果\gamma = \sqrt{\sigma^2+\epsilon},\beta = \mu，则\tilde z^{(i)}=z^{(i)} \\
+\]</span></p>
+<h2 id="将batch-norm拟合进神经网络">将Batch Norm拟合进神经网络</h2>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201221143511249.png" alt="image-20201221143511249" /><figcaption>image-20201221143511249</figcaption>
+</figure>
+<p>参数：<span class="math inline">\(W^{[1]},b^{[1]},\cdots,W^{[L]},b^{[L]} \\ \beta^{[1]},\gamma^{[1]},\cdots,\beta^{[L]},\gamma^{[L]}\)</span></p>
+<figure>
+<img src="https://gitee.com/Zephon-H/ImagesStore/raw/master/img/image-20201221144146555.png" alt="image-20201221144146555" /><figcaption>image-20201221144146555</figcaption>
+</figure>
+<p>实现</p>
+<p><span class="math inline">\(对每个第t个mini-batch: \\ 在X^{\{t\}}上计算前向传播 \\ 对每个隐藏层，使用BN计算，用\tilde z^{[l]}代替z^{[l]} \\ 使用反向传播计算dW^{[l]},\bcancel{db^{[l]}},d\beta^{[l]},d\gamma^{[l]} \\ 更新参数:W^{[l]}:=W^{[l]}-\alpha dW^{[l]},\beta^{[l]} :=\beta^{[l]}-\alpha d\beta^{[l]},\gamma^{[l]} :=\gamma^{[l]}-\alpha d\gamma^{[l]}\)</span></p>
+<blockquote>
+<p>为什么Batch Norm有用？</p>
+<ol type="1">
+<li>和Logistic Regression中的归一化一样，通过归一化，可以将不同特征值包括隐藏单元的值的范围归到类似，从而加速学习</li>
+<li>可以使权重比网络更滞后或更深层</li>
+<li>有一些正则化效果</li>
+</ol>
+</blockquote>
+<h2 id="在测试时的batch-norm">在测试时的Batch Norm</h2>
+<p><span class="math display">\[
+在测试时，需要单独估算\mu和\sigma^2,通常的\\
+\mu,\sigma^2：使用指数加权平均来估算，这个平均数涵盖所有mini-batch\\
+假设有mini-batch：\\
+X^{\{1\}},X^{\{2\}},\cdots,\\
+对应的有:\\
+\mu^{\{1\}[l]},\mu^{\{2\}[l]},\cdots, \rightarrow \mu\\
+同样的有:\\
+\sigma^{\{1\}[l]},\sigma^{\{2\}[l]},\cdots, \rightarrow \sigma^2 \\
+最终测试时:\\
+z^{(i)}_{norm}=\frac{z^{(i)}-\mu}{\sqrt{\sigma^2+\epsilon}}
+\]</span></p>
+<blockquote>
+<p>总结：在训练时，<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma^2\)</span>是在整个mini-batch上计算出来的，包含了多个数量的样本，但在测试时，可能需要逐处理样本，因为可以根据训练集估算<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma^2\)</span>，在实际操作中，我们通常使用指数加权平均来估算<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma^2\)</span></p>
+</blockquote>
+<h2 id="softmax-regression">Softmax Regression</h2>
+<blockquote>
+<p>使用softmax回归进行多分类</p>
+</blockquote>
+<p><span class="math inline">\(C = \#classes \\ 则输出层单元数通常n^{[L]}=C,对应每类的概率 \\\)</span></p>
+<p>Softmax layer:</p>
+<p><span class="math inline">\(Z^{[l]} = W^{[l]}a^{[l-1]}+b^{[l]} ,shape=(C,1)\\ 激活函数： \\ t = e^{z^{[l]}} ,shape=(C,1)\\ a^{[l]} = \frac{t}{\sum_{j=1}^Ct_j},a_i^{[l]} = \frac{t_i}{\sum_{j=1}^Ct_j} \\ 整个过程概括为softmax激活函数:\\ a^{[l]} = g^{[l]}(z^{[l]}),\\不同之处在于输入输出都是一个shape=(C,1)的向量，而之前的sigmoid、ReLU等输入输出都是一个实数\)</span></p>
+<p>Loss function</p>
+<p><span class="math inline">\(L(\hat y,y) = -\sum_{j=1}^Cy_j\log\hat y_j \\ J(W^{[1]},b^{[1]},\cdots) = \frac{1}{m}\sum_{i=1}^m L(\hat y^{(i)},y^{(i)})\)</span></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zephon
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.zephon.ml/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86/" title="深度学习-超参数调试处理">http://www.zephon.ml/2020/12/24/深度学习-超参数调试处理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/23/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AD%96%E7%95%A5/" rel="prev" title="深度学习-改善训练结果">
+      <i class="fa fa-chevron-left"></i> 深度学习-改善训练结果
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90/" rel="next" title="深度学习-误差分析">
+      深度学习-误差分析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80MDY3OS8xNzIwNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E8%B6%85%E5%8F%82%E6%95%B0%E8%B0%83%E8%AF%95%E5%A4%84%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">深度学习-超参数调试处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E5%8F%82%E6%95%B0%E9%80%89%E6%8B%A9"><span class="nav-number">1.1.</span> <span class="nav-text">超参数选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E8%B6%85%E5%8F%82%E6%95%B0%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E8%8C%83%E5%9B%B4"><span class="nav-number">1.2.</span> <span class="nav-text">为超参数选择合适的范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#batch-normalization"><span class="nav-number">1.3.</span> <span class="nav-text">Batch Normalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86batch-norm%E6%8B%9F%E5%90%88%E8%BF%9B%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">1.4.</span> <span class="nav-text">将Batch Norm拟合进神经网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%B5%8B%E8%AF%95%E6%97%B6%E7%9A%84batch-norm"><span class="nav-number">1.5.</span> <span class="nav-text">在测试时的Batch Norm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-regression"><span class="nav-number">1.6.</span> <span class="nav-text">Softmax Regression</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zephon"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">Zephon</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">167</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Zephon-H" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Zephon-H" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/qq1528498238@gmail.com" title="E-Mail → qq1528498238@gmail.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zephon</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">805k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">12:12</span>
+</div>
+
+<br />
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("04/21/2019 15:54:40");//此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</body>
+</html>

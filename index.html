@@ -1,191 +1,82 @@
-<?php
-require "common.php";
-
-if ($set['autokeywords'] == 1) {
-	$word = get_word();
-} else {
-	$word = "？";
-}
-?>
 
 <!DOCTYPE html>
-<html lang="zh-CN">
- <head> 
-  <meta charset="UTF-8" /> 
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" /> 
-  <meta http-equiv="Cache-Control" content="no-siteapp" /> 
-  <meta name="apple-mobile-web-app-capable" content="yes" /> 
-  <meta name="apple-touch-fullscreen" content="yes" /> 
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
-  <meta name="full-screen" content="yes" />
-  <!--UC强制全屏--> 
-  <meta name="browsermode" content="application" />
-  <!--UC应用模式--> 
-  <meta name="x5-fullscreen" content="true" />
-  <!--QQ强制全屏--> 
-  <meta name="x5-page-mode" content="app" />
-  <!--QQ应用模式--> 
-  <title>Zephon的个人导航页</title> 
-  <meta name="keywords" content="搜索，网址导航，浏览器主页">
-  <meta name="description" content="个人用导航页">
-  <link rel="shortcut icon" href="logo.svg" type="image/x-icon" /> 
-  <link href="css/style.css" rel="stylesheet" /> 
-  <link href="css/sousuo.css" rel="stylesheet" />  
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1572019_yrk10qvz.css" /> 
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1717091_aav2rq7m97j.css" />
-  <!--<link rel="stylesheet" href="css/loading.css">-->  <!--加载动画-->
-  <!--<script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-  <script src="js/xd.js"></script> 
+<html lang="en-us">
 
- </head> 
- <body> 
-  <!--加载动画-->
-  <!--<script src="js/loading.js"></script>-->
-  <div id="menu">
-   <i></i>
-  </div> 
-  <div class="list closed"> 
-   <ul>
-    <li class="title"><i class="iconfont icon-huo"></i> 博 · 客</li>
-	<li><a rel="nofollow" href="https://www.zephon.ml/blog" target="_blank">Zephon Blog</a></li>
-	<!----> 
-    <li class="title"><i class="iconfont icon-huo"></i> 搜 · 索</li>
-	<li><a rel="nofollow" href="https://www.niceso.fun/" target="_blank">奈斯搜</a></li>
-	<li><a rel="nofollow" href="https://jujuso.com" target="_blank">优聚搜</a></li>
-	<li><a rel="nofollow" href="https://www.upyunso.com/" target="_blank">UP云搜</a></li>
-	<li><a rel="nofollow" href="https://alyunpan.com/" target="_blank">资源分享</a></li>
-	<li><a rel="nofollow" href="https://www.dalipan.com/#/" target="_blank">大力盘搜</a></li>
-	<li><a rel="nofollow" href="https://www.junengfan.cn/bd" target="_blank">文档搜索</a></li>
-	<li><a rel="nofollow" href="https://ifish.fun/paper/search" target="_blank">科研搜索</a></li>
-	<li><a rel="nofollow" href="https://magi.com/" target="_blank">Magi搜索</a></li>
-	<li><a rel="nofollow" href="https://searx.bar/" target="_blank">SearchX</a></li>
+<head>
+	<meta name="generator" content="Hugo 0.82.0" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#494f5c">
+	<meta name="msapplication-TileColor" content="#494f5c">
+<meta itemprop="name" content="Zephon">
+<meta itemprop="description" content="Zephon的博客，记录并分享自己的学习过程"><meta property="og:title" content="Zephon" />
+<meta property="og:description" content="Zephon的博客，记录并分享自己的学习过程" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://www.linvon.cn/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Zephon"/>
+<meta name="twitter:description" content="Zephon的博客，记录并分享自己的学习过程"/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<meta name='keywords' content="">
+
+<meta property="og:title" content="Zephon - Zephon">
+<meta name="apple-mobile-web-app-title" content="Zephon - Zephon">
+
+
+<meta name="description" content="Zephon的博客，记录并分享自己的学习过程">
+<meta property="og:description" content="Zephon的博客，记录并分享自己的学习过程">
+
+	<title>Zephon</title>
+	<link rel="alternate" type="application/rss+xml" href="http://www.linvon.cn/index.xml" title="Zephon" />
+	<link rel="stylesheet" href="http://www.linvon.cn/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css" integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin="anonymous">
+	<style>.bg-img {background-image: url('https://api.ixiaowai.cn/gqapi/gqapi.php');}</style>
+	<link rel="stylesheet" href="http://www.linvon.cn/css/custom.css">
 	
+
+</head>
+
+<body id="page">
 	
-    <!----> 
-	<li class="title"><i class="iconfont icon-shenghuo"></i> 视 · 频</li> 
+	<div class="bg-img"></div>
+	<div id="spotlight" class="animated fadeIn">
+		<div id="home-center">
+			<h1 id="home-title">Zephon</h1>
+			<p id="home-subtitle">尽吾志也而不能至者，可以无悔矣，其孰能讥之乎？此余之所得也。</p>
+			<div id="home-social">
+				<a href="https://github.com/Zephon-H" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+			</div>
+			<nav id="home-nav" class="site-nav">
+				<a href="https://www.zephon.ml/blog/">Posts</a>
+			</nav>
+		</div>
+		<div id="home-footer">
+			<p>
+				&copy; 2022 <a href="https://www.zephon.ml">Zephon</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> &#183; <a href="https://www.zephon.ml/blog/" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+			</p>
+		</div>
+	</div>
+
+
+	<script src="js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
 	
-	<li><a rel="nofollow" href="https://www.bilibili.com/" target="_blank">哔哩哔哩</a></li>
-	<li><a rel="nofollow" href="http://1090ys.com/" target="_blank">1090影视</a></li>
-	<li><a rel="nofollow" href="https://imyshare.com/free-movie/" target="_blank">视频解析</a></li>
-	<li><a rel="nofollow" href="https://www.whg6.com/html/video/" target="_blank">全能解析</a></li>
-	<li><a rel="nofollow" href="https://www.dianyinggou.com/" target="_blank">影视搜索</a></li>
-	<li><a rel="nofollow" href="https://www.sbkk.me/" target="_blank">随便看看</a></li>
-	<li><a rel="nofollow" href="http://www.zhenbuka3.com/" target="_blank">在线影视</a></li>
-	<li><a rel="nofollow" href="https://ddrk.me/" target="_blank">低端影视</a></li>
-	<li><a rel="nofollow" href="http://www.kuhuiv.com/" target="_blank">酷绘视频</a></li>
-	<!----> 
-	<li class="title"><i class="iconfont icon-shenghuo"></i> 资 · 源</li> 
-	<li><a rel="nofollow" href="http://music.alang.run/" target="_blank">一起听歌</a></li>
-	<li><a rel="nofollow" href="https://listen1.github.io/listen1/" target="_blank">Listen1</a></li>
-	<li><a rel="nofollow" href="https://bailemi.com/" target="_blank">音乐分享</a></li>
-	<li><a rel="nofollow" href="http://www.musictool.top/" target="_blank">音乐搜索</a></li>
-	<li><a rel="nofollow" href="https://www.jiumodiary.com/" target="_blank">鸠摩搜书</a></li>
-	<li><a rel="nofollow" href="https://www.jb51.net/books" target="_blank">计算机书</a></li>
-	<li><a rel="nofollow" href="http://www.b520.cc/" target="_blank">在线小说</a></li>
-	<li><a rel="nofollow" href="http://m.tingshubao.com/" target="_blank">在线听小说</a></li>
-	<li><a rel="nofollow" href="https://wallhere.com/" target="_blank">图片壁纸</a></li>
-	<li><a rel="nofollow" href="http://qzbltushu.ysepan.com/" target="_blank">考研考证</a></li>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-123537933-1', 'auto');
 	
-	<!----> 
-	<li class="title"><i class="iconfont icon-shenghuo"></i> 工 · 具</li> 
-	<li><a rel="nofollow" href="https://tool.lu/" target="_blank">在线工具</a></li>
-	<li><a rel="nofollow" href="https://www.67tool.com/" target="_blank">即时工具</a></li>
-	<li><a rel="nofollow" href="https://www.alltoall.net/" target="_blank">格式转换</a></li>
-	<li><a rel="nofollow" href="https://pearocr.com/" target="_blank">在线OCR</a></li>
-	<li><a rel="nofollow" href="https://imyshare.com/" target="_blank">资源导航</a></li>
-	<li><a rel="nofollow" href="https://cowtransfer.com/" target="_blank">奶牛快传</a></li>
-	<li><a rel="nofollow" href="https://photokit.com/" target="_blank">智能抠图</a></li>
-	<li><a rel="nofollow" href="https://www.linshi-email.com/" target="_blank">临时邮箱</a></li>
-	<li><a rel="nofollow" href="https://smailpro.com/" target="_blank">临时Gmail</a></li>
-	<!----> 
-	<li class="title"><i class="iconfont icon-shenghuo"></i> 摸 · 鱼</li> 
-	<li><a rel="nofollow" href="https://tophub.today/" target="_blank">今日热榜</a></li>
-	<li><a rel="nofollow" href="https://liferestart.syaro.io/public/index.html" target="_blank">重开模拟器</a></li>
-	<li><a rel="nofollow" href="https://www.52pojie.cn/" target="_blank">52破解</a></li>
-	<li><a rel="nofollow" href="https://www.gugeapps.net/" target="_blank">Chrome插件</a></li>
-	<li><a rel="nofollow" href="https://www.6yit.com/" target="_blank">六音软件</a></li>
-	<li><a rel="nofollow" href="https://rousong.net/" target="_blank">苹果集市</a></li>
-	<li><a rel="nofollow" href="https://gofans.cn/" target="_blank">ios限免</a></li>
-	<li><a rel="nofollow" href="https://cli.im/" target="_blank">二维码生成</a></li>
-	<li><a rel="nofollow" href="http://www.qinms.com/webapp/barcode/index.aspx" target="_blank">条形码</a></li>
-	<!----> 
-    <li class="title"><i class="iconfont icon-shenghuo"></i> 其 · 它</li> 
-    <li><a rel="nofollow" href="https://www.tampermonkey.net/" target="_blank">油猴插件</a></li>
-	<li><a rel="nofollow" href="https://greasyfork.org/zh-CN/" target="_blank">插件集合</a></li>
-	<li><a rel="nofollow" href="https://www.goinsms.xyz/" target="_blank">临时手机号</a></li>
-	<li><a rel="nofollow" href="https://www.autodraw.com/" target="_blank">在线绘图</a></li>
-	<li><a rel="nofollow" href="https://233heji.com/" target="_blank">资源合集</a></li>
-	<li><a rel="nofollow" href="https://adguard.com/zh_cn/welcome.html" target="_blank">网页去广告</a></li>
-	<li><a rel="nofollow" href="https://www.adtchrome.com/" target="_blank">网页去广告</a></li>
-	<li><a rel="nofollow" href="https://leetcode.com/" target="_blank">力扣</a></li>
-	<li><a rel="nofollow" href="https://readpaper.com/" target="_blank">论文阅读</a></li>
-    <!---->
-   </ul>  
-    </div>
-  <!--和风天气-->
-  <div class="mywth" >
-<div id="he-plugin-simple"></div>
-<script>
-WIDGET = {
-  CONFIG: {
-    "modules": "012",
-    "background": 1,
-    "tmpColor": "FFFFFF",
-    "tmpSize": 16,
-    "cityColor": "FFFFFF",
-    "citySize": 16,
-    "aqiSize": 16,
-    "weatherIconSize": 24,
-    "alertIconSize": 18,
-    "padding": "10px 10px 10px 10px",
-    "shadow": "1",
-    "language": "auto",
-    "borderRadius": 5,
-    "fixed": "false",
-    "vertical": "middle",
-    "horizontal": "center",
-    "key": "93b5bd5cb33e455c90d9ed829e5e4895"
-  }
+	ga('send', 'pageview');
 }
 </script>
-<script src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"></script>
-</div>
-<!---->
-  <div id="search" class="s-search">
-   <div id="search-list" class="hide-type-list">
-    <div class="s-type">
-     </div>
-    <div class="search-group group-a">
-     <ul class="search-type">
-      <li><input onclick="bw()" checked="" hidden="" type="radio" name="type" id="type-baidu" value="https://www.baidu.com/s?wd=" data-placeholder="百度一下" /><label for="type-baidu"><span>百度</span></label></li>
-      <li><input onclick="bw()" hidden="" type="radio" name="type" id="type-google" value="https://www.google.com/search?q=" data-placeholder="谷歌搜索" /><label for="type-google"><span>Google</span></label></li>
-	  <li><input onclick="bw()" hidden="" type="radio" name="type" id="type-bing" value="https://cn.bing.com/search?q=" data-placeholder="Bing搜索" /><label for="type-bing"><span>Bing</span></label></li>
-	  <li><input onclick="bw()" hidden="" type="radio" name="type" id="type-360" value="https://www.so.com/s?q=" data-placeholder="GitHub搜索" /><label for="type-360"><span>GitHub搜索</span></label></li>
-	  <li><input onclick="bw()" hidden="" type="radio" name="type" id="type-sogo" value="https://www.sogou.com/web?query=" data-placeholder="搜狗搜索" /><label for="type-sogo"><span>搜狗</span></label></li>
-	 </ul>
-    </div>
-   </div>
-   <form action="https://www.baidu.com/s?wd=" method="get" target="_blank" id="super-search-fm">
-    <input type="text" id="search-text" placeholder="输入关键字搜索" style="outline:0" />
-    <button type="submit"><i class="iconfont icon-sousuo"></i></button>
-    <ul id="ul" class="ko"></ul>
-   </form>
-   <div id="yy" style="display:none;">
-    <input type="text" id="kos" placeholder="<?php echo $word; ?>" />
-    <button type="submit" id="kob"><i class="iconfont icon-xdss"></i></button>
-    <ul id="kol" class="ko"></ul>
-   </div>
-   <div class="set-check hidden-xs">
-    <input type="checkbox" id="set-search-blank" class="bubble-3" autocomplete="off" />
-   </div>
-  </div> 
-  <script type="text/javascript" src="js/yyss.js"></script>
-  <script type="text/javascript" src="js/sousuo.js"></script> 
-  <script type="text/javascript" src="js/lianxiang.js"></script> 
-  <script type="text/javascript" src="js/imgData.js"></script> 
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  <div class="bgo"></div>
+</body>
 
- </body>
 </html>

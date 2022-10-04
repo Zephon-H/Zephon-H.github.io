@@ -1,0 +1,63 @@
+html {
+    background: #fffef9;
+}
+
+body, button, input, select, textarea {
+    color: #1d1d1f;
+    font-size: 15px;
+}
+
+a {
+    color: #86868b
+}
+
+a:hover {
+    color: #b14e12
+}
+
+.content a:hover {
+    box-shadow: inset 0 -2px 0 #0066cc;
+}
+
+.content a {
+    box-shadow: none;
+}
+
+a.footnote-ref {
+    background-color: transparent;
+}
+
+#site-header {
+    background-color: #fafafa;
+}
+
+.chroma .err {
+    color: snow;
+    background-color: transparent;
+}
+
+pre code {
+    background: #2d2d2d;
+}
+
+pre {
+    background: #2d2d2d;
+}
+
+.chroma {
+    background-color: #2d2d2d;
+}
+
+.bg-img {
+    width: 100vw;
+    height: 100vh;
+    opacity: .3;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    transition: opacity .5s;
+}
